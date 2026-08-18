@@ -1,10 +1,19 @@
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@latest
-  vite-plus: latest
+  taze: ^19.17.1
+  "@types/node": ^26.1.2
+  typescript: ^7.0.2
+  vite: npm:@voidzero-dev/vite-plus-core@^0.2.7
+  vite-plus: ^0.2.7
 overrides:
   vite: "catalog:"
 peerDependencyRules:
   allowAny:
     - vite
+    - vitest
   allowedVersions:
     vite: "*"
+
+# Prefer catalog
+catalogMode: prefer
+shellEmulator: true
+ignoreWorkspaceRootCheck: false

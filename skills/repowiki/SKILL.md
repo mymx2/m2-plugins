@@ -3,14 +3,14 @@ name: repowiki
 description: 生成 DeepWiki 风格的仓库分析报告。深入分析代码架构、模块依赖和核心系统，输出带 Mermaid 图表、源文件引用和表格的结构化文档。
 tip: 重要提醒： 每次需要生成 REPOWIKI.md 文件时再安装该技能，不要一直放在 skills 中，以防ai错误调用，白耗token。
 triggers:
-  - "生成仓库报告"
-  - "repowiki"
-  - "deepwiki"
-  - "分析这个仓库"
-  - "生成项目文档"
-  - "仓库报告"
-  - "代码库分析"
-  - "生成wiki"
+  - '生成仓库报告'
+  - 'repowiki'
+  - 'deepwiki'
+  - '分析这个仓库'
+  - '生成项目文档'
+  - '仓库报告'
+  - '代码库分析'
+  - '生成wiki'
 license: MIT
 metadata:
   origin: https://github.com/mymx2/skills/skills/repowiki
@@ -107,6 +107,7 @@ metadata:
 
 - `path/to/file1.ts`
 - `path/to/file2.ts#L5-L10`
+
 </details>
 
 ### 职责与边界
@@ -137,6 +138,7 @@ metadata:
 <summary>相关源文件</summary>
 
 - `path/to/relevant/file.ts#L1-L10`
+
 </details>
 
 ### 问题与方法
@@ -350,6 +352,7 @@ stateDiagram-v2
 - `src/core/engine.ts` - 核心引擎实现
 - `src/core/types.ts` - 类型定义
 - `src/config/default.ts#L1-L5` - 默认配置
+
 </details>
 ```
 
