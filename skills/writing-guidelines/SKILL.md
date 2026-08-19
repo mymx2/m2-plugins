@@ -1,18 +1,35 @@
 ---
 name: writing-guidelines
 description: >
-  This skill provides a comprehensive set of writing guidelines for technical documentation, covering planning, voice and tone, structure, code formatting, typography, and AI-assisted workflows. Use when: writing or reviewing any technical doc (tutorials, how-tos, reference, conceptual, troubleshooting); planning content structure or selecting a content type; aligning doc style (active voice, direct address, sentence-case headings); formatting code blocks, lists, or placeholders; checking typography (curly quotes, ellipsis, non-breaking spaces); or setting up an AI-assisted writing workflow with human review.
+  This skill provides a comprehensive set of writing guidelines for technical documentation, covering planning, voice and tone, structure, code formatting, typography, and AI-assisted workflows. Use when writing or reviewing technical docs (tutorials, how-tos, reference, conceptual, troubleshooting), planning content structure, or aligning doc style and typography. Not for marketing copy, social posts, release notes, or non-documentation prose.
+when_to_use: 'write docs, 技术文档, 写作规范, documentation style, 文档写作'
 license: MIT
 metadata:
   origin: https://github.com/mymx2/skills/skills/writing-guidelines
   author: mymx2 <https://github.com/mymx2>
-  version: 2026.06.12
+  version: 2026.08.19
   source: https://github.com/vercel-labs/writing-guidelines <MIT>
 ---
 
 # Writing Guidelines
 
 Docs succeed because of hundreds of small decisions. This is a living, non-exhaustive list of those decisions, drawn from the Vercel docs handbook and the patterns that hold up across hundreds of pages. Most guidelines are framework-agnostic, with a few Vercel-specific conventions called out at the end.
+
+## Outcome Contract
+
+- **Outcome**: A technical doc draft or revision that complies with the rules below.
+- **Done when**: Content type declared; banned words eliminated; every code block has a language tag; headings are sentence case.
+- **Evidence**: Section-by-section self-check against this file; no rule skipped silently.
+- **Output**: The revised doc, plus a short list of rules consciously not applied and why.
+- **Authorization**: Edit documentation only — do not touch code, config, or product copy outside the doc surface.
+
+## How to Apply
+
+1. Pick the content type first (`Tutorial`, `How-to`, `Reference`, `Conceptual`, `Troubleshooting`, `Landing`) — it drives the shape.
+2. Draft the five-section plan (overview, goal, audiences, documentation plan, open questions) before writing prose.
+3. Write applying Voice & tone and Structure rules as you go.
+4. Finish with a typography and source-formatting pass (quotes, ellipsis, units, wrapping).
+5. If an LLM drafted any part, follow the AI workflow section: disclose, and do a final human review.
 
 ## Planning
 

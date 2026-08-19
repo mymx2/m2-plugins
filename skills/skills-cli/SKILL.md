@@ -1,8 +1,7 @@
 ---
 name: skills-cli
-description: >
-  Skills CLI（npx skills）完整使用指南，涵盖技能安装、使用、查找、更新、移除、初始化等全部命令，以及技能创建规范和兼容的智能体列表。
-  当用户需要安装/管理技能、了解 Skills CLI 用法、创建自定义技能、查看支持的智能体列表、排查技能相关问题时使用。
+description: 'Complete usage guide for the Skills CLI (npx skills): install, use, find, update, remove, and init commands, skill scaffolding rules, and the list of 60+ compatible agents. Use when the user needs to install or manage skills, learn a Skills CLI command, scaffold a custom skill, check supported agents, or troubleshoot skill-related issues. Not for writing skill content or reviewing skill quality.'
+when_to_use: 'skills cli, npx skills, 安装技能, 管理技能, skills add'
 license: MIT
 metadata:
   origin: https://github.com/vercel-labs/skills
@@ -12,9 +11,26 @@ metadata:
 
 # Skills CLI 完整指南
 
+答案基本都在下文的命令表里——先定位任务类型再查表，不要凭记忆拼接参数。
+
 Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工具，支持 **OpenCode**、**Claude Code**、**Codex**、**Cursor**、**Qoder** 等 60+ 智能体。
 
 > 如果项目中存在名为 `skills` 的目录（发生命名冲突），`npx` 可能会报错，此时请使用 `pnpx`。
+
+## Outcome Contract
+
+- **Outcome**: 用户得到一条可直接运行的 Skills CLI 命令（或一组），并知道执行后的验证方式。
+- **Done when**: 命令的参数组合来自下文参考表，非交互/CI 场景带 `-y`；执行后用 `npx skills list` 验证结果。
+- **Evidence**: 命令执行的实际输出；`skills list` 中目标技能的状态。
+- **Authorization**: 查表和解释可以直接做；安装、更新、移除会改动用户环境，经用户确认后执行。
+
+## 使用流程
+
+1. 判断任务类型：安装（add）、试用（use）、查找（find）、列出（list）、更新（update）、移除（remove）、创建模板（init）。
+2. 在下文对应章节定位命令与参数表，按需组合来源格式、范围（`-g`）、目标 agent（`-a`）。
+3. CI/CD 或脚本场景加 `-y` 跳过交互确认。
+4. 项目里已有 `skills` 目录导致 `npx` 命名冲突时，改用 `pnpx` 或 `vpx`。
+5. 执行后运行 `npx skills list` 验证技能落在预期位置（项目级还是全局）。
 
 ---
 
@@ -46,6 +62,8 @@ Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工�
 ---
 
 ## 安装技能（`skills add`）
+
+来源格式、参数和范围三件事确认后再拼命令：
 
 ### 支持的来源格式
 

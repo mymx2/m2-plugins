@@ -1,14 +1,16 @@
 /**
- * skills/skill-authoring/scripts/validate-skill.ts 的单元测试。
+ * skills/skill-authoring/scripts/validate-skill.ts 的单元测试 + 本仓库技能门禁。
  *
  * 规则库与 CLI 都随技能分发（技能目录自包含）；测试放在仓库测试目录，
- * 不随技能安装。覆盖门 5 结构完整性检查的正反两路，以及 validateSkill
- * 的集成路径（tmpdir 里构造 skills/ 树 fixture）。失败断言 FailError 消息片段。
+ * 不随技能安装。fixture 部分覆盖各门的正反两路（tmpdir 构造 skills/ 树）；
+ * 末尾的"本仓库技能体检"对仓库 skills/ 下每个技能跑七道质量门，
+ * 哪个技能红就是它该修改的清单。
  */
 
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vite-plus/test'
 import {
   checkStructuralCompleteness,
@@ -197,4 +199,21 @@ describe('validateSkill', () => {
     writeFile(root, 'pack/demo-skill/SKILL.md', VALID_SKILL)
     expect(validateSkill(join(root, 'pack', 'demo-skill'))).toEqual([])
   })
+})
+
+// ---- 本仓库技能体检 -----------------------------------------------------------
+
+const REPO_SKILLS_DIR = fileURLToPath(new URL('../../skills', import.meta.url))
+
+const repoSkillNames = readdirSync(REPO_SKILLS_DIR, { withFileTypes: true })
+  .filter(e => e.isDirectory() && existsSync(join(REPO_SKILLS_DIR, e.name, 'SKILL.md')))
+  .map(e => e.name)
+  .sort()
+
+describe('本仓库技能体检', () => {
+  for (const name of repoSkillNames) {
+    it(`skills/${name} 通过全部质量门`, () => {
+      expect(validateSkill(join(REPO_SKILLS_DIR, name))).toEqual([])
+    })
+  }
 })

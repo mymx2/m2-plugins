@@ -1,22 +1,40 @@
 ---
 name: writing-review
-description: Review docs/prose for Writing Guidelines compliance
+description: 'Review docs and prose for compliance with the Writing Guidelines rulebook. Use when asked to check, proofread, or audit documentation files against writing style rules. Not for writing new docs from scratch or reviewing code.'
+when_to_use: 'review docs, 审稿, 文档检查, writing review, proofread'
 argument-hint: <file-or-pattern>
 license: MIT
 metadata:
   origin: https://github.com/mymx2/skills/skills/writing-guidelines
   author: mymx2 <https://github.com/mymx2>
-  version: 2026.06.12
+  version: 2026.08.19
   source: https://github.com/vercel-labs/writing-guidelines <MIT>
 ---
 
 # Writing Review
 
+Findings without line numbers are opinions. Every finding must be clickable: `file:line`, terse, no preamble.
+
 Review these files for compliance: $ARGUMENTS
 
 Read files, check against rules below. Output concise but comprehensive: sacrifice grammar for brevity. High signal-to-noise.
 
+## Outcome Contract
+
+- **Outcome**: A findings list grouped by file, every item in `file:line` form.
+- **Done when**: Each finding points at a concrete line; files with no findings are listed as `✓ pass`.
+- **Evidence**: The quoted line content behind each finding.
+- **Authorization**: Read and report only — do not edit the reviewed files unless the user asks for fixes.
+
+## Review Process
+
+1. Read the files matched by `$ARGUMENTS`; if empty, ask the user for the file scope first.
+2. Check against each rule group below, in order.
+3. Output findings in the Output Format: state issue + location, skip explanation unless the fix is non-obvious.
+
 ## Rules
+
+The rule groups below are the checklist — apply every group to every file:
 
 ### Planning & content type
 
