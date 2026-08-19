@@ -21,5 +21,7 @@ export default defineConfig({
   },
   test: {
     exclude: ['**/node_modules/**', '**/dist/**', 'projects/**'],
+    // spawn bash/python 的进程级测试在并发下明显慢于 5s 默认超时
+    testTimeout: 120_000,
   },
 })

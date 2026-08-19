@@ -10,7 +10,8 @@
     "@types/node": "catalog:",
     "taze": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "catalog:"
+    "vite-plus": "catalog:",
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@11.20.0"
 }

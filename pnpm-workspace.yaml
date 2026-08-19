@@ -1,7 +1,10 @@
 catalog:
+  zx: ^8.8.5
+  '@types/fs-extra': ^11.0.4
   taze: ^19.17.1
-  "@types/node": ^26.1.2
+  '@types/node': ^26.1.2
   typescript: ^7.0.2
+  vitest: ^4.1.10
   vite: npm:@voidzero-dev/vite-plus-core@^0.2.7
   vite-plus: ^0.2.7
 overrides:

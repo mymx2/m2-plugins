@@ -5,6 +5,7 @@
     "module": "ESNext",
     "lib": ["ESNext"],
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
