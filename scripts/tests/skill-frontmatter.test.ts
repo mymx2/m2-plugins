@@ -15,7 +15,7 @@ import {
   parseFrontmatter,
   parseWhenToUseKeywords,
   skillRefDiff,
-} from '../../skills/skill-authoring/scripts/skill-frontmatter.ts'
+} from '../../skills/forge/scripts/skill-frontmatter.ts'
 
 const GOOD = `---
 name: example

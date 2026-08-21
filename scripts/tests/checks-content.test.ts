@@ -18,8 +18,8 @@ import {
   checkSkillIsolation,
   checkTriggerOverlap,
   pipeCount,
-} from '../../skills/skill-authoring/scripts/checks-content.ts'
-import { FailError } from '../../skills/skill-authoring/scripts/skill-frontmatter.ts'
+} from '../../skills/forge/scripts/checks-content.ts'
+import { FailError } from '../../skills/forge/scripts/skill-frontmatter.ts'
 
 /** 在临时目录里写一个文件并返回其路径。 */
 function writeFile(root: string, rel: string, text: string): string {

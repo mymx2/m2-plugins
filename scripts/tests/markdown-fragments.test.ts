@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vite-plus/test'
 import {
   githubHeadingInventory,
   githubHeadingRecords,
-} from '../../skills/skill-authoring/scripts/markdown-fragments.ts'
+} from '../../skills/forge/scripts/markdown-fragments.ts'
 
 describe('githubHeadingInventory', () => {
   it('按 GitHub 规则处理渲染文本与重名碰撞', () => {

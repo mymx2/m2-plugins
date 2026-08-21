@@ -1,5 +1,5 @@
 /**
- * skills/skill-authoring/scripts/validate-skill.ts 的单元测试 + 本仓库技能门禁。
+ * skills/forge/scripts/validate-skill.ts 的单元测试 + 本仓库技能门禁。
  *
  * 规则库与 CLI 都随技能分发（技能目录自包含）；测试放在仓库测试目录，
  * 不随技能安装。fixture 部分覆盖各门的正反两路（tmpdir 构造 skills/ 树）；
@@ -16,7 +16,7 @@ import {
   checkStructuralCompleteness,
   FailError,
   validateSkill,
-} from '../../skills/skill-authoring/scripts/validate-skill.ts'
+} from '../../skills/forge/scripts/validate-skill.ts'
 
 /** 在临时目录里写一个文件并返回其路径。 */
 function writeFile(root: string, rel: string, text: string): string {

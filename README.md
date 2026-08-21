@@ -33,7 +33,7 @@ vpx skills add https://github.com/mymx2/skills --skill <skill-name>
 例如：
 
 ```shell
-vpx skills add https://github.com/mymx2/skills --skill find-skills
+vpx skills add https://github.com/mymx2/skills --skill forge
 vpx skills add https://github.com/anthropics/skills --skill skill-creator
 ```
 
