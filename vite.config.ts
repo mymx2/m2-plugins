@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite-plus'
 
-const ignorePatterns = ['pnpm-workspace.yaml', '**/*-lock.*', '__*']
+const ignorePatterns = ['pnpm-workspace.yaml', '**/*-lock.*', '__*', 'vendor/**']
 
 export default defineConfig({
   lint: {
@@ -20,7 +20,7 @@ export default defineConfig({
     '*': 'vp check --no-error-on-unmatched-pattern',
   },
   test: {
-    exclude: ['**/node_modules/**', '**/dist/**', 'projects/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', 'projects/**', 'vendor/**'],
     // spawn bash/python 的进程级测试在并发下明显慢于 5s 默认超时
     testTimeout: 120_000,
   },
