@@ -1,0 +1,72 @@
+{
+  "skill_name": "think",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "老板让我评估下要不要把项目从 Vue 2 迁到 Vue 3,你帮我分析分析,先别动手改代码",
+        "top_k": 1
+      },
+      {
+        "prompt": "We're debating whether to add real-time collaboration to our notes app. Before anyone touches code, give us your honest take on whether it's worth the complexity.",
+        "top_k": 1
+      },
+      {
+        "prompt": "I have three competing designs for our notification pipeline. Help me commit to one.",
+        "top_k": 1
+      },
+      {
+        "prompt": "我们想给后台加个多租户的权限体系,这块要怎么搞你帮我拿个主意,列清楚步骤再开工",
+        "top_k": 1
+      },
+      {
+        "prompt": "产品甩过来一堆用户反馈,有报错的、有要功能的、有纯吐槽的,你帮我归归类,说说哪些该做哪些先放着",
+        "top_k": 1,
+        "note": "Triage Mode 探针:作者意图归 think(SKILL.md Triage Mode 覆盖需求捆包),description 无 triage/bundle 词汇"
+      },
+      {
+        "prompt": "Our side project has 40 weekly users and eats $150/month in API costs. Keep pushing it, or kill it?",
+        "top_k": 1
+      },
+      {
+        "prompt": "Should we build our own build tooling on top of esbuild or just adopt Turborepo? Recommend before we commit engineering time.",
+        "top_k": 1
+      },
+      {
+        "prompt": "我想给编辑器加 IME 支持,但心里没底,你先去把主流方案的坑都摸一遍,再给我一个选型建议",
+        "top_k": 1,
+        "boundary": "think-vs-learn"
+      },
+      {
+        "prompt": "Before we commit to event sourcing, get a grounded picture of how mature teams actually run it, then recommend go or no-go.",
+        "top_k": 1,
+        "boundary": "think-vs-learn"
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Clicking export throws a 500 every single time. Find out what's wrong.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "这封给投资人的英文邮件语气太冲了,帮我改得软一点",
+        "owner": "write"
+      },
+      {
+        "prompt": "Read this article and pull out the three main arguments: https://example.com/essay",
+        "owner": "read"
+      },
+      {
+        "prompt": "两份技术方案文档我都写好了,你站在评审角度挑挑毛病,别改,只说问题",
+        "owner": "check"
+      },
+      {
+        "prompt": "Research the three leading OAuth libraries properly — real docs, real tradeoffs — and produce a comparison doc the team can keep as a reference.",
+        "owner": "learn"
+      },
+      {
+        "prompt": "把这三个前端框架的渲染原理对比清楚,写成一份可以长期引用的对比文档",
+        "owner": "learn"
+      }
+    ]
+  }
+}

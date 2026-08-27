@@ -1,0 +1,20 @@
+{
+  "name": "m2-plugins",
+  "owner": {
+    "name": "mymx2",
+    "email": "mymx2@qq.com",
+    "url": "https://github.com/mymx2"
+  },
+  "metadata": {
+    "description": "Engineering workflow plugins for AI agents.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "dyc",
+      "source": "./plugins/dyc",
+      "category": "developer-tools",
+      "tags": ["mymx2", "dyc", "waza", "skills", "engineering"]
+    }
+  ]
+}

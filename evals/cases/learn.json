@@ -1,0 +1,59 @@
+{
+  "skill_name": "learn",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "我想系统搞懂 RAG 这个领域,把来龙去脉都研究透,最后产出一篇能直接发公众号的综述",
+        "top_k": 1
+      },
+      {
+        "prompt": "I've bookmarked 30-odd articles on local-first sync. Distill them into one reference doc I can send people.",
+        "top_k": 1
+      },
+      {
+        "prompt": "把这半年攒的 CRDT 论文和笔记整理成一篇入门长文,投稿用的",
+        "top_k": 1
+      },
+      {
+        "prompt": "Interview's in two weeks and I know nothing about WebGPU compute. Take me from zero to being able to hold a real conversation about it.",
+        "top_k": 1
+      },
+      {
+        "prompt": "这几个前端状态管理库的原理我一直是半懂不懂,这次认真吃透,整理成一份体系化笔记",
+        "top_k": 1
+      },
+      {
+        "prompt": "Research the three leading OAuth libraries properly — real docs, real tradeoffs — and produce a comparison doc the team can keep as a reference.",
+        "top_k": 1,
+        "boundary": "think-vs-learn"
+      },
+      {
+        "prompt": "把这三个前端框架的渲染原理对比清楚,写成一份可以长期引用的对比文档",
+        "top_k": 1,
+        "boundary": "think-vs-learn"
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "读一下这篇博客说了啥:https://example.com/blog",
+        "owner": "read"
+      },
+      {
+        "prompt": "Turn these meeting notes into a crisp one-pager for the exec team.",
+        "owner": "write"
+      },
+      {
+        "prompt": "我想给编辑器加 IME 支持,但心里没底,你先去把主流方案的坑都摸一遍,再给我一个选型建议",
+        "owner": "think"
+      },
+      {
+        "prompt": "Before we commit to event sourcing, get a grounded picture of how mature teams actually run it, then recommend go or no-go.",
+        "owner": "think"
+      },
+      {
+        "prompt": "这个仓库整体架构怎么样,值得继续投入吗,给我个判断",
+        "owner": "think"
+      }
+    ]
+  }
+}

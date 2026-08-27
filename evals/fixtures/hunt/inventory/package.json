@@ -1,0 +1,9 @@
+{
+  "name": "inventory",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cart inventory service",
+  "scripts": {
+    "test": "node --test"
+  }
+}

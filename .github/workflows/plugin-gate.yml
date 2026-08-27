@@ -1,0 +1,57 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Plugin Gate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  # ── 统一门禁 ───────────────────────────────────────────
+  gate:
+    name: Gate — lint · fmt · type · test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: ✈ Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: 📦 Setup Vite+ (installs vp, Node, and dependencies)
+        uses: voidzero-dev/setup-vp@2dec1e33f4ab2c6d5bce1b0c4607961bb1a3f7a1 # v1
+        with:
+          run-install: true
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+
+      - name: 📦 Install ruff
+        run: pip install ruff
+
+      - name: 🔍 Lint · fmt · type (TS)
+        run: vp check
+
+      - name: 🔍 Lint · fmt (Python)
+        run: ruff check scripts/ plugins/ evals/ && ruff format --check scripts/ plugins/ evals/
+
+      - name: 🛡 Tests + repo validation
+        run: vp test
+
+      - name: 🧪 evals 设施单测
+        run: python -m pytest evals/tests/ -q
+
+      - name: 🧭 evals 词面路由不退化
+        run: |
+          python evals/lexical_router.py
+          python evals/compare_routing.py evals/results/lexical-routing.baseline.json evals/results/lexical-routing.json
+          python scripts/check-trigger-jaccard.py

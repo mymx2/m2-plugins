@@ -1,0 +1,22 @@
+{
+  "name": "m2-plugins",
+  "interface": {
+    "displayName": "M2 Plugins"
+  },
+  "plugins": [
+    {
+      "name": "dyc",
+      "version": "1.0.0",
+      "description": "Eleven engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, and repowiki.",
+      "source": {
+        "source": "local",
+        "path": "./plugins/dyc"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

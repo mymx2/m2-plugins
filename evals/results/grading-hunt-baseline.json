@@ -1,0 +1,63 @@
+{
+  "skill": "hunt",
+  "variant": "baseline",
+  "run_dir": "evals/runs/hunt-baseline",
+  "expectations": [
+    {
+      "text": "在修改任何源码之前,输出中先出现一句话根因陈述,指明具体函数与机制(forward loop 中 splice 导致跳项),带 file:line 或函数名",
+      "passed": true,
+      "evidence": "actions.log 第5行 READ src/inventory.js 标注 'removeAllExpired splices during forward iteration';第7行 CMD npm test 复现失败;首次 EDIT 出现在第9行,晚于诊断与复现。最终回复 Root cause 行:'removeAllExpired 在正序 for 循环中原地 splice(i,1),删除后 i++ 跳过紧随其后的元素,相邻两个过期商品中第二个被留在购物车里(src/inventory.js:6-10)' — 具体函数+机制+file:line 齐全。"
+    },
+    {
+      "text": "修复前先运行测试并在 transcript 中留下红色失败输出(复现先于修复)",
+      "passed": true,
+      "evidence": "actions.log 第7行 'CMD npm test - FAIL: actual [2,3] expected [3], confirms skip-adjacent-element bug' 位于第9行 EDIT 之前。最终回复 Confirmed 行:'修复前复现 actual [2,3] vs expected [3],与客诉现象一致'。"
+    },
+    {
+      "text": "修复采用根因级机制(filter / 倒序遍历 / 等价),而非只让可见测试变绿的双遍循环、重试式或输出层补丁",
+      "passed": true,
+      "evidence": "run_dir/src/inventory.js:removeAllExpired 与 dropCancelled 均改为 'for (let i = items.length - 1; i >= 0; i--)' 倒序遍历再 splice — 消除索引偏移的根因机制,非双遍循环或补丁。"
+    },
+    {
+      "text": "对同文件中同形状的 dropCancelled 给出 sibling sweep 结论:修复,或明确回答 same bug / safe / unsure",
+      "passed": true,
+      "evidence": "actions.log 第8行 grep 命中 'dropCancelled:18 is same-bug sibling';第9行 EDIT 一并修复;最终回复 Sibling sweep 行:'dropCancelled(invoicing 批处理)是同形状 bug——连续两个 cancelled 订单会漏删第二个,已一并修复;无其他匹配' — 明确 same-bug 结论。"
+    },
+    {
+      "text": "收尾包含 Root cause / Fix / Sibling sweep / Confirmed / Tests / Regression guard 等字段或等价结构,回归测试位于项目测试套件中而非临时文件",
+      "passed": true,
+      "evidence": "最终回复含全部六字段。Regression guard:'test/inventory.test.js:18;红-绿已实际运行:还原未修复代码后两个测试均红(新测试 actual [2,3]),恢复修复后全绿'。回归测试写入 test/inventory.test.js:18(项目套件,node --test),非临时文件。"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "修复前 npm test 复现 actual [2,3] vs expected [3]",
+      "type": "process",
+      "verified": true,
+      "evidence": "actions.log 第7行 + 最终回复 Confirmed 行一致"
+    },
+    {
+      "claim": "红-绿运行实际执行(还原未修复代码两测试均红,恢复后全绿)",
+      "type": "process",
+      "verified": true,
+      "evidence": "actions.log 第11-12行 red-run/green-run 两条命令均有结果摘要"
+    },
+    {
+      "claim": "修复不改变 removeAllExpired/dropCancelled 的对外签名与返回语义",
+      "type": "factual",
+      "verified": true,
+      "evidence": "run_dir/src/inventory.js module.exports 不变,函数仍 in-place splice 并返回原数组"
+    }
+  ],
+  "summary": { "passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0 },
+  "execution_metrics": { "actions_log_lines": 14, "tool_uses": 17, "duration_ms": 174141 },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "在修改任何源码之前,输出中先出现一句话根因陈述",
+        "reason": "actions.log 只记动作不记发言,无法从 log 直接证明'根因陈述这句话'先于 EDIT 被写出;当前靠 log 动作顺序(READ→npm test 复现→EDIT)+ 最终回复自述间接佐证。若要严格判定时序,需要求子代理把根因陈述也作为一行写入 actions.log。"
+      }
+    ],
+    "overall": "5 条期望均有区分度;唯一盲区是'陈述时序'依赖间接证据。"
+  }
+}

@@ -1,0 +1,5 @@
+[2026-08-25 14:31:02] listening on 8787
+[2026-08-25 14:32:11] verify failed token=ghp_9f8e7d6c5b4a321fEDCBA0987654321 ip=203.0.113.7
+[2026-08-25 14:32:11] respond 401
+[2026-08-25 14:33:40] verify failed token=ghp_9f8e7d6c5b4a321fEDCBA0987654321 ip=198.51.100.22
+[2026-08-25 14:33:41] respond 401

@@ -1,0 +1,49 @@
+{
+  "skill_name": "read",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "这个链接讲了什么,帮我概括下要点:https://mp.weixin.qq.com/s/xxxx",
+        "top_k": 1
+      },
+      {
+        "prompt": "Pull the benchmark table out of this PDF: https://arxiv.org/pdf/2401.00001",
+        "top_k": 1
+      },
+      {
+        "prompt": "把这篇长文转成 markdown 存到 ./notes 目录:https://example.com/long-post",
+        "top_k": 1
+      },
+      {
+        "prompt": "What exactly does the docs page say about the sunset date for v1? Quote it verbatim: https://docs.example.com/v1",
+        "top_k": 1
+      },
+      {
+        "prompt": "看看这个飞书文档里排班是怎么定的:https://xxx.feishu.cn/wiki/yyy",
+        "top_k": 1
+      },
+      {
+        "prompt": "This GitHub issue thread has 200 comments. What did the maintainer finally decide? https://github.com/org/repo/issues/123",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "README 里这段英文介绍翻得生硬,帮我润成自然的中文",
+        "owner": "write"
+      },
+      {
+        "prompt": "I want a proper comparison of Postgres vs MySQL for our workload, with cited sources.",
+        "owner": "learn"
+      },
+      {
+        "prompt": "本地这份需求文档你从头到尾过一遍,把前后矛盾的地方都标出来",
+        "owner": "check"
+      },
+      {
+        "prompt": "The marketing site renders a blank page on Chrome 120 only.",
+        "owner": "hunt"
+      }
+    ]
+  }
+}

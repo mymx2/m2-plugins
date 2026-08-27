@@ -1,13 +1,22 @@
 {
   "name": "skills",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "prepare": "vp config",
+    "init": "vpx tsx init.ts",
+    "validate:version": "vpx tsx init.ts --check",
+    "lint": "vp lint && ruff check scripts/ plugins/ evals/",
+    "fmt": "vp fmt && ruff format scripts/ plugins/ evals/",
+    "test": "vp test && python -m pytest evals/tests/ -q && python scripts/check-trigger-jaccard.py && python evals/lexical_router.py && python evals/compare_routing.py evals/results/lexical-routing.baseline.json evals/results/lexical-routing.json",
+    "validate:schema": "vpx tsx scripts/validate-schemas.ts",
+    "qoder:dyc": "vpx tsx plugins/dyc/.qoder-plugin/install.ts plugins/dyc",
     "up": "taze -r -w -i"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "ajv": "catalog:",
+    "ajv-formats": "catalog:",
     "taze": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:",

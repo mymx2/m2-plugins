@@ -1,0 +1,52 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--autoConnect"]
+    },
+    "deepwiki": {
+      "type": "streamable-http",
+      "url": "https://mcp.deepwiki.com/mcp"
+    },
+    "context7": {
+      "type": "streamable-http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
+      }
+    },
+    "github": {
+      "type": "streamable-http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "mdn": {
+      "type": "streamable-http",
+      "url": "https://mcp.mdn.mozilla.net/"
+    },
+    "shadcn-vue": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["shadcn-vue@latest", "mcp"]
+    },
+    "ai-elements-vue": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://registry.ai-elements-vue.com/mcp"]
+    },
+    "tdesign-mcp-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "tdesign-mcp-server@latest"]
+    }
+  }
+}

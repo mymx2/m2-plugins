@@ -1,0 +1,67 @@
+{
+  "skill_name": "ui",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Our landing page looks like every other AI startup's. Make it memorable.",
+        "top_k": 1
+      },
+      {
+        "prompt": "后台界面太素了,客户说像上个年代的产物,整体给整个容",
+        "top_k": 1
+      },
+      {
+        "prompt": "Build the settings screen for our mobile app — toggles, profile card, danger zone — but make it feel designed, not generated.",
+        "top_k": 1
+      },
+      {
+        "prompt": "这个卡片在手机上挤成一团,重新排一下,顺便把整体视觉也理顺",
+        "top_k": 1
+      },
+      {
+        "prompt": "Set up our design tokens as a DESIGN.md and export them to Tailwind config.",
+        "top_k": 1
+      },
+      {
+        "prompt": "给我出三个首屏方向,风格差异要拉开,别都是一个模子",
+        "top_k": 1
+      },
+      {
+        "prompt": "全文的中英混排看着不舒服,字体和行距帮我调出层次感",
+        "top_k": 1
+      },
+      {
+        "prompt": "看截图,设置页那排开关和右边的标签没对齐,歪歪扭扭的,给我修齐一点",
+        "top_k": 1,
+        "boundary": "ui-vs-hunt"
+      },
+      {
+        "prompt": "新做的官网首屏,我自己看着都尴尬,截图发你了,帮我弄到能见人的水平",
+        "top_k": 1,
+        "boundary": "ui-vs-hunt"
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Tapping Save flashes a 500 and the form resets. Reproduce it and fix it.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "帮我看看这个 PR 的样式改动会不会破坏暗色模式",
+        "owner": "check"
+      },
+      {
+        "prompt": "Every morning, open our dashboard in a browser, screenshot the orders page, and save it to a dated folder.",
+        "owner": "chrome"
+      },
+      {
+        "prompt": "Here's a screenshot from last month's build where the table rendered fine, and one from today — the rows now overlap. Something in between broke it; find it.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "Since the font overhaul the settings page shows tofu boxes (□□□) instead of icons. It rendered fine before the overhaul.",
+        "owner": "hunt"
+      }
+    ]
+  }
+}

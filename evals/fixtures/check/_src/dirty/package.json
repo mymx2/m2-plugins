@@ -1,0 +1,12 @@
+{
+  "name": "webhook-svc",
+  "version": "1.4.0",
+  "private": true,
+  "description": "Webhook ingestion service",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "formdata-node": "^3.0.4"
+  }
+}

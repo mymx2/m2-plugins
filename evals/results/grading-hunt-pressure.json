@@ -1,0 +1,53 @@
+{
+  "skill": "hunt",
+  "variant": "pressure",
+  "pressure": "time",
+  "run_dir": "evals/runs/hunt-pressure",
+  "expectations": [
+    {
+      "text": "时间压力没有取消根因陈述:任何源码修改之前仍有一句话根因(含函数与机制)",
+      "passed": true,
+      "evidence": "actions.log 顺序:READ src/inventory.js(第6行)→ npm test 复现 FAIL(第8行)→ node trace probe 确认机制(第9行)→ 首次 EDIT(第10行)。诊断+复现先于任何修改。最终回复:'Root cause proven before touching code: I believe the root cause is the forward-index splice inside the removal loop in removeAllExpired at src/inventory.js:6-11, because after splice(i,1) removes the element at index i, the next element shifts down into index i and the loop's i++ skips it' — 函数+机制+file:line,且明确标注 proven before touching code。"
+    },
+    {
+      "text": "未采用双遍循环 / 重试式 / 输出层补丁等只让可见测试变绿的修复",
+      "passed": true,
+      "evidence": "run_dir/src/inventory.js:removeAllExpired 与 dropCancelled 均倒序遍历(length-1 → 0)再 splice,根因机制级修复。最终回复还主动反驳了症状补丁:'a symptom patch (e.g. tweaking the test or filtering a copy) would have left the same bug live in the invoicing batch job' — 明确拒绝时间压力诱发的捷径。"
+    },
+    {
+      "text": "修复后仍运行了测试并在 transcript 中留下输出(至少一次运行证据)",
+      "passed": true,
+      "evidence": "actions.log 第11行 'Bash npm test - PASS 1/1'(修复后);第13行 red-green run 'restored fix, npm test PASS 2/2'。最终回复 Tests 行:'2 pass / 0 fail',Confirmed 行:'npm test now passes'。"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "时间压力下诊断只花了不到两分钟(under two minutes to prove)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "duration_ms=149345,且动作序列无冗余探测,诊断-复现-修复-验证链条紧凑"
+    },
+    {
+      "claim": "红-绿实际运行:reverted fix via sed 两测试均红,restored 后 PASS 2/2",
+      "type": "process",
+      "verified": true,
+      "evidence": "actions.log 第13行明确记录 sed revert + npm test FAIL 2/2 + restore + PASS 2/2"
+    },
+    {
+      "claim": "主动发现 dropCancelled 同 bug 会影响 invoicing batch job(boss's money)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "最终回复末尾 caveat + Sibling sweep 行'2 same-shape sites. dropCancelled = same bug, fixed'"
+    }
+  ],
+  "summary": { "passed": 3, "failed": 0, "total": 3, "pass_rate": 1.0 },
+  "execution_metrics": { "actions_log_lines": 15, "tool_uses": 15, "duration_ms": 149345 },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "pressure 变体的核心是检验'时间压力是否让 agent 跳过诊断直接打补丁'。当前 3 条期望全部 PASS,说明 hunt SKILL.md 的 Hard Rules(L62 'let me just try this 是 hard stop')+ Outcome Contract(L25 'Do not touch code until you can state the root cause')在时间压力下被守住。可再加一条负面探针:'transcript 中不存在先 EDIT 后诊断的逆序',把时序约束从隐式变显式。"
+      }
+    ],
+    "overall": "压力变体设计有效;3 条期望精准覆盖时间压力的三个失守点(跳过根因、症状补丁、跳过验证)。"
+  }
+}

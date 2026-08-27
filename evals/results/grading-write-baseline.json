@@ -1,0 +1,67 @@
+{
+  "skill": "write",
+  "variant": "baseline",
+  "run_dir": "evals/runs/write-baseline",
+  "expectations": [
+    {
+      "text": "输出保留原稿的事实内容与章节结构:无段落重排、无章节增删(结构性资产如编号列表保留)",
+      "passed": false,
+      "evidence": "章节结构(存储迁移周报/本周进展/下周计划/风险)与编号列表(1/2/3)保留,事实(87%/90%/P99/连接风暴未复现)保留。但 agent 删除了'本周进展'下第二段('总的来说,本周的进展是显著的...打下坚实的基础')整段 — 这是一次段落级删除,超出'无章节增删/无段落重排'的字面边界。注:write/SKILL.md L97 允许'删除但需列理由',agent 在最终回复给了一句理由('完成了既定目标和 87% 覆盖率对不上,整段删掉了'),但这是对期望字面条款的越界,按 no-partial-credit 判 FAIL。期望与技能规则存在张力,见 eval_feedback。"
+    },
+    {
+      "text": "输出中不含 em-dash(U+2014)与 en-dash(U+2013)",
+      "passed": true,
+      "evidence": "polished-fixed.md 实测 U+2014=0、U+2013=0(原稿 U+2014=6 处,全部替换为逗号/句号)。"
+    },
+    {
+      "text": "中英混排标点问题被修复(全半角、CJK-Latin 空距),且 transcript 中出现 Punctuation Gate 脚本调用或等价检查",
+      "passed": true,
+      "evidence": "actions.log 第6-9行:RUN check-punctuation.sh --lang zh polished.md -> 8 findings;--fix 修复逗号;EDIT 替换标题半角括号为全角;复跑 'punctuation: ok, gate passed'。产物 polished-fixed.md 实测半角逗号/括号已转全角,CJK-Latin 空距(如 'Redis 集群'、'87%')正确。Gate 脚本被真实调用两轮。"
+    },
+    {
+      "text": "输出总长度不大于原稿长度",
+      "passed": true,
+      "evidence": "原稿去空白 293 字符,polished-fixed.md 去空白 194 字符,缩短 34%,符合 Verification 第3条 'shorter than or equal to the first draft'。"
+    },
+    {
+      "text": "回复只包含润色后的正文(可含一句截断说明),无修改清单、无后续建议、无总结陈词",
+      "passed": false,
+      "evidence": "最终回复以元叙述'润好了,如下:'开头,末尾以一段括号说明('总的来说那段是纯粹的收尾总结...整段删掉了;其余事实和结构原样保留。润色稿在 .../polished-fixed.md')收尾 — 这既是对删除的理由陈述(技能 L97 要求),也构成'修改说明+文件指路',超出'只含正文+至多一句截断说明'。按字面从严判 FAIL。"
+    }
+  ],
+  "claims": [
+    {
+      "claim": "事实与数字未改:87% 覆盖率、90% 目标、P99 基线、连接风暴未复现",
+      "type": "factual",
+      "verified": true,
+      "evidence": "polished-fixed.md 与原稿逐字段一致"
+    },
+    {
+      "claim": "半角逗号/括号全部转全角",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Gate 复跑 'punctuation: ok, gate passed' + 目测产物 '周报（第 34 周）' 全角括号"
+    },
+    {
+      "claim": "删除了'总的来说'段是合理判断(与 87% 未达标事实矛盾)",
+      "type": "quality",
+      "verified": true,
+      "evidence": "原稿'完成了既定目标'确实与'覆盖率 87%,距离 90% 还有差距'矛盾;agent 的删除理由成立,但触发期望1/5 的字面 FAIL"
+    }
+  ],
+  "summary": { "passed": 3, "failed": 2, "total": 5, "pass_rate": 0.6 },
+  "execution_metrics": { "actions_log_lines": 11, "tool_uses": 14, "duration_ms": 151739 },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "输出保留原稿的事实内容与章节结构:无段落重排、无章节增删",
+        "reason": "该期望与 write/SKILL.md L97 'any deletion gets listed with its reason instead of discovered later' 直接冲突——技能允许'列理由的删除',期望却要求'无增删'。原稿里'总的来说'段本就与 87% 事实矛盾,是好编辑该删的。建议把期望改成:'事实与章节结构保留;任何段落级删除必须在回复中以一句话给出理由'(与 L97 对齐),否则好编辑反被判 FAIL。"
+      },
+      {
+        "assertion": "回复只包含润色后的正文(可含一句截断说明)",
+        "reason": "'润好了,如下:'开头与末尾删除理由说明,是 agent 在'技能 L97 要求列删除理由'与'期望要求纯净正文'之间的合理折中。建议把期望放宽为'正文为主,元叙述不超过一句,删除理由可附一句',或明确要求'把删除理由写进 actions.log 而非回复正文',让判定无歧义。"
+      }
+    ],
+    "overall": "2 个 FAIL 都源于期望字面条款与 write SKILL.md 自身规则(L97 删除需列理由、L181 截断/多版本可附一句说明)的张力,而非 agent 执行错误。agent 的去 AI 味、标点 gate、长度压缩、em-dash 清零全部到位。建议修订期望使其与技能规则自洽——这是 eval 本身的问题,不是技能行为问题。"
+  }
+}

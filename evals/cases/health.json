@@ -1,0 +1,45 @@
+{
+  "skill_name": "health",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "感觉 Claude 最近老不按 AGENTS.md 里写的规矩来,帮我查查配置是不是出了问题",
+        "top_k": 1
+      },
+      {
+        "prompt": "Our Codex setup has three overlapping rules files and I suspect they fight each other. Audit the whole agent config.",
+        "top_k": 1
+      },
+      {
+        "prompt": "MCP 服务器越装越多,hooks 和权限这块帮我理一理,有没有安全隐患",
+        "top_k": 1
+      },
+      {
+        "prompt": "The AI's edits have been getting sloppier and tests keep getting 'fixed' instead of caught. Is our verification setup rotting?",
+        "top_k": 1
+      },
+      {
+        "prompt": "团队好几个人共用这套 agent 配置,做个体检,看看哪些约束 AI 根本够不着",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Review this PR before I merge it.",
+        "owner": "check"
+      },
+      {
+        "prompt": "网站一打开就白屏,帮我定位下原因",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "Audit our codebase for injection risks before the pen test next week.",
+        "owner": "check"
+      },
+      {
+        "prompt": "这个 MCP 服务器连不上,你操作浏览器帮我看看网页端是不是也挂了",
+        "owner": "chrome"
+      }
+    ]
+  }
+}

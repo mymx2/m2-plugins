@@ -40,6 +40,16 @@ cypress/downloads
 !**/src/main/**/logs/
 !**/src/test/**/logs/
 
+### evals ###
+# Python 字节码缓存
+evals/**/__pycache__/
+# check fixture 的内嵌 git 仓:内容入库(见下),git 元数据由 run_tier3.py 在 run 目录重建
+evals/fixtures/check/webhook-svc/.git/
+# check fixture 的 debug.log 是评测资产(token 泄漏证据),覆盖上方全局 *.log
+!evals/fixtures/check/webhook-svc/debug.log
+# Tier 3 运行现场:由 run_tier3.py prepare 从 fixtures/ 重建,产物不入库
+evals/runs/
+
 ### User ###
 .DS_Store
 Thumbs.db

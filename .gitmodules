@@ -1,6 +1,18 @@
-[submodule "vendor/agent-skills"]
-	path = vendor/agent-skills
+[submodule "vendor/anthropics/claude-plugins-official"]
+	path = vendor/anthropics/claude-plugins-official
+	url = https://github.com/anthropics/claude-plugins-official
+[submodule "vendor/openai/plugins"]
+	path = vendor/openai/plugins
+	url = https://github.com/openai/plugins
+[submodule "vendor/addyosmani/agent-skills"]
+	path = vendor/addyosmani/agent-skills
 	url = https://github.com/addyosmani/agent-skills
-[submodule "vendor/waza"]
-	path = vendor/waza
+[submodule "vendor/tw93/Waza"]
+	path = vendor/tw93/Waza
 	url = https://github.com/tw93/Waza
+[submodule "vendor/upstash/context7"]
+	path = vendor/upstash/context7
+	url = https://github.com/upstash/context7
+[submodule "vendor/mattpocock/skills"]
+	path = vendor/mattpocock/skills
+	url = https://github.com/mattpocock/skills

@@ -16,7 +16,7 @@ import {
   checkStructuralCompleteness,
   FailError,
   validateSkill,
-} from '../../skills/forge/scripts/validate-skill.ts'
+} from '../../plugins/dyc/skills/forge/scripts/validate-skill.ts'
 
 /** 在临时目录里写一个文件并返回其路径。 */
 function writeFile(root: string, rel: string, text: string): string {
@@ -203,7 +203,7 @@ describe('validateSkill', () => {
 
 // ---- 本仓库技能体检 -----------------------------------------------------------
 
-const REPO_SKILLS_DIR = fileURLToPath(new URL('../../skills', import.meta.url))
+const REPO_SKILLS_DIR = fileURLToPath(new URL('../../plugins/dyc/skills', import.meta.url))
 
 const repoSkillNames = readdirSync(REPO_SKILLS_DIR, { withFileTypes: true })
   .filter(e => e.isDirectory() && existsSync(join(REPO_SKILLS_DIR, e.name, 'SKILL.md')))

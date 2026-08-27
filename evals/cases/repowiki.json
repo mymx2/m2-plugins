@@ -1,0 +1,41 @@
+{
+  "skill_name": "repowiki",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "给这个仓库生成一份 deepwiki 风格的说明书,要带架构图",
+        "top_k": 1
+      },
+      {
+        "prompt": "New hires keep asking how this codebase fits together. Generate the wiki for it.",
+        "top_k": 1
+      },
+      {
+        "prompt": "把这个项目的模块关系和核心流程梳理成一份带 Mermaid 图的分析报告",
+        "top_k": 1
+      },
+      {
+        "prompt": "We're open-sourcing next month. Produce the repository documentation with diagrams and source references.",
+        "top_k": 1
+      },
+      {
+        "prompt": "开源仓库冷启动,帮新人生成一份能看懂的代码库导读",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "这个代码库的质量到底行不行,给个分数和改进清单",
+        "owner": "check"
+      },
+      {
+        "prompt": "The utils module is a tangled mess — restructure it.",
+        "owner": "think"
+      },
+      {
+        "prompt": "README 的快速开始部分太简略了,帮我扩写详细点",
+        "owner": "write"
+      }
+    ]
+  }
+}

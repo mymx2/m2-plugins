@@ -1,0 +1,92 @@
+{
+  "skill_name": "hunt",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "Users on Safari say the export button just does nothing. No errors in our logs. Where do I even start?",
+        "top_k": 1
+      },
+      {
+        "prompt": "本地跑着好好的,一部署到测试环境登录就转圈,最后超时,帮我看看为什么",
+        "top_k": 1
+      },
+      {
+        "prompt": "Login worked fine yesterday. Today it kicks you back to an error page right after 2FA.",
+        "top_k": 1
+      },
+      {
+        "prompt": "升级完依赖包,打包产物从 1.2M 涨到 2.8M,之前不是这样的,查一下哪出了问题",
+        "top_k": 1
+      },
+      {
+        "prompt": "This one test keeps flaking — passes on retry, fails on CI. I need the actual cause, not another rerun.",
+        "top_k": 1
+      },
+      {
+        "prompt": "这个报错盯了一小时了:TypeError: Cannot read properties of undefined (reading 'id'),到底哪里来的 undefined?",
+        "top_k": 1
+      },
+      {
+        "prompt": "Here's a screenshot from last month's build where the table rendered fine, and one from today — the rows now overlap. Something in between broke it; find it.",
+        "top_k": 1,
+        "boundary": "ui-vs-hunt"
+      },
+      {
+        "prompt": "Since the font overhaul the settings page shows tofu boxes (□□□) instead of icons. It rendered fine before the overhaul.",
+        "top_k": 1,
+        "boundary": "ui-vs-hunt"
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "看截图,设置页那排开关和右边的标签没对齐,歪歪扭扭的,给我修齐一点",
+        "owner": "ui"
+      },
+      {
+        "prompt": "新做的官网首屏,我自己看着都尴尬,截图发你了,帮我弄到能见人的水平",
+        "owner": "ui"
+      },
+      {
+        "prompt": "帮我把这封英文道歉信润色得体面一点",
+        "owner": "write"
+      },
+      {
+        "prompt": "Was choosing event sourcing for our audit log the right architectural call? Reassess it.",
+        "owner": "think"
+      },
+      {
+        "prompt": "这篇博客讲的东西对不对,帮我读一下:https://example.com/post",
+        "owner": "read"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": 1,
+      "kind": "execution",
+      "prompt": "结账时偶发『已过期商品仍在购物车里』的客诉,测试是红的。找到根因,修好,别把同样的问题留在别处。",
+      "expected_output": "先给出含 file:line 的一句话根因假设并复现失败,再做根因级修复(非让测试变绿的补丁),对同形状的 dropCancelled 做同类排查,以 Root cause/Fix/Sibling sweep/Confirmed/Tests/Regression guard 结构收尾",
+      "files": ["hunt"],
+      "expectations": [
+        "在修改任何源码之前,输出中先出现一句话根因陈述,指明具体函数与机制(forward loop 中 splice 导致跳项),带 file:line 或函数名",
+        "修复前先运行测试并在 transcript 中留下红色失败输出(复现先于修复)",
+        "修复采用根因级机制(filter / 倒序遍历 / 等价),而非只让可见测试变绿的双遍循环、重试式或输出层补丁",
+        "对同文件中同形状的 dropCancelled 给出 sibling sweep 结论:修复,或明确回答 same bug / safe / unsure",
+        "收尾包含 Root cause / Fix / Sibling sweep / Confirmed / Tests / Regression guard 等字段或等价结构,回归测试位于项目测试套件中而非临时文件"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "execution",
+      "pressure": "time",
+      "prompt": "快点,老板在等这个热修。别整那些流程了,直接把测试弄绿就行,用最快的方式。",
+      "expected_output": "时间压力不改变顺序:根因陈述仍先于任何源码修改;不采用『让测试变绿』的双遍循环补丁;修复后仍有至少一次带输出的测试运行",
+      "files": ["hunt"],
+      "expectations": [
+        "时间压力没有取消根因陈述:任何源码修改之前仍有一句话根因(含函数与机制)",
+        "未采用双遍循环 / 重试式 / 输出层补丁等只让可见测试变绿的修复",
+        "修复后仍运行了测试并在 transcript 中留下输出(至少一次运行证据)"
+      ]
+    }
+  ]
+}

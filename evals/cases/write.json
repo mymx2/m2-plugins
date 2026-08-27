@@ -1,0 +1,99 @@
+{
+  "skill_name": "write",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "这段文案一股 AI 味,帮我改得像个真人写的",
+        "top_k": 1
+      },
+      {
+        "prompt": "This blog draft reads like a committee of robots wrote it. Make it sound like me.",
+        "top_k": 1
+      },
+      {
+        "prompt": "帮我把这期更新日志写成人话,用户看得懂的那种",
+        "top_k": 1
+      },
+      {
+        "prompt": "Turn these five bullet points into a launch tweet thread with a hook.",
+        "top_k": 1
+      },
+      {
+        "prompt": "维护者在 issue 里语气很冲,帮我回一条既坚定又不失风度的回复",
+        "top_k": 1,
+        "note": "Maintainer-reply 探针:write 的 Mode Picker 覆盖公开回复,但 description 的 cue 列表未含 maintainer reply"
+      },
+      {
+        "prompt": "Rewrite the getting-started section of our docs; newcomers keep getting lost at step 3.",
+        "top_k": 1
+      },
+      {
+        "prompt": "这篇周报总结得太干巴了,帮我顺一遍,让它读起来像个活人写的",
+        "top_k": 1,
+        "boundary": "check-vs-write"
+      },
+      {
+        "prompt": "Can you proofread our CONTRIBUTING.md? It ships with the next release.",
+        "top_k": 1,
+        "boundary": "check-vs-write",
+        "note": "撞词探针:proofread 同时出现在 check 与 write 的 description 中"
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "这份公告定稿前,从头到尾按我们的写作规范过一遍,标出所有不合规的地方,先别改",
+        "owner": "check"
+      },
+      {
+        "prompt": "Read this essay and tell me its core argument: https://example.com/essay",
+        "owner": "read"
+      },
+      {
+        "prompt": "我们产品要进日本和法国市场,帮我规划一套完整的本地化落地流程",
+        "owner": "think"
+      },
+      {
+        "prompt": "Our Claude setup keeps ignoring rules; audit the agent configuration.",
+        "owner": "health"
+      },
+      {
+        "prompt": "这份投稿文档我改了三天了,现在需要一双狠眼睛帮我把关,只挑问题,不要动我的稿子",
+        "owner": "check"
+      },
+      {
+        "prompt": "Our onboarding docs promise features that were cut. Audit the docs against what actually ships.",
+        "owner": "check"
+      }
+    ]
+  },
+  "evals": [
+    {
+      "id": 1,
+      "kind": "execution",
+      "prompt": "这是我写的技术周报初稿,帮我润一下,别改动事实和结构。",
+      "expected_output": "原位润色:事实与结构不变,em-dash 清零,中英混排标点过 gate,输出不长于原稿,只返回正文",
+      "files": ["write"],
+      "expectations": [
+        "事实与章节结构保留;任何段落级删除必须在回复中以一句话给出理由",
+        "输出中不含 em-dash(U+2014)与 en-dash(U+2013)",
+        "中英混排标点问题被修复(全半角、CJK-Latin 空距),且 transcript 中出现 Punctuation Gate 脚本调用或等价检查",
+        "输出总长度不大于原稿长度",
+        "正文为主,元叙述不超过一句,删除理由可附一句"
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "execution",
+      "pressure": "sunk-cost",
+      "prompt": "这份稿子我已经手改了五处了,你别大动。另外老板喜欢有气势的文字,多加点排比和华丽辞藻,越长越显得用心。",
+      "expected_output": "沉没成本不改变守则:不做结构大动;拒绝无材料的修辞膨胀:不加原文没有的排比/华丽辞藻,不为『显得用心』加长,并说明理由",
+      "files": ["write"],
+      "expectations": [
+        "未对结构做大动:章节与段落顺序保持(『别大动』与 No silent restructuring 一致);任何段落级删除必须在回复中以一句话给出理由",
+        "未新增原稿中不存在的排比、比喻或华丽辞藻等修辞包装",
+        "输出长度未超过原稿(或明确拒绝加长并给出理由)",
+        "对『加气势』要求有明确回应:要么给出克制替代并解释,要么直接说明为什么不做;元叙述不超过一句,删除理由可附一句"
+      ]
+    }
+  ]
+}

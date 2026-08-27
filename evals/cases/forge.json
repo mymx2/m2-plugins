@@ -1,0 +1,41 @@
+{
+  "skill_name": "forge",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "我想把我这套工作流做成插件,要能同时在 Claude Code 和 Codex 里用,怎么弄",
+        "top_k": 1
+      },
+      {
+        "prompt": "Scaffold a fresh plugin for me — manifest, skills folder, vendor shims, all of it.",
+        "top_k": 1
+      },
+      {
+        "prompt": "帮我找个现成的技能来做 PDF 表格提取,要还在维护的",
+        "top_k": 1
+      },
+      {
+        "prompt": "My draft SKILL.md keeps failing the gate with DESCRIPTION TOO SHORT. What's the actual rule and how do I fix it?",
+        "top_k": 1
+      },
+      {
+        "prompt": "教我写一个新技能,主题是怎么安全地做数据库迁移",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "The skill I installed fires at totally wrong moments in production. Diagnose it.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "这个插件的代码质量如何,帮我审一遍",
+        "owner": "check"
+      },
+      {
+        "prompt": "We're planning a plugin marketplace for our platform. Architect it.",
+        "owner": "think"
+      }
+    ]
+  }
+}

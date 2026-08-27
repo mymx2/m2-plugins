@@ -1,0 +1,55 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dyc",
+  "version": "1.0.0",
+  "description": "m2-plugins/plugins/dyc — eight core engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, and health, with additional skills for extended capabilities.",
+  "author": {
+    "name": "dyc",
+    "email": "mymx2@qq.com",
+    "url": "https://github.com/mymx2"
+  },
+  "homepage": "https://github.com/mymx2/m2-plugins",
+  "repository": "https://github.com/mymx2/m2-plugins",
+  "license": "MIT",
+  "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins", "waza"],
+  "extensions": {
+    ".claude-plugin": {
+      "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+      "init": ".claude-plugin/init.ts"
+    },
+    ".codex-plugin": {
+      "init": ".codex-plugin/init.ts",
+      "skills": "./skills/",
+      "mcpServers": "./mcp.codex.json",
+      "interface": {
+        "displayName": "DYC",
+        "shortDescription": "Eight slash-command skills for AI agents: /think, /ui, /check, /hunt, /write, /learn, /read, /health.",
+        "longDescription": "DYC packages eight engineering workflow skills as slash commands: think for planning, check for review, hunt for debugging, ui for frontend work, read for source intake, write for prose, learn for domain research, and health for agent configuration audits. Sourced from tw93/Waza.",
+        "developerName": "dyc",
+        "websiteURL": "https://github.com/mymx2/m2-plugins",
+        "brandColor": "#111827",
+        "category": "Developer Tools",
+        "capabilities": ["Interactive", "Write"],
+        "defaultPrompt": [
+          "Help me choose the right skill for this task",
+          "Run /check to review my recent changes",
+          "Use /think to plan this change"
+        ]
+      }
+    },
+    ".codebuddy-plugin": {
+      "init": ".codebuddy-plugin/init.ts"
+    },
+    ".qoder-plugin": {
+      "displayName": "dyc",
+      "descriptionZh": "m2-plugins/plugins/dyc，八种斜杠命令技能的集合，包括/think、/ui、/check、/hunt、/write、/learn、/read 和/health，用于人工智能代理，来源:tw93/Waza",
+      "category": "developer-tools",
+      "tags": ["mymx2", "dyc", "waza"],
+      "init": ".qoder-plugin/init.ts",
+      "mcpServers": "./mcp.json",
+      "skills": "./skills/",
+      "rules": "./rules/",
+      "preserveUpstreamMetadata": true
+    }
+  }
+}

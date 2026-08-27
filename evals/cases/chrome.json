@@ -1,0 +1,41 @@
+{
+  "skill_name": "chrome",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "后台有一批客户资料要录入,帮我用浏览器自动化填一遍这个表单",
+        "top_k": 1
+      },
+      {
+        "prompt": "Open our staging login flow, capture the console errors and a full-page screenshot.",
+        "top_k": 1
+      },
+      {
+        "prompt": "用浏览器装一下我们这个扩展,看看 popup 能不能正常弹出来,service worker 活没活",
+        "top_k": 1
+      },
+      {
+        "prompt": "The chrome-devtools MCP server won't connect from this machine. Fix the setup.",
+        "top_k": 1
+      },
+      {
+        "prompt": "把商品详情页的加载过程录个 trace 存下来",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "The landing page takes 9 seconds to load on mobile. Find out why.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "登录页丑得没法看,重新设计一版",
+        "owner": "ui"
+      },
+      {
+        "prompt": "Summarize what this docs page says: https://docs.example.com/api",
+        "owner": "read"
+      }
+    ]
+  }
+}

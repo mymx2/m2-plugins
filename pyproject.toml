@@ -1,0 +1,26 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E", # pycodestyle errors
+  "F", # pyflakes
+  "W", # pycodestyle warnings
+  "I", # isort
+  "UP", # pyupgrade
+]
+ignore = [
+  "E501", # line too long (some scripts have long strings)
+]
+
+[tool.ruff.lint.per-file-ignores]
+# 技能脚本源自 tw93/Waza，放宽部分规则
+"plugins/dyc/skills/*/scripts/*.py" = [
+  "E501", # line too long
+  "E701", # multiple statements on one line (colon)
+  "E702", # multiple statements on one line (semicolon)
+  "E741", # ambiguous variable name
+  "F841", # unused variable
+  "F821", # undefined name (some use runtime-only references)
+]
