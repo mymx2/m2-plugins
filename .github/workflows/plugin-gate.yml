@@ -35,8 +35,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 📦 Install ruff
-        run: pip install ruff
+      - name: 📦 Install ruff + pytest
+        run: pip install ruff pytest
 
       - name: 🔍 Lint · fmt · type (TS)
         run: vp check
