@@ -1,0 +1,26 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: convert-url-to-markdown
+# 用例摘要，显示在用例列表与报告中。
+title: 按要求把 URL 内容转为 Markdown 保存
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 read 对"转成 Markdown / 保存"类请求：
+  返回干净 Markdown 并落盘为 example.md，而不是只给摘要。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    把 https://example.com 的页面内容转成 Markdown，
+    保存为当前目录的 example.md。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'example.md'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['example.md']

@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: smoke-test-plan
+# 用例摘要，显示在用例列表与报告中。
+title: 冒烟测试方案落到具体浏览器工具调用
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 chrome 的方案设计能力：每一步都落到
+  chrome-devtools-mcp 的具体工具名，而不是抽象描述。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    给我们的管理后台设计一个冒烟测试自动化方案：
+    登录 → 检查左侧菜单项都在 → 每个关键页截图存档。
+    用 chrome-devtools-mcp 来做，说明每一步具体用哪个工具。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'chrome-devtools-mcp'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    # new_page 与 navigate_page 都是合法的首步工具选择，用 any 兼容；
+    # take_screenshot 是截图存档的唯一工具，必须出现。
+    - output_contains:
+        any: ['new_page', 'navigate_page']
+    - output_contains:
+        all: ['take_screenshot']

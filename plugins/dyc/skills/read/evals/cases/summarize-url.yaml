@@ -1,0 +1,25 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: summarize-url
+# 用例摘要，显示在用例列表与报告中。
+title: 抓取 URL 后给出基于来源的简要总结
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 read 对"读一下"类请求默认给简明总结：
+  内容基于真实抓取结果，而不是整页原文倾倒。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    读一下 https://example.com ，用几句话总结这个页面的内容。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'Example Domain'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['Example Domain']

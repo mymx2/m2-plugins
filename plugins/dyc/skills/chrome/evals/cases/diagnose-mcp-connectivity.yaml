@@ -1,0 +1,27 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: diagnose-mcp-connectivity
+# 用例摘要，显示在用例列表与报告中。
+title: 给出 chrome-devtools-mcp 连不上时的排查路径
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 chrome 对 MCP 服务器连接故障的诊断能力：
+  围绕 chrome-devtools-mcp 给出可执行的分步排查，
+  而不是泛泛的"检查网络"。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    我的 chrome-devtools-mcp 服务器一直连不上，
+    浏览器自动化任务全部超时，帮我排查一下可能的原因和步骤。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'chrome-devtools-mcp'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['chrome-devtools-mcp']

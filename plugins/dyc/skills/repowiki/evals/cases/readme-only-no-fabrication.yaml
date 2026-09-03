@@ -1,0 +1,40 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: readme-only-no-fabrication
+# 用例摘要，显示在用例列表与报告中。
+title: README-only 仓库报告不虚构模块
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 repowiki 的证据纪律：素材只有 README 时报告仍然产出，
+  但不得虚构不存在的源码模块或依赖。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'README.md': |
+      # tiny-echo
+
+      一个把输入原样回显的命令行玩具。支持 --upper 转大写。
+      就这两个功能，没有更多了。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    分析当前目录这个仓库，生成 REPOWIKI.md。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'REPOWIKI.md'
+  file_contains:
+    - path: 'REPOWIKI.md'
+      content: 'tiny-echo'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - 'REPOWIKI.md 已生成且结构完整'
+    - '报告内容基于 fixture 中真实存在的 README.md，没有虚构不存在的模块、文件或依赖'
+  pass_threshold: 0.75

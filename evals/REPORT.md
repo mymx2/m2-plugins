@@ -2,6 +2,12 @@
 
 评测日期:2026-08-26。评测方式:三层独立、数据驱动。**未修改 `plugins/dyc/skills/` 下任何文件**;全部产物在 `evals/` 下。
 
+> **修复状态(2026-09-03 核对)**:下文"修复建议"8 项(BLOCKER×1 / STRUCT×5 / INCR×2)已全部在
+> `42c32ff` / `c0040ca` 落地,逐条核对记录见该节开头的状态块。write-baseline 的 2 个 FAIL 属
+> 期望缺陷,`evals/cases/write.json` 期望 1/5 已按 `grading-write-baseline.json` 的 eval_feedback
+> 修订,该次执行重跑待做。行为执行层(真实引擎)另见各技能 `plugins/dyc/skills/<name>/evals/`
+> (skill-up 格式,cbc 引擎),与本目录的触发路由层互补。
+
 ## 评测范围与方法
 
 | 层                        | 对象                 | 方法                                                                                                 | 产物                                                     |
@@ -75,6 +81,18 @@ agent 删掉"总的来说"段(该段"完成了既定目标"与 87% 未达标事�
 ---
 
 ## 修复建议(按严重度排序)
+
+> **2026-09-03 逐条核对:8 项全部落地。** #1 think description 已含 "triaging a bundle of
+> mixed requests/feedback into accept/reject buckets";#2 think L48 已改厂商中立清单
+> (`.claude/.codex/.qoder/rules/*` or equivalent);#3 think L81 已展开为 public surface
+> 枚举(settings/flags/env vars/commands/...);#4 check L11 已改 alias 说明(见当前 SKILL.md
+> 开头 Note);#5 check Sign-off 已改"先一句 plain-prose 说明进展,再贴 status block";#6 write
+> description 尾部已与 check 显式分工("use check — check flags rule violations, write
+> applies the wording fixes");#7 9 个技能 when_to_use 已各补中文场景词;#8 generated
+> mirrors / hollow green / whole-file reserialization 均已 inline 定义(当前 check SKILL.md
+> L120/L170/L175)。正文行号相对 2026-08-26 版本有漂移(think 现 249 行、check 现 311 行),
+> `results/tier1-readability.md` 的行号引用待重审;BLOCKER #1 修复后的 Tier 2 语义判定
+> (65/66 → 预期 66/66)待重验,词面层与入库基线一致已由 CI 确认。
 
 ### BLOCKER(会导致错误行为)
 

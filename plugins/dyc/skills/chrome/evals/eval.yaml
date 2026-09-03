@@ -1,0 +1,51 @@
+# skill-up 评测配置的模式版本，不要修改。
+schema_version: v1alpha1
+
+environment:
+  # 每个用例的运行环境；用例为诊断与方案设计，不驱动真实浏览器。
+  type: none
+
+skills:
+  # 安装进 Agent Engine 的被测技能。
+  - source: local_path
+    # 被测技能路径，相对技能根目录。
+    path: .
+
+engine:
+  # 自定义引擎：cbc（CodeBuddy CLI，claude_code 生态兼容）。
+  # 覆盖为 --engine claude_code 时走内置实现，custom 块被忽略。
+  name: codebuddy
+  custom:
+    # 本地命令调用；stdout 直接作为 final_message。
+    transport: local
+    response_format: text
+    local:
+      # cbc 为原生二进制，在 PATH 中可直接 exec。
+      command: cbc
+      # 单轮用例：prompt 经模板变量注入，输出取 stdout。
+      # 不传 --max-turns：judge 调用会把 ${max_turns} 渲染为 0，
+      # 导致 cbc 报 Max turns (0) exceeded；turn 数由 300s 超时兜底。
+      args:
+        - --settings
+        - '{"disableAllHooks":true}'
+        - --mcp-config
+        - '{"mcpServers":{}}'
+        - --strict-mcp-config
+        - -p
+        - --permission-mode=bypassPermissions
+        - '${prompt}'
+
+cases:
+  # 用例文件列表，路径相对技能根目录。
+  files:
+    - evals/cases/diagnose-mcp-connectivity.yaml
+    - evals/cases/smoke-test-plan.yaml
+  # 所有用例继承的默认约束，可被单个用例覆盖。
+  defaults:
+    # 单用例 5 分钟预算（含 agent + judge），保证可稳定回归。
+    timeout_seconds: 300
+    max_turns: 12
+
+report:
+  # 每次运行后写出的报告格式。
+  formats: [json]

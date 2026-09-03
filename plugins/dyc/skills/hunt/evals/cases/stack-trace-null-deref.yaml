@@ -1,0 +1,48 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: stack-trace-null-deref
+# 用例摘要，显示在用例列表与报告中。
+title: 从报错堆栈定位空指针根因
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 hunt 面对堆栈报错时走假设驱动流程：
+  根因一句话说清并定位到具体代码（文件/函数/行号任一），
+  修复在诊断之后。语义契约对模型表述方差敏感
+  （实测同 prompt 三次跑出"根因/render-order.js"与"已修复"等
+  完全不同的详尽形态），rule_based 词面锚定必然误判，故用 agent_judge。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'render-order.js': |
+      // 订单卡片渲染
+      export function renderOrder(order) {
+        const userName = order.user.name
+        return `<div>${userName} - ${order.amount}</div>`
+      }
+
+      export function renderOrderList(orders) {
+        return orders.map(renderOrder).join('')
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    线上页面白屏了，报错堆栈在下面，帮我排查一下原因：
+
+    TypeError: Cannot read properties of undefined (reading 'name')
+        at renderOrder (render-order.js:3:24)
+        at Array.map (<anonymous>)
+        at renderOrderList (render-order.js:8:21)
+
+    代码在当前目录的 render-order.js。
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - '诊断先于修复：先陈述根因假设，再给修复方案'
+    - '根因定位到具体代码（文件名、函数名或行号任一即可）'
+    - '根因解释了报错现象（order.user 为 undefined 导致解引用失败、map 中断、整页白屏）'
+  pass_threshold: 0.75

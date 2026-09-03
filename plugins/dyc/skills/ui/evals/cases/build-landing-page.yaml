@@ -1,0 +1,53 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: build-landing-page
+# 用例摘要，显示在用例列表与报告中。
+title: 把廉价感落地页改出设计观点
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 ui 对"很丑/廉价"的直觉投诉做美学迭代：
+  产出有明确观点与视觉决策的页面，不是默认模板感。
+  形态说明：从零生成完整落地页实测 7 分钟以上（超出 300s 预算），
+  故用"种子页面改进"形态——这也是 ui 的核心场景（gut-feel complaint）。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'index.html': |
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="utf-8"><title>Focus Tomato</title></head>
+      <body style="font-family: Arial; background: #f0f0f0; margin: 40px;">
+        <h1 style="color: blue;">Focus Tomato - 最好的番茄钟 APP</h1>
+        <p>我们的番茄钟非常好用，功能强大，欢迎下载使用！！！</p>
+        <ul>
+          <li>功能1：计时</li>
+          <li>功能2：统计</li>
+          <li>功能3：提醒</li>
+        </ul>
+        <button style="background: blue; color: white; padding: 10px;">立即下载</button>
+        <p>Copyright 2026</p>
+      </body>
+      </html>
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    当前目录的 index.html 是我们产品的落地页，一眼看上去就很廉价，
+    帮我改得有质感一点，中英文混排，风格极简但要有记忆点。
+    直接改这个文件。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'index.html'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - 'index.html 被实质性重写，仍是结构完整、可直接在浏览器打开的页面'
+    - '页面有明确的设计观点与风格取舍，摆脱了种子文件的默认模板感'
+    - '说明中涉及字体、排版、间距或配色等具体视觉决策'
+  pass_threshold: 0.75

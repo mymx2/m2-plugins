@@ -33,7 +33,7 @@ import {
   writeFileSync,
 } from 'node:fs'
 import { homedir } from 'node:os'
-import { join, resolve } from 'node:path'
+import { basename, join, resolve } from 'node:path'
 
 /** 需要复制到 custom 目录的条目（不存在则跳过） */
 const INCLUDE = [
@@ -48,10 +48,26 @@ const INCLUDE = [
   'skills',
 ]
 
-/** 目标 Qoder 主目录：哪个存在装哪个（支持仅装国际版或仅装 CN 的机器） */
-function targetHomes(): string[] {
+/** 目标 Qoder 主目录：哪个存在装哪个（支持仅装国际版或仅装 CN 的机器）。uninstall.ts 复用 */
+export function targetHomes(): string[] {
   const home = homedir()
   return [join(home, '.qoder'), join(home, '.qoder-cn')].filter(existsSync)
+}
+
+/** custom 目录下 manifest name 相同的其他插件目录（跳过 skip 名单）。install/uninstall 共用 */
+export function findSameNameDirs(customDir: string, name: string, skip: string[] = []): string[] {
+  if (!existsSync(customDir)) return []
+  const found: string[] = []
+  for (const dir of readdirSync(customDir)) {
+    if (skip.includes(dir)) continue
+    try {
+      const other = JSON.parse(readFileSync(join(customDir, dir, 'plugin.json'), 'utf-8'))
+      if (other.name === name) found.push(dir)
+    } catch {
+      // 非插件目录，忽略
+    }
+  }
+  return found
 }
 
 function installToHome(qoderHome: string, pluginRoot: string, name: string, version: string): void {
@@ -118,17 +134,8 @@ function installToHome(qoderHome: string, pluginRoot: string, name: string, vers
   console.log(`  ✓ 注册表已更新:${key}(v${version})`)
 
   // 第五步：检测 custom 下的同名插件重复安装（跳过备份目录）
-  for (const dir of readdirSync(customDir)) {
-    if (dir === name || dir === `.${name}.bak`) continue
-    const otherManifest = join(customDir, dir, 'plugin.json')
-    try {
-      const other = JSON.parse(readFileSync(otherManifest, 'utf-8'))
-      if (other.name === name) {
-        console.warn(`  ⚠ custom/${dir} 也是 '${name}' 插件，建议在 Qoder 插件面板中移除其一`)
-      }
-    } catch {
-      // 非插件目录，忽略
-    }
+  for (const dir of findSameNameDirs(customDir, name, [name, `.${name}.bak`])) {
+    console.warn(`  ⚠ custom/${dir} 也是 '${name}' 插件，建议在 Qoder 插件面板中移除其一`)
   }
 }
 
@@ -156,6 +163,7 @@ export function install(pluginRoot: string): void {
 
 export default { install }
 
-if (process.argv[1]?.endsWith('install.ts')) {
+// 精确匹配文件名：endsWith('install.ts') 会把 uninstall.ts 也判为入口
+if (process.argv[1] && basename(process.argv[1]) === 'install.ts') {
   install(resolve(process.argv[2] ?? '.'))
 }

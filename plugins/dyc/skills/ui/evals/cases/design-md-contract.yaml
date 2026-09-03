@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: design-md-contract
+# 用例摘要，显示在用例列表与报告中。
+title: 生成 DESIGN.md 设计 token 契约文件
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 ui 的设计系统文件建设能力：
+  DESIGN.md 覆盖 lint / diff / export 用法与基础 token 分类。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    我们要给组件库建设计 token 契约，帮我在当前目录生成 DESIGN.md，
+    包含 lint、diff、export 三个命令的用法说明，
+    token 覆盖颜色、字号、间距三类。
+    内容从简：每个命令 3-5 行说明，不用贴完整 schema。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'DESIGN.md'
+  file_contains:
+    - path: 'DESIGN.md'
+      content: 'lint'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['DESIGN.md']

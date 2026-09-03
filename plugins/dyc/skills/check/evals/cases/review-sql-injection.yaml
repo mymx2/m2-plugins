@@ -1,0 +1,44 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: review-sql-injection
+# 用例摘要，显示在用例列表与报告中。
+title: 从代码审查中发现 SQL 注入缺陷
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 check 审查单个文件时能发现字符串拼接 SQL 的注入风险，
+  发现基于工作区里的真实代码证据，而不是空泛的好评。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'user_repo.js': |
+      // 用户查询服务
+      import { db } from './db.js'
+
+      export async function findUserByName(name) {
+        const sql = `SELECT * FROM users WHERE name = '${name}'`
+        return db.query(sql)
+      }
+
+      export async function deleteUser(id) {
+        if (id == null) throw new Error('id required')
+        return db.query(`DELETE FROM users WHERE id = ${id}`)
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    帮我 review 一下当前目录的 user_repo.js，看看有没有问题。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'SQL'
+  must_not_contain:
+    - 'LGTM'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['SQL', '注入']

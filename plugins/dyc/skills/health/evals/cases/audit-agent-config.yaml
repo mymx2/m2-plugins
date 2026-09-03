@@ -1,0 +1,42 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: audit-agent-config
+# 用例摘要，显示在用例列表与报告中。
+title: 审计 agent 配置发现失效校验器与过宽权限
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 health 的配置风险审计：AGENTS.md 引用的门禁脚本
+  在工作区并不存在（校验器不可达），且 Bash(*) 权限过宽，
+  两类问题都应被点名并给出可执行的修复动作。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'AGENTS.md': |
+      # Project Agent Guide
+
+      ## Commands
+      - 跑门禁：`bash scripts/check-all.sh`（必须全绿才能合并）
+      - 单测：`python -m pytest tests/`
+    '.claude/settings.json': |
+      {
+        "permissions": {
+          "allow": ["Bash(*)", "WebFetch(*)"]
+        }
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    检查一下我这个项目的 agent 配置有没有问题，重点看指令和权限。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'check-all.sh'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['check-all.sh', 'Bash']

@@ -11,6 +11,7 @@
     "test": "vp test && python -m pytest evals/tests/ -q && python scripts/check-trigger-jaccard.py && python evals/lexical_router.py && python evals/compare_routing.py evals/results/lexical-routing.baseline.json evals/results/lexical-routing.json",
     "validate:schema": "vpx tsx scripts/validate-schemas.ts",
     "qoder:dyc": "vpx tsx plugins/dyc/.qoder-plugin/install.ts plugins/dyc",
+    "qoder:dyc:uninstall": "vpx tsx plugins/dyc/.qoder-plugin/uninstall.ts plugins/dyc",
     "up": "taze -r -w -i"
   },
   "devDependencies": {

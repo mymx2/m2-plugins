@@ -1,0 +1,32 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: scaffold-new-plugin
+# 用例摘要，显示在用例列表与报告中。
+title: 按插件规范脚手架新插件 manifest
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 forge 创建符合 Agent Plugins Spec 的插件：
+  plugins/note-exporter/plugin.json 落盘且含规范字段。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    在当前目录的 plugins/note-exporter/ 下创建一个符合
+    Agent Plugins Spec 的新插件，名字叫 note-exporter，
+    先只写根 manifest，不用做厂商适配。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'plugins/note-exporter/plugin.json'
+  file_contains:
+    - path: 'plugins/note-exporter/plugin.json'
+      content: 'note-exporter'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    # 锚定 prompt 里的专名（插件名），不锚定 "plugin.json" 等
+    # 期望模型复述的文件名——实测模型会贴路径与内容而不复述该词。
+    - output_contains:
+        all: ['note-exporter']

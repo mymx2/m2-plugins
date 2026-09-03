@@ -1,0 +1,29 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: release-notes
+# 用例摘要，显示在用例列表与报告中。
+title: 起草专业简洁的版本发布说明
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 write 的发布文案能力：三条变更全部覆盖，
+  版本号与关键事实不丢失，无 AI 腔收尾。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    帮我们写 v2.3.0 的 release notes，要点：
+    修复 Windows 下路径处理的问题；新增暗黑模式；
+    移除废弃的 --old-flag 命令行参数。语气专业简洁。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - '暗黑'
+  must_not_contain:
+    - '总而言之'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['2.3.0', '暗黑']

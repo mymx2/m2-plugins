@@ -1,0 +1,39 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: audit-mcp-config
+# 用例摘要，显示在用例列表与报告中。
+title: 审计 MCP 配置的供应链与明文密钥风险
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 health 对 MCP 面的审计：未固定版本的 npx 拉取
+  与明文写入配置的 API key 都应被点名。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    '.mcp.json': |
+      {
+        "mcpServers": {
+          "docs-search": {
+            "command": "npx",
+            "args": ["-y", "docs-search-mcp"],
+            "env": { "DOCS_API_KEY": "sk-live-xxxx" }
+          }
+        }
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    审计一下当前目录的 .mcp.json，有没有安全隐患。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'docs-search'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['docs-search', 'npx']

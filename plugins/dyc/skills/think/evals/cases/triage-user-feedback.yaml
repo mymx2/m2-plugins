@@ -1,0 +1,29 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: triage-user-feedback
+# 用例摘要，显示在用例列表与报告中。
+title: 把混杂的用户反馈分诊为可执行分类
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 think 对一揽子混杂请求的分诊能力：
+  每条反馈都有明确归类和处置建议，而不是泛泛回应。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    收到一批用户反馈，帮我分分类，判断哪些值得做：
+    1. 安卓端登录偶发失败
+    2. 希望支持暗黑模式
+    3. 文档里的快速开始链接 404
+    4. 建议把打包工具从 webpack 换成 vite
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - '暗黑'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['登录', '暗黑', '404']

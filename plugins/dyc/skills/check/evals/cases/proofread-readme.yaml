@@ -1,0 +1,45 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: proofread-readme
+# 用例摘要，显示在用例列表与报告中。
+title: 校对 README 时发现不存在的命令
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 check 的文档校对能力：README 中 lintt 是拼错的命令，
+  校对结论必须点名这个具体问题，而不是"整体不错"。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'README.md': |
+      # quick-serve
+
+      极简静态文件服务器。
+
+      ## 安装
+
+      npm i -g quick-serve
+
+      ## 常用命令
+
+      - 启动：`quick-serve start --port 8080`
+      - 校验配置：`quick-serve lintt`
+      - 查看版本：`quick-serve --version`
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    发布前帮我校对一下当前目录的 README.md，看看有没有问题。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'lintt'
+  must_not_contain:
+    - 'LGTM'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['lintt']

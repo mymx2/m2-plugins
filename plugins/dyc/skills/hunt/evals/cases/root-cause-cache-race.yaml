@@ -1,0 +1,57 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: root-cause-cache-race
+# 用例摘要，显示在用例列表与报告中。
+title: 并发缓存竞态下的一句话根因定位
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 hunt 在给出任何修复前先产出可检验的根因：
+  定位到 cache 缓存了 rejected Promise 的问题（赋值未 await，
+  首次失败后所有调用共享同一个 rejected Promise），
+  并解释"失败后持续报错、重启才恢复"的全部症状。
+  注 1：种子 bug 是缓存 Promise 而非值——`cache = await ...` 写法
+  失败时 cache 仍为 null，不构成症状（2026-09-03 实测教训）。
+  注 2：cbc 快速模型实测会 30s 内跳过验证直接修补（judge 判 FAIL），
+  慢引擎（claude_code）下同一用例 PASS——该 FAIL 是"快速模型牺牲
+  诊断契约"的真实信号，保留不修。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'config-client.js': |
+      // 远程配置客户端
+      let cache = null
+
+      export async function getConfig() {
+        if (cache) return cache
+        cache = fetchConfigFromRemote()
+        return cache
+      }
+
+      async function fetchConfigFromRemote() {
+        const res = await fetch('https://cdn.example.com/config.json')
+        if (!res.ok) throw new Error(`config fetch failed: ${res.status}`)
+        return res.json()
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    排查一下这个问题：偶发 Config 接口超时后，
+    后续所有请求都直接失败，一直报 config fetch failed，
+    只有重启进程才恢复。代码在当前目录的 config-client.js。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - '缓存'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - '用一句话明确给出根因，并定位到具体代码（getConfig 中 cache 缓存了未 await 的 Promise，首次失败后所有调用共享同一个 rejected Promise）'
+    - '根因能解释全部症状：失败后持续报错、以及为什么重启才能恢复'
+    - '给出了验证根因的方式（复现步骤或探针），而不是直接跳到修补'
+  pass_threshold: 0.75

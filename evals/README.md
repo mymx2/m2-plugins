@@ -17,6 +17,15 @@
 | **Tier 3** 行为抽样     | hunt / check / write 各 baseline + 压力变体,6 次子代理执行 | `python evals/run_tier3.py` + `python evals/grade.py` | `runs/<skill>-<variant>/`、`results/grading-*.json` | 每条期望 PASS/FAIL,压力变体核心契约必须全守住                          |
 | **Tier 1** 弱模型可读性 | think / check 逐句照做视角                                 | 人工审查                                              | `results/tier1-readability.md`                      | BLOCKER=0                                                              |
 
+## 与技能内行为评测(skill-up)的分工
+
+本目录管**触发路由**(一条 prompt 应该选中哪个技能):确定性脚本 + 入库基线,进 CI 门禁。
+行为执行(选中技能后**干得对不对**)由各技能自带的 skill-up 评测承担:
+`plugins/dyc/skills/<name>/evals/`(eval.yaml + cases/,默认 cbc 引擎,`skill-up run` 执行,
+`--engine claude_code` / `--engine qodercli` 可覆盖)。两套互补:路由层先保证"选对人",
+技能内 evals 再验证"干对事"。技能内 evals 的案例入库,运行产物(`<skill>-workspace/`)
+不入库(见根 `.gitignore`)。
+
 ## 各层跑法
 
 ### Tier 0 — 触发面 Jaccard

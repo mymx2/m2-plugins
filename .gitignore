@@ -49,6 +49,9 @@ evals/fixtures/check/webhook-svc/.git/
 !evals/fixtures/check/webhook-svc/debug.log
 # Tier 3 运行现场:由 run_tier3.py prepare 从 fixtures/ 重建,产物不入库
 evals/runs/
+# skill-up 运行产物（实测 v0.10.0 生成于 plugins/<p>/skills/<s>-workspace/）
+plugins/*/skills/*-workspace/
+plugins/*/skills/*/*-workspace/
 
 ### User ###
 .DS_Store

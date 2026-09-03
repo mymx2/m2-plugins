@@ -1,0 +1,72 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: generate-repowiki-report
+# 用例摘要，显示在用例列表与报告中。
+title: 为迷你仓库生成含 Mermaid 的 REPOWIKI.md
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 repowiki 的核心产出：单文件 REPOWIKI.md，
+  含可渲染的 Mermaid 图，叙事围绕"为什么这样设计"。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'README.md': |
+      # mini-tasks
+
+      极简任务管理 CLI。设计要点：所有子命令通过 src/plugins/ 下的
+      模块自动注册，新增命令零改动核心（约定优于配置）。
+
+      ## 用法
+      - `node src/index.js add "买菜"` 添加任务
+      - `node src/index.js list` 列出任务
+      - `node src/index.js done 1` 完成任务
+    'package.json': |
+      {
+        "name": "mini-tasks",
+        "version": "0.1.0",
+        "type": "module"
+      }
+    'src/index.js': |
+      import { readdirSync } from 'node:fs'
+
+      const commands = new Map()
+      for (const file of readdirSync(new URL('./plugins/', import.meta.url))) {
+        const mod = await import(`./plugins/${file}`)
+        commands.set(mod.name, mod.run)
+      }
+
+      const [cmd, ...args] = process.argv.slice(2)
+      commands.get(cmd)?.(args)
+    'src/plugins/add.js': |
+      import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+
+      export const name = 'add'
+
+      export async function run(args) {
+        const file = 'tasks.json'
+        const tasks = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : []
+        tasks.push({ title: args[0], done: false })
+        writeFileSync(file, JSON.stringify(tasks, null, 2))
+        console.log(`added: ${args[0]}`)
+      }
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    分析当前目录这个仓库，生成仓库报告。
+    控制篇幅：核心系统 2-3 个，每个一节；不用穷尽所有细节。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'REPOWIKI.md'
+  file_contains:
+    - path: 'REPOWIKI.md'
+      content: '```mermaid'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['REPOWIKI.md']

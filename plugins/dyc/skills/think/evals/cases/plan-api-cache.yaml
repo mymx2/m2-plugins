@@ -1,0 +1,32 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: plan-api-cache
+# 用例摘要，显示在用例列表与报告中。
+title: 为配置缓存需求产出决策完整的推荐方案
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 think 在"出方案"请求下产出决策完整的方案：
+  单一推荐、被否决的替代方案、验证步骤齐全，
+  且不在用户批准前写实现代码。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    我们的 Flutter 应用每次冷启动都要全量拉取远程配置，首屏很慢。
+    想加一层本地配置缓存，帮我出个方案，先别写代码。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_not_contain:
+    - '```dart'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - '给出明确的单一推荐方案，而不是罗列多个选项让用户自己挑'
+    - '说明了被否决的替代方案及其权衡（如缓存失效策略、配置一致性）'
+    - '包含成功标准或验证方式'
+    - '在用户批准前没有产出实现代码'
+  pass_threshold: 0.75

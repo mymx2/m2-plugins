@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: author-commit-lint-skill
+# 用例摘要，显示在用例列表与报告中。
+title: 编写通过门禁的 commit-lint 技能
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 forge 的技能编写能力：SKILL.md 的 frontmatter
+  与 description 触发句式符合校验门禁要求。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    在当前目录的 skills/commit-lint/ 下帮我写一个技能：
+    name 是 commit-lint，用于规范 commit message。
+    description 要符合门禁要求（40-500 字符，带 "Use when..." 触发句式），
+    正文包含 Overview / When to Use / Verification 几个 section。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  files_exist:
+    - 'skills/commit-lint/SKILL.md'
+  file_contains:
+    - path: 'skills/commit-lint/SKILL.md'
+      content: 'Use when'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['commit-lint']

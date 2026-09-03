@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: de-ai-chinese-prose
+# 用例摘要，显示在用例列表与报告中。
+title: 中文润色去除 AI 腔并保留原意
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 write 能剥离"总而言之/赋能"式 AI 腔，
+  改写后保留产品事实（构建工具），只输出改写结果。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    帮我润色下面这段产品介绍，去掉 AI 味，保持原意：
+
+    总而言之，我们的新一代智能构建工具不仅极大地提升了构建速度，
+    而且赋能开发者实现效率的飞跃式提升，
+    综上所述，它将成为您团队不可或缺的利器。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_not_contain:
+    - '总而言之'
+    - '综上所述'
+    - '赋能'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['构建']
