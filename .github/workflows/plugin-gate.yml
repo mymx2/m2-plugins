@@ -17,7 +17,7 @@ concurrency:
 jobs:
   # ── 统一门禁 ───────────────────────────────────────────
   gate:
-    name: Gate — lint · fmt · type · test
+    name: Gate — lint · fmt · type · version · test
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -40,6 +40,9 @@ jobs:
 
       - name: 🔍 Lint · fmt · type (TS)
         run: vp check
+
+      - name: 🏷 Version drift (package.json is the source of truth)
+        run: vp run validate:version
 
       - name: 🔍 Lint · fmt (Python)
         run: ruff check scripts/ plugins/ evals/ && ruff format --check scripts/ plugins/ evals/

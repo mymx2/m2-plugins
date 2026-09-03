@@ -126,8 +126,9 @@ plugins/<name>/
 1. `setup-vp` action 安装 vp + Node + 依赖
 2. `setup-python` + `pip install ruff`
 3. `vp check`（TS lint + type check）
-4. `ruff check scripts/ plugins/ && ruff format --check scripts/ plugins/`（Python）
-5. `vp test`（全部测试，含 validate_repo.py + schema 校验）
+4. `vp run validate:version`（全链路版本与 package.json 一致，漂移即红）
+5. `ruff check scripts/ plugins/ && ruff format --check scripts/ plugins/`（Python）
+6. `vp test`（全部测试，含 validate_repo.py + schema 校验）
 
 ## Environment
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dyc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "m2-plugins/plugins/dyc — eight core engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, and health, with additional skills for extended capabilities.",
   "author": {
     "name": "dyc",

@@ -41,6 +41,9 @@ Docs: [Plugin docs](https://code.claude.com/docs/en/discover-plugins)
 # List installed plugins
 /plugin list
 
+# Update plugin to the latest version
+/plugin update dyc@m2-plugins
+
 # Disable / enable / uninstall
 /plugin disable dyc@m2-plugins
 /plugin enable dyc@m2-plugins
@@ -82,6 +85,8 @@ Docs: [Plugin docs](https://developers.openai.com/plugins/build/plugins)
 /plugins
 ```
 
+No separate update command: reopen `/plugins`, refresh the marketplace listing, and reinstall the entry (or restart Codex) to pick up the latest version.
+
 **Local development**
 
 ```bash
@@ -115,6 +120,9 @@ Docs: [Plugin docs](https://docs.qoder.com/zh/cli/plugins)
 ```bash
 # List installed plugins
 qodercli plugins list
+
+# Update plugin to the latest version from its marketplace
+qodercli plugins update dyc@m2-plugins
 
 # Disable / enable / uninstall
 qodercli plugins disable dyc
@@ -157,6 +165,9 @@ Docs: [Plugin docs](https://www.codebuddy.cn/docs/cli/plugin-marketplaces)
 ```bash
 # Open the plugin manager (Discover / Installed / Marketplaces / Errors)
 /plugin
+
+# Update plugin to the latest version
+/plugin update dyc@m2-plugins
 
 # Disable / enable / uninstall
 /plugin disable dyc@m2-plugins
