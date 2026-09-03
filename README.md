@@ -112,7 +112,7 @@ codex
 qodercli plugins marketplace add mymx2/m2-plugins
 
 # 2. Install plugin
-qodercli plugins install dyc
+qodercli plugins install dyc@m2-plugins
 ```
 
 Docs: [Plugin docs](https://docs.qoder.com/zh/cli/plugins)
