@@ -21,7 +21,7 @@ check is the last gate between code and users. It reads diffs, PRs, issues, rele
 - Outcome: a review, release decision, or maintainer action grounded in the current diff, project context, and live evidence.
 - Done when: findings, fixes, shipped state, or blockers are stated with the commands, artifacts, or remote state that prove them.
 - Evidence: worktree status, diff, public project docs, manifests, CI, package contents, release or registry state, and current command output.
-- Output: concise findings first, then verification and shipped-state summary when applicable. Multi-step or ship-action runs close with a completion ledger (done / not applicable / remaining), never a narrative that leaves the user asking "is everything done".
+- Output: concise findings first, then verification and shipped-state summary when applicable. Multi-step or ship-action runs, and any request with several items or screenshots, close with a numbered completion ledger (done / not applicable / remaining), never a narrative that leaves the user asking "is everything done".
 - Authorization: read-only intent may inspect the worktree and remote state but may not edit files, apply autofixes, commit, push, publish, comment, close, merge, or change branches. Each write or public action needs current-turn authorization, except when the user explicitly authorizes a named batch that contains it.
 
 ## When to Use
@@ -59,6 +59,7 @@ Pick the mode that matches the user's intent, then read it in full before acting
 | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | "implement this plan", `/think` output handed off                                              | load `references/mode-ship.md` (Plan Execution Mode)           |
 | Diff or PR ready, "review", "看看代码", "合并前"                                               | Default review (start at [Get the Diff](#get-the-diff))        |
+| "能删什么", "过度工程", "over-engineering review", "what can we delete"                        | load `references/deletion-review.md`                           |
 | "look at issues", "review PRs", "triage", "批量处理"                                           | load `references/mode-triage.md`                               |
 | "is this worth a release", "值不值得发版"                                                      | load `references/mode-ship.md` (Release Worthiness Analysis)   |
 | "commit", "push", "publish", "release", "close issue", "发布表情"                              | load `references/mode-ship.md` (Ship / Release Follow-through) |
@@ -282,6 +283,7 @@ In a dirty or multi-agent checkout, a passing local build or test run is not pro
 | PR comment sounded like a report                                  | 1-2 sentences, natural, like a colleague. Not structured, not AI-sounding.                                             |
 | PR comment used bullet points                                     | Write as short paragraphs, one thought per paragraph; thank the contributor first                                      |
 | New file name duplicated a locale, platform, or suffix convention | Check the target directory's existing naming convention before creating or renaming files                              |
+| Deployed without provider runtime or env checks                   | Follow the project's public deployment docs and compare provider config with local required env and runtime settings   |
 
 ## Sign-off
 
@@ -305,3 +307,5 @@ verification:     [command] -> pass / fail
 `public actions` lists every outward-facing step the task implied (issue replies, closures, release reactions) with its done or pending state; an external action the user has to ask about was not finished.
 
 For a whole-scope or post-fix verdict, `scope` is backed by the frozen baseline and current inventory, not by the last patch viewed. For a ship action, the status line is incomplete until every currently authorized ledger item is `done`, `not applicable`, or `blocked` with evidence.
+
+A turn that wrote files ends with the actual output of `git status --short --branch` and, when it pushed, the `status,conclusion` of the CI run for that sha; if either command was not run, the first line says which.

@@ -31,7 +31,7 @@ Write strips AI patterns from prose and rewrites it to sound human. The skill is
 
 ## Core Stance
 
-This skill is a catalog of smells, not a checklist to run top to bottom. Use it to recognize AI taste, then make judgment calls. The reference files (especially `write-zh.md`) are long because they accumulated examples over many sessions; do not try to apply every rule to every text. Applying more rules is not doing a better job.
+This skill is a catalog of smells, not a checklist to run top to bottom. Use it to recognize AI taste, then make judgment calls. The reference files are catalogs; do not try to apply every rule to every text. Applying more rules is not doing a better job.
 
 - **Over-editing is failure, equal to under-editing.** If a sentence is already natural, clear, and stable, leave it. Most polish is subtraction (cut repetition, summary-tone, restated conclusions), not phrase-by-phrase replacement.
 - **A piece has a speaker.** The reader's test is not "any banned words" but "can I tell who is talking". Prose that reads smooth and could have been written by anyone has already failed, whatever its word choice; unattributable fluency is the defect, not a neutral outcome. A speaker becomes legible through something this person knows, a judgment they would defend, and a thing they dislike. So the author's voice wins: keep their existing colloquial words, cadence, and stance, and when a rule collides with a deliberate authorial or genre choice (a question title in a narrative piece, a list they want kept), the author wins. Rules are defaults, not laws. Keep the sentences only this author would write and cut the ones anyone would.
@@ -48,7 +48,7 @@ When distilling a new lesson into this skill, fold it into an existing principle
    - Contains Chinese characters + release notes or social post mode → load `references/write-zh-release-notes.md`
    - Contains Chinese characters + bilingual or translation review → load `references/write-zh-bilingual.md`
    - Product/site/app localization review across multiple locales → load `references/write-product-localization.md`; also load `references/write-zh-bilingual.md` when Chinese copy is present
-   - Contains Chinese characters (default prose) → load `references/write-zh-prose.md` (quick rules); load `references/write-zh.md` for the full AI-taste pattern catalog
+   - Contains Chinese characters (default prose) → load `references/write-zh.md`
    - Otherwise → load `references/write-en.md`
 
 No summary, no commentary, no explanation of changes unless explicitly asked.
@@ -61,7 +61,7 @@ Default is a line-level rewrite of the supplied text. Take a mode only when its 
 | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Release note, changelog entry, update-feed copy                                                    | load `references/mode-release-notes.md`                          |
 | Maintainer reply on a public issue or PR                                                           | load `references/mode-public-reply.md`                           |
-| Long draft (roughly 10k characters or more) needing structural work                                | load `references/mode-long-form.md`                              |
+| Long draft needing structural work                                                                 | load `references/mode-long-form.md`                              |
 | EN/CN pair to check for drift                                                                      | [Bilingual Review](#bilingual-review-mode)                       |
 | Product, site, or app copy across locales                                                          | [Product Localization Review](#product-localization-review-mode) |
 | Document, PDF, or white paper to review                                                            | [Document Review](#document-review-mode)                         |
@@ -137,14 +137,6 @@ Activate when: "本地化文案", "多语言文案", "localization copy", "i18n 
 
 Load `references/write-product-localization.md`. If Chinese is one of the locales, also load `references/write-zh-bilingual.md`.
 
-Default workflow:
-
-1. Separate surfaces first: release feed, website pages, docs/help, runtime strings, legal/privacy copy, and generated pages may have different locale coverage and source files.
-2. Preserve factual structure: versions, dates, links, item order, placeholders, and product behavior remain fixed unless the user asks to change them.
-3. Review by locale artifacts, not by English meaning alone. Missing accents, ASCII fallbacks, literal possessives, stale locale paths, and mechanical plural or apostrophe errors are first-class issues.
-4. After broad cleanup, run a second pass for replacement damage. Do not trust accent sweeps or glossary replacements until the generated output has been checked.
-5. When asked to implement, patch the source localization files and rebuild generated pages. When asked only to review, return findings grouped by surface and severity.
-
 ## Document Review Mode
 
 Activate when: PDF, document, white paper, "review this document", "check this document", "审稿".
@@ -172,18 +164,11 @@ Apply the 推文五规则 in `references/write-zh-release-notes.md` (community l
 
 ## Gotchas
 
-| What happened                                                                      | Rule                                                                                                                                              |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Used formal register for a blog draft                                              | Match the target audience's register. Blog is conversational, not academic.                                                                       |
-| Applied Chinese/English spacing rules to a pure-English text                       | Bilingual spacing rules (半角/全角) only apply when the text mixes Chinese and English                                                            |
-| Polished the user's voice into generic launch copy                                 | Preserve the author's cadence and stance. Use real product artifacts to sharpen facts, not to replace the voice.                                  |
-| Drafted release or social copy from memory or a handoff                            | Read the current release page, changelog, issue/PR, runnable artifact, product page, screenshot, or supplied source before making factual claims. |
-| Wrote launch copy in one pass without checking the live screenshots                | Iterate: draft, compare against the real product screenshot or page, tighten wording to match what ships, repeat until copy and artifact agree    |
-| Polished a review report until it sounded timeless                                 | Keep snapshots labeled as snapshots, or distill them into stable rules. Do not make dated claims sound evergreen                                  |
-| User flagged one word as "not my voice"; only that instance was fixed              | A flagged word marks a smell class, not a typo. Sweep the whole text for the same class (same register, same template shape) before returning     |
-| Hit the requested word count by explaining the same three ideas from four angles   | Count the material first. Research, ask up to three questions, or ship shorter. Padding is a failed draft, not a long one                         |
-| Flagged or rewrote a phrase that was the author's own wording                      | With source material, grep it before flagging or fixing; restore the original, don't paraphrase it                                                |
-| Fixed an AI phrase with fresh invented color; the author flagged the new words too | Fix by subtraction: keep to facts in the material, add no new imagery                                                                             |
+| What happened                                                         | Rule                                                                                                                                          |
+| --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Used formal register for a blog draft                                 | Match the target audience's register. Blog is conversational, not academic.                                                                   |
+| Applied Chinese/English spacing rules to a pure-English text          | Bilingual spacing rules (半角/全角) only apply when the text mixes Chinese and English                                                        |
+| User flagged one word as "not my voice"; only that instance was fixed | A flagged word marks a smell class, not a typo. Sweep the whole text for the same class (same register, same template shape) before returning |
 
 ## Output
 

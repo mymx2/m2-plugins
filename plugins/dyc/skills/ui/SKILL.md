@@ -70,7 +70,7 @@ Pick the path that matches each deliverable, then read it in full. A request may
 
 **Adding a surface to a mature product skips direction lock in the other direction**: when the task is a new panel, dialog, sheet, toast, or confirmation inside an app that already has same-class components, the direction is the app. Grep for the existing sibling component first and reuse its container, motion, and typography tokens; inventing a new style needs a stated reason why no existing component fits. First drafts that ignore the app's own component vocabulary get rejected on sight.
 
-Resolve the five direction dimensions below from the conversation, current product, screenshots, source tokens, and sibling components before writing code. Infer first. Across every path in the request, ask in one compact clarification round with at most two sub-questions, only when the missing answer would materially change a deliverable. State the strongest inferred answer for every unresolved dimension and ask the user to correct only the material assumptions. An omitted answer accepts the stated assumption. A contradictory answer reopens only the affected dimension and must be resolved before that deliverable proceeds. An existing product may answer all five without another user turn.
+Resolve the five direction dimensions below before writing code. Take colour, type, width, and voice from the current product's tokens, sibling components, screenshots, and the repo's git history first; then from other shipped products by the same team or author when they exist; then from the conversation. Model-default palettes, default fonts, and freehand graphics are allowed only when no reference exists. Infer first. Across every path in the request, ask in one compact clarification round with at most two sub-questions, only when the missing answer would materially change a deliverable. State the strongest inferred answer for every unresolved dimension and ask the user to correct only the material assumptions. An omitted answer accepts the stated assumption. A contradictory answer reopens only the affected dimension and must be resolved before that deliverable proceeds. An existing product may answer all five without another user turn.
 
 1. **Who uses this, and in what context?** Analyst dashboard differs from landing page or onboarding flow. See "App shell exception" below if the answer is a sidebar + main workspace layout.
 2. **What is the aesthetic direction?** Name it precisely: dense editorial, raw terminal, ink-on-paper, brutalist grid, warm analog. "Clean and modern" is not a direction. If the user names a reference site or product ("feels like Linear / Claude.ai / Vercel"), do not accept it as a direction -- extract 3 concrete properties from it: button radius philosophy, surface depth treatment (shadow vs background step vs border), and accent color family. Name those instead.
@@ -147,7 +147,7 @@ Offer without being asked when the decision is taste, not correctness: icon, wei
 
 1. Re-read the visual thesis from direction lock; check for drift toward generic defaults.
 2. Run the aesthetic review checklist (Output: Aesthetic Review section) before handoff.
-3. Ask the user to verify at full width and at 375px; fix mobile breakage before handing off.
+3. Render at full width and at 375px yourself; fix mobile breakage before handing off. Hand the user the exact view to check only when the host cannot render.
 4. Scan the first viewport for default-prompt tells (reflex font, gradient, identical cards, centered hero with two CTAs).
 
 ## Hard Rules
@@ -171,6 +171,7 @@ Direction lock loads `references/design-reference.md` for the full rewrites, typ
 | English looked fine, localized text overflowed                                    | Test long words and localized strings before handoff, especially inside buttons, tabs, nav, and compact cards.                                                                                                           |
 | Relied on `…` truncation to fit text in a fixed-width slot                        | Guarantee fit instead: compact the format, cap to whole segments, or hard-trim with no glyph. Metric and label footers must never tail-truncate into an ellipsis.                                                        |
 | One extra word pushed a line into a wrap; the last line held a single orphan word | Before handoff, sweep every user-visible text block for near-wrap and orphan-line states. Fix by tightening the copy, not by shrinking type; one instance found means sweep the whole document, all instances get fixed. |
+| Five text styles inside one small card                                            | One text style per role inside a card, hierarchy by order; more than three distinct text styles in a small block is the smell.                                                                                           |
 
 ## Output: Aesthetic Review
 
@@ -187,7 +188,7 @@ Run these checks before the handoff summary:
 - Would the design still feel premium if all decorative shadows were removed?
 - AI Slop Test: scan the first screen for default patterns (reflex font, purple-to-blue gradient, centered hero with two CTAs side by side, three identical cards, generic top nav). If any appear unintentionally, fix typography, color, or layout until none remain.
 
-If any check fails, fix first. Ask the user to verify at full width and at 375px; if the layout breaks at mobile width, fix before handing off.
+If any check fails, fix first. Render at full width and at 375px yourself (Responsive & Screen Verification in `references/design-reference.md`); if the layout breaks at mobile width, fix before handing off. Only when the host cannot render, say so and hand the user the exact view to check.
 
 End with:
 

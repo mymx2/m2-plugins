@@ -26,4 +26,6 @@ Interruptibility inverts between the two. On the web you reach for transitions o
 - **Literals outlive the token layer.** Named motion constants get added, then new views keep typing `0.18` inline because it is one character shorter than reaching for the token. Grep for raw curve constructors outside the token file; the count going up is the drift signal. The point is not tidiness, it is that retuning the app's feel should be one edit rather than a survey.
 - **A motion token is a sentence, not a number.** `expandCollapse` says where it is allowed; `0.15` says nothing and gets copied into places it does not fit. Name each token for the interaction and record why the value cannot be faster or slower, because that reason is what a later reader needs in order to change it safely.
 
+A motion or icon change is verified by looking: two frames captured during the transition (or a short recording) and one still of the icon at the shipped size, attached or described. "Added" without a capture is a claim.
+
 The same mapping shape holds for UIKit (`UIViewPropertyAnimator`, `isHighlighted`, `UIAccessibility.isReduceMotionEnabled`) and Compose (`animate*AsState`, `InteractionSource.collectIsPressedAsState`, `LocalAccessibilityManager`). Translate the row, keep the judgment.

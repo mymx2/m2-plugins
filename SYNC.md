@@ -33,9 +33,10 @@ Guidelines for deciding what flows from upstream into `plugins/dyc`:
 
 - **Source:** `vendor/addyosmani/agent-skills`
 - **Upstream:** https://github.com/addyosmani/agent-skills
-- **Git SHA:** `5a5ea45e806f82273549fd85e60adb95d55f510d`
-- **Synced:** 2026-08-24
-- **Changes since last sync:** 2 commits — fix(validator) allowlisted skills only; fix(skill-lint) frontmatter and exempt lookup
+- **Git SHA:** `d2c37ef18a008c0dc233d4e1a34b7fe15f132cbd`
+- **Synced:** 2026-09-03
+- **Changes since last sync:** 19 commits — skill content updates (performance, constraints, planning) out of dyc distillation scope
+- **Skipped this sync:** `skill-lint.js` workflow-step gate (`## The X Workflow` step-section pairing) — deferred until a dyc skill uses that pattern
 
 ## mattpocock/skills
 
@@ -62,9 +63,10 @@ Guidelines for deciding what flows from upstream into `plugins/dyc`:
 
 - **Source:** `vendor/tw93/Waza`
 - **Upstream:** https://github.com/tw93/Waza
-- **Git SHA:** `831d9b96d80165e8a0211314055da21452edda56`
-- **Synced:** 2026-08-25
-- **Changes since last sync:** 2 commits — fix(check) tighten delivery receipts (mode-ship account identity verification, mode-triage queue freeze + reconciliation); write skill pitfall table + write-zh rules 26-27
+- **Git SHA:** `610b53af44eff1ec1dd19b4a5f6ccdb29c33a85d`
+- **Synced:** 2026-09-03
+- **Changes since last sync:** 9 commits — skill skeletons aligned with duplicate gotchas folded; ui consolidated around measurement-based verification; write catalogs deduplicated (`write-zh-prose.md` removed, bilingual slimmed to pointers); health audit false positives reduced (doc-refs symlink tri-state, markdown fence/inline-code skip, rustdoc exemption, actionable command gating, Swift surface, mirror-collapse count)
+- **Skipped this sync:** Document Review Mode (dyc routes document audits to `check`); Punctuation Gate dual-path wording (dyc keeps the single `check_punctuation.py` gate); `write-zh.md` redactions (dyc keeps the original concrete examples); `dispatch_intent` frontmatter field (dyc routing metadata stays in `when_to_use`); `design-aesthetic-quality.md` file deletion (dyc keeps its redirect stub); health SKILL.md section-anchor notes (dyc collector structure differs); `llms.txt` + `build_metadata.py` (vendor-local artifact)
 
 ## upstash/context7
 

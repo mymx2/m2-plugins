@@ -1,10 +1,10 @@
 # Long-form Article Mode
 
-Loaded from `write` when the input is a long draft (roughly 10k characters or more) that needs structural work before line edits.
+Loaded from `write` when the input is a long draft that needs structural work before line edits.
 
-Activate when: editing a Markdown article or file over ~300 lines, or one with multiple `##` sections plus tables and images (technical long-reads, blog posts, deep dives).
+Activate when: editing a Markdown article with multiple `##` sections, tables, or images (technical long-reads, blog posts, deep dives).
 
-In long-form, the dominant problem is usually structural: the same checklist repeated across sections, prose that re-reads a table sitting right above it, list bloat, whole redundant sections. Sentence-level AI taste is the smaller half. A single in-place polish pass cannot see or fix the structural half, which is why a plain `/write` on a long article feels like it changed wording but left the bloat. This mode therefore overrides two Hard Rules: structural cuts and merges are in-scope, and the output is change-points for review, not a rewritten blob.
+In long-form, the dominant problem is usually structural: the same checklist repeated across sections, prose that re-reads a table sitting right above it, list bloat, whole redundant sections. Sentence-level AI taste is the smaller half, and a single in-place polish pass cannot see the structural half. This mode therefore overrides two Hard Rules: structural cuts and merges are in-scope, and the output is change-points for review, not a rewritten blob.
 
 Workflow:
 
@@ -14,4 +14,4 @@ Workflow:
 4. **Then line-level de-AI**, section by section, per the `write-zh` reference.
 5. **Output is change-points, not a blob.** Show what changed so the user can review and keep their own hand-edits. Only return fully rewritten text when the user says 直接改 / just rewrite; when you do return a full rewrite, run the Punctuation Gate on it first.
 
-Do not single-pass rewrite a 40k-character article: it silently overwrites the author's hand-tuned phrasing and cannot be reviewed as a diff. See the `write-zh` reference, 结构级重复与表格复读（长文专项）, for the matching content rules.
+Do not single-pass rewrite a long article: it silently overwrites the author's hand-tuned phrasing and cannot be reviewed as a diff. See the `write-zh` reference, 结构级重复与表格复读（长文专项）, for the matching content rules.

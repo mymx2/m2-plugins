@@ -146,9 +146,6 @@ When it reads clean from start to finish, the draft is ready for the user to pub
 - **Contradictions stay visible.** When two sources contradict on a factual claim, note both positions and the evidence each gives; never silently pick one.
 - **Stop at publish confirmation.** After the user confirms the article is ready, do not upload, post, distribute, or perform any publish action unless explicitly asked.
 
-## Gotchas
+## Output
 
-| What happened                                                         | Rule                                                                                                                                                                                            |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Used native fetch tools or `curl` on URLs while `/read` was installed | Phase 1 fetch is not optional. `/read` owns the proxy cascade, paywall detection, and platform routing. Bypassing it silently loses coverage on paywalled, JS-heavy, or Chinese-platform pages. |
-| Turned a project review into a generic skill rule without filtering   | Promote only repeated workflow behavior. Leave project-specific commands, paths, and safety constraints in that project                                                                         |
+The artifact is the mode's exit from the table above. Report the saved path when files were written, then stop at the user's publish confirmation.

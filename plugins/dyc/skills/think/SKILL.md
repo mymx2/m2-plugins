@@ -51,17 +51,18 @@ Before outputting any plan, scan any project-level agent instruction files prese
 
 Load the matching reference when the planning task enters that territory:
 
-| When the ask involves                                              | Load                            |
-| ------------------------------------------------------------------ | ------------------------------- |
-| Underspecified ask; need to extract what the user really wants     | `references/interview.md`       |
-| Rough idea needing exploration / stress-testing before committing  | `references/idea-refine.md`     |
-| New project/feature needing requirements written down before code  | `references/spec-mode.md`       |
-| A plan that must be decomposed into implementable tasks            | `references/task-breakdown.md`  |
-| Framework-specific code that must match official docs              | `references/source-driven.md`   |
-| Designing APIs, module boundaries, or public interfaces            | `references/api-design.md`      |
-| Designing or restructuring modules for testability and navigation  | `references/deep-modules.md`    |
-| Project terminology being used loosely or named for the first time | `references/domain-language.md` |
-| A significant, hard-to-reverse architectural decision              | `references/adr.md`             |
+| When the ask involves                                                | Load                            |
+| -------------------------------------------------------------------- | ------------------------------- |
+| Underspecified ask; need to extract what the user really wants       | `references/interview.md`       |
+| Rough idea needing exploration / stress-testing before committing    | `references/idea-refine.md`     |
+| New project/feature needing requirements written down before code    | `references/spec-mode.md`       |
+| A plan that must be decomposed into implementable tasks              | `references/task-breakdown.md`  |
+| Framework-specific code that must match official docs                | `references/source-driven.md`   |
+| Choosing between a new library, a stdlib call, or a platform feature | `references/platform-native.md` |
+| Designing APIs, module boundaries, or public interfaces              | `references/api-design.md`      |
+| Designing or restructuring modules for testability and navigation    | `references/deep-modules.md`    |
+| Project terminology being used loosely or named for the first time   | `references/domain-language.md` |
+| A significant, hard-to-reverse architectural decision                | `references/adr.md`             |
 
 ## Lightweight Mode
 
@@ -126,11 +127,15 @@ Output the classification table first. Wait for the user to confirm the accepted
 
 Before proposing custom implementations, check framework built-ins, official patterns, and ecosystem standards against live docs (use the environment's doc-lookup tools when available). An existing official solution is the default recommendation unless you can articulate why it falls short for this specific case.
 
+Climb in order and stop at the first rung that holds: an existing helper or pattern in this codebase → the standard library → a native platform feature (`<input type="date">` over a picker library, CSS over JS, a DB constraint over application code) → an already-installed dependency → only then, new code. Never propose a new dependency for what a few lines or a platform feature already covers.
+
 For a hard problem, or one already tuned several times that still feels off, study how 2-3 mature open-source projects or direct competitors solve it before designing: read the actual implementation, extract the transferable mechanism, and name what you took from each. First-principles design next to a proven implementation discards the iterations someone else already paid for.
 
 ## Propose Approaches
 
 Give one recommended approach with rationale. Include effort, risk, and what existing code it builds on. Mention one alternative only if the tradeoff is genuinely close (>40% chance the user would prefer it). Always include one minimal option.
+
+Anything that asks a person to install or configure something (hook, MCP server, editor plugin, config key, pricing tier, per-day limit) is a setup cost paid by every user. Default to the zero-setup form: a built-in command plus a skill, a fixed sensible default, a doc line. Offer the setup-requiring form only after naming why the zero-setup one cannot do the job.
 
 When the plan is about distilling lessons from one project into a reusable skill set or shared rules, split the plan into **promote** and **do not promote**. Promote only reusable workflow constraints. Explicitly reject project-specific commands, paths, release checklists, safety boundaries, and private local context unless the user asks to update that project itself.
 
@@ -213,14 +218,13 @@ When the user sends an explicit go-ahead like "implement this plan" / "可以干
 
 ## Gotchas
 
-| What happened                                                       | Rule                                                                                                                                          |
-| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| User said "just do it" or equivalent approval                       | Treat as approval of the recommended option. State which option was selected, finish the plan. Do not implement inside `/think`.              |
-| Rejected design restarted from scratch                              | Ask what specifically failed, re-enter with narrowed constraints                                                                              |
-| User said "just fix X" and skipped /think                           | If the fix touches 3+ files or needs a method choice, pause and run Lightweight Mode                                                          |
-| Picked a regional or locale-specific API variant without checking   | List all regional or locale differences before writing integration code                                                                       |
-| Introduced a second language or runtime into a single-stack project | Never add a new language or runtime without explicit approval                                                                                 |
-| User asked to distill a project review into shared skills or rules  | First separate transferable capability from project facts. Do not import that project's commands, paths, or release rules into the shared set |
+| What happened                                                       | Rule                                                                                                                             |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| User said "just do it" or equivalent approval                       | Treat as approval of the recommended option. State which option was selected, finish the plan. Do not implement inside `/think`. |
+| Rejected design restarted from scratch                              | Ask what specifically failed, re-enter with narrowed constraints                                                                 |
+| User said "just fix X" and skipped /think                           | If the fix touches 3+ files or needs a method choice, pause and run Lightweight Mode                                             |
+| Picked a regional or locale-specific API variant without checking   | List all regional or locale differences before writing integration code                                                          |
+| Introduced a second language or runtime into a single-stack project | Never add a new language or runtime without explicit approval                                                                    |
 
 ## Output
 
