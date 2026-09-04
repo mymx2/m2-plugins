@@ -115,3 +115,6 @@ Servers
 
 ### Kotlin ###
 .kotlin
+
+### Others ###
+**/.playwright-*

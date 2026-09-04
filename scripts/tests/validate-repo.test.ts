@@ -10,8 +10,11 @@
  *
  * 设计原则：
  *   - 验证逻辑的唯一来源是 validate_repo.py 和 validate-plugin.ts。
- *   - 本文件只做 spawn + assert，不重复实现任何规则。
- *   - 失败时输出完整 stderr/stdout，方便定位具体哪个门红了。
+ *   - 本文件只做调用 + assert，不重复实现任何规则。
+ *   - validate_repo.py 走 spawn（Python 无法进程内调用）；
+ *     validate-plugin.ts 直接 import（零依赖纯函数，避免 npx 从 registry
+ *     下载 tsx 导致的 CI 网络抖动超时，见 spawnSync npx ETIMEDOUT 事故）。
+ *   - 失败时输出完整 stderr/stdout 或 failures 列表，方便定位具体哪个门红了。
  */
 
 import { execFileSync } from 'node:child_process'
@@ -20,21 +23,14 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vite-plus/test'
 
+import { validatePlugin } from '../../plugins/dyc/skills/forge/scripts/validate-plugin'
+
 // ── 路径常量 ──────────────────────────────────────────────────────────────
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const REPO_ROOT = join(__dirname, '..', '..')
 const PLUGINS_DIR = join(REPO_ROOT, 'plugins')
 const VALIDATE_REPO_PY = join(REPO_ROOT, 'scripts', 'validate_repo.py')
-const VALIDATE_PLUGIN_TS = join(
-  REPO_ROOT,
-  'plugins',
-  'dyc',
-  'skills',
-  'forge',
-  'scripts',
-  'validate-plugin.ts',
-)
 
 // ── 发现插件 ──────────────────────────────────────────────────────────────
 
@@ -97,12 +93,8 @@ describe('validate-plugin.ts — forge 插件门', () => {
     const pluginRoot = join(PLUGINS_DIR, name)
 
     it(`${name} 7 门全绿`, () => {
-      const stdout = execFileSync('npx', ['tsx', VALIDATE_PLUGIN_TS, pluginRoot], {
-        encoding: 'utf-8',
-        cwd: REPO_ROOT,
-        timeout: 30_000,
-      })
-      expect(stdout).toContain('PASSED')
+      const failures = validatePlugin(pluginRoot)
+      expect(failures, failures.join('\n\n')).toEqual([])
     })
   }
 })
