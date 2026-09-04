@@ -47,7 +47,7 @@ Q2 — <question title>: <body>
 
 Each answered round reshapes the tree: settled decisions push the frontier outward and unblock dependent questions. Recompute and ask the next round. A question whose answer depends on another question still open this round belongs to a later round, not this one — that layering rule is what keeps rounds answerable.
 
-**Finding facts is your job, never the user's.** When a frontier question needs a fact from the environment (filesystem, tools, docs), look it up or dispatch a subagent rather than asking the user for something you could find yourself. Don't block on it: treat a running lookup as an unsettled prerequisite, so only its downstream questions wait — ask the rest of the frontier now. The **decisions** are the user's; put each to them and wait.
+**Finding facts is your job, never the user's.** When a frontier question needs a fact from the environment (filesystem, tools, docs), look it up — dispatching a subagent when the harness has one — rather than asking the user for something you could find yourself. Don't block on it: treat a running lookup as an unsettled prerequisite, so only its downstream questions wait — ask the rest of the frontier now. The **decisions** are the user's; put each to them and wait.
 
 Done when the frontier is empty: every branch visited, nothing silently assumed. Do not act until the user confirms you've reached a shared understanding.
 

@@ -24,10 +24,10 @@ A decision is **non-trivial** when it introduces/modifies branching logic, cross
 
 ## Loading Constraints
 
-This reference is designed for the **main-session orchestrator**, where Step 3 can spawn a fresh-context reviewer.
+This reference is designed for the **main-session orchestrator**. Step 3 needs a fresh-context reviewer: spawn one when the harness has a subagent facility, use the external-CLI path (Cross-Model Escalation) when it does not, and only when neither exists use the degraded self-questioning fallback below.
 
-- **Do not wire it into a persona's skill set.** A persona following Step 3 would spawn another persona — the nested-spawn anti-pattern forbidden by the `orchestration-patterns` reference.
-- **Inside a subagent context** (nested spawn unavailable): prefer surfacing to the user that doubt review cannot run nested and let the main session handle it. As a last resort, a degraded self-questioning fallback exists — rewrite ARTIFACT + CONTRACT as a fresh self-prompt with a hard mental separator from your prior reasoning and walk Steps 1–5. This is not fresh-context review, so flag the result as degraded and prefer escalation whenever the user is reachable.
+- **Do not wire it into a persona's skill set.** A persona following Step 3 would spawn another persona — the nested-spawn anti-pattern (personas never invoke other personas).
+- **No spawn facility** (inside a subagent context, or the harness has none and no external CLI is available): prefer surfacing to the user that fresh-context doubt review cannot run here and let the main session or user handle it. As a last resort, a degraded self-questioning fallback exists — rewrite ARTIFACT + CONTRACT as a fresh self-prompt with a hard mental separator from your prior reasoning and walk Steps 1–5. This is not fresh-context review, so flag the result as degraded and prefer escalation whenever the user is reachable.
 
 ## Cross-Model Escalation
 

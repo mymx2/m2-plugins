@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "dyc",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Eleven engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, and repowiki.",
       "homepage": "https://github.com/mymx2/m2-plugins",
       "source": "./plugins/dyc",

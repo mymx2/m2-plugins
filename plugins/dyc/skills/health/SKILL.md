@@ -40,7 +40,7 @@ Two lanes share one report:
 
 **Output language:** Check in order: (1) project agent instructions (`AGENTS.md` before runtime-specific files); (2) global agent instructions; (3) user's recent language; (4) English.
 
-**Budget posture:** Start with the summary audit. Escalate automatically when the user asks for a deep, full, complete, thorough, "深入", "完整", "彻底", or "继续跑完" audit, when the user explicitly mentions AI coding code rot, Codex/Claude config drift, unclear context, missing verification, verifier output that points at stale paths, or "代码变烂", when current project instructions or remembered user preference says to run deep health checks by default, or when the summary pass exposes a critical ambiguity that cannot be resolved locally. File counts, contributor counts, skill counts, and large files are inventory signals only; none automatically trigger a deeper audit or a finding. Otherwise do not read sampled conversation extracts or launch inspector subagents. Tell the user before escalating because deep health audits can consume significant token quota.
+**Budget posture:** Start with the summary audit. Escalate automatically when the user asks for a deep, full, complete, thorough, "深入", "完整", "彻底", or "继续跑完" audit, when the user explicitly mentions AI coding code rot, Codex/Claude config drift, unclear context, missing verification, verifier output that points at stale paths, or "代码变烂", when current project instructions or remembered user preference says to run deep health checks by default, or when the summary pass exposes a critical ambiguity that cannot be resolved locally. File counts, contributor counts, skill counts, and large files are inventory signals only; none automatically trigger a deeper audit or a finding. Otherwise do not read sampled conversation extracts or work the deep lanes. Tell the user before escalating because deep health audits can consume significant token quota.
 
 **Conversation scope:** Summary scans up to three recent previous sessions for the current project across the installed agent runtimes from a bounded candidate window when those local histories exist. Deep streams every previous current-project session across those runtimes for signals while printing only bounded extracts and a coverage receipt. Other projects remain out of scope by default. Only when the user explicitly asks for all conversations or cross-project capability distillation, invoke the bundled conversation audit with `--all-projects` against the supported local history roots discovered for that runtime (or hand off to an installed full-history retrospective workflow such as `ai-retro`). The explicit global mode excludes files modified in the last five minutes as potentially live and redacts emitted text. Claim complete coverage only when the audit output reports `coverage_status: complete` and `cross_project_full_history: yes`; anything else is an explicit coverage gap.
 
@@ -66,7 +66,7 @@ When the audit finds the project's agent context is poorly set up (no rules file
 
 1. Every finding names the misaligned layer, concrete evidence, and a copy-pasteable action.
 2. MCP live check: every server probed with one harmless tool call; `live=yes/no` recorded.
-3. If deep audit: all launched inspectors reconciled before reporting complete; unreviewed scopes listed explicitly.
+3. If deep audit: all deep lanes reconciled before reporting complete; unreviewed scopes listed explicitly.
 4. Budget posture: summary-first, escalate only on explicit signal or user request.
 
 ## Hard Rules
@@ -169,15 +169,9 @@ For projects that use `/loop`, autonomous agents, or any long-running agent flow
 
 ## Step 2: Analyze
 
-Analyze locally from the summary output by default. If the user asks for a deep/full/thorough audit, remembered preference requires it, the request explicitly targets AI maintainability, or local analysis cannot classify a material security/control ambiguity, re-run collection with `& "$POWERSHELL" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$HEALTH_LAUNCHER" collect auto deep` on Windows, or `BASH_ENV= ENV= /bin/bash -p "$HEALTH_SCRIPT" auto deep` on Linux and macOS. Then launch only the relevant inspectors in parallel. Redact credentials to `[REDACTED]`.
+Analyze locally from the summary output by default. If the user asks for a deep/full/thorough audit, remembered preference requires it, the request explicitly targets AI maintainability, or local analysis cannot classify a material security/control ambiguity, re-run collection with `& "$POWERSHELL" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$HEALTH_LAUNCHER" collect auto deep` on Windows, or `BASH_ENV= ENV= /bin/bash -p "$HEALTH_SCRIPT" auto deep` on Linux and macOS. Then work the deep lanes: context + security; control + behavior; and, only for deep health audits or explicit code-rot/AI-maintainability requests, AI maintainability. Inspector agents are a vendor customization, not skill content; when the harness provides none, run the lanes sequentially in-session. Redact credentials to `[REDACTED]`.
 
-- **Deep inspector routing:**
-  - **Agent 1** (Context + Security): Read `agents/inspector-context.md`. Feed `CONVERSATION SIGNALS` section.
-  - **Agent 2** (Control + Behavior): Read `agents/inspector-control.md`. Feed the relevant runtime, hook, MCP, and permission evidence.
-  - **Agent 3** (AI Maintainability): Read `agents/inspector-maintainability.md`. Feed only `PROJECT SIGNALS`, `AI MAINTAINABILITY SUMMARY` or `AI MAINTAINABILITY DETAIL`, and concrete verifier/drift receipts. Launch this agent only for deep health audits or explicit code-rot/AI-maintainability requests.
-- **Fallback:** If a subagent fails, analyze that layer locally and note "(analyzed locally)".
-
-Before reporting a deep audit as complete, wait for every launched inspector and reconcile its assigned scope. If one remains pending or fails without a local replacement pass, list that scope as unreviewed instead of issuing a whole-scope clean bill.
+Before reporting a deep audit as complete, reconcile every lane's assigned scope. If one remains uncovered, list that scope as unreviewed instead of issuing a whole-scope clean bill.
 
 ## Step 3: Report
 

@@ -21,7 +21,7 @@ Sync workflow: `git submodule update --remote` → diff against recorded SHA →
 Guidelines for deciding what flows from upstream into `plugins/dyc`:
 
 1. **Scope-mapped content first.** Distill changes to files that have a direct counterpart in dyc (same skill, same path). If the upstream file has no dyc equivalent, skip unless it fills a gap dyc should have.
-2. **Skill substance over packaging.** Always distill changes to `SKILL.md`, `references/`, `agents/`, and `rules/` within dyc's 8+3 skill set. These are the core deliverables.
+2. **Skill substance over packaging.** Always distill changes to `SKILL.md`, `references/`, and `rules/` within dyc's 8+3 skill set; upstream skill-level `agents/` briefs park in repo-root `agents/` instead（dyc 不以技能内嵌 agents/ 发布，见 `docs/agents.md`）. These are the core deliverables.
 3. **Tooling improvements.** From agent-skills, distill validator gates, lint rules, and frontmatter validation patterns that improve forge's `validate-plugin.ts` or skill-lint checks.
 4. **Skip vendor-local artifacts.** Do not distill upstream's own packaging files (`marketplace.json`, `plugins/waza/.codex-plugin/plugin.json`, setup scripts) — dyc manages its own extensions namespace independently.
 5. **Skip chore commits.** Version bumps, release tags, CI tweaks, and formatting-only changes do not require distillation.

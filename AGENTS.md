@@ -39,13 +39,14 @@ plugins/<name>/
   skills/<skill>/SKILL.md  # 技能定义（frontmatter: name + description，description 带 "Use when..."）
 ```
 
-插件内的 `references/`、`agents/`、`scripts/`、`rules/` 目录均为可选。
+插件内的 `references/`、`scripts/`、`rules/` 目录均为可选；技能不内嵌 `agents/`（见 Gotchas）。
 
 ### 仓库级基础设施
 
 - `schemas/`：JSON Schema 定义，`validate-schemas.ts` 自动映射校验
 - `scripts/`：仓库级校验工具（TS + Python），测试在 `scripts/tests/`
 - `evals/`：11 个技能的三层行为评测设施（Jaccard / 词面路由 / 行为抽样），含 `cases/`、`fixtures/`、`runs/`、`results/`、`tests/`；跑法与阈值见 `evals/README.md`
+- `agents/`：从技能剥离的 persona brief（开发期资产，非安装产物）；`docs/agents.md`：代理机制说明、专家激活目录与编排素材，供各厂商取用定制
 - `vendor/`：Git submodules（上游参考源），不参与构建（lint/fmt/test 全局忽略）
 - `.claude-plugin/marketplace.json`：Claude Code marketplace 注册表（受 schema 校验）
 - `.agents/plugins/marketplace.json`：Codex marketplace 注册表
@@ -150,6 +151,7 @@ plugins/<name>/
 - **跨技能引用**：按名引用（不用路径），路径引用过不了 isolation 门
 - **when_to_use 用半角逗号**：校验器按 `,` 切分触发词，改成全角会把整串解析成一个关键词，触发区分度门失效
 - **目录不留空**：技能目录下只在有文件时创建子目录
+- **技能不内嵌 agents/**：harness 通过带元信息（skills/mcps/tools）的专门工具加载子代理，技能内嵌 `agents/` 不会被加载；子代理是厂商扩展，用法看各厂商文档。persona brief 集中存放仓库根 `agents/`（见 `docs/agents.md`），技能运行时不依赖它们
 - **submodule 同步**：vendor/ 改动后更新 `SYNC.md` 中的 SHA 和日期，submodule pointer 与 SYNC.md 一起提交
 - **commit message 格式**：Conventional Commits，`<type>(<scope>): <subject>`，commit-msg hook 强制校验
 - **`projects/` 目录被 gitignore**：不要在 `projects/` 下存放需要提交的内容
@@ -194,7 +196,7 @@ plugins/<name>/
 
 1. 在 `plugins/<name>/skills/<skill-name>/` 创建目录（kebab-case）
 2. 编写 `SKILL.md`（含 frontmatter: name + description，description 带 "Use when..." 触发词）
-3. 按需添加 `references/`、`agents/`、`scripts/` 子目录
+3. 按需添加 `references/`、`scripts/` 子目录
 4. 运行 `vpx tsx plugins/dyc/skills/forge/scripts/validate-skill.ts plugins/<name>/skills/<skill-name>` 确认七门全绿
 5. 运行 `vp run lint` 确认风格合规
 

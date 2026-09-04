@@ -14,7 +14,7 @@ Read the diff and find the problems. Review, audit, triage, and readiness reques
 
 ## Overview
 
-check is the last gate between code and users. It reads diffs, PRs, issues, releases, and documents, then produces findings grounded in evidence from the current session — never from memory or inference alone. It covers code review (quick/standard/deep), issue/PR triage, ship/release follow-through, project audits, and document proofreading, with specialist reviewers and adversarial passes activated by scope depth.
+check is the last gate between code and users. It reads diffs, PRs, issues, releases, and documents, then produces findings grounded in evidence from the current session — never from memory or inference alone. It covers code review (quick/standard/deep), issue/PR triage, ship/release follow-through, project audits, and document proofreading, with domain checklists and adversarial passes activated by scope depth.
 
 ## Outcome Contract
 
@@ -109,23 +109,23 @@ Freeze the resolved base, `HEAD`, worktree inventory, generated/distribution sur
 
 Measure the diff and classify depth. These thresholds are default intuition, not law — a project may override them in `references/project-context.md`; explicit depth language in the request always overrides size.
 
-| Depth        | Criteria (default intuition)                              | Reviewers                                 |
-| ------------ | --------------------------------------------------------- | ----------------------------------------- |
-| **Quick**    | Small diff (order of <100 lines, a handful of files)      | Base review only                          |
-| **Standard** | Medium (order of 100-500 lines, or several files)         | Base + conditional specialists            |
-| **Deep**     | Large, or touches auth/payments/data mutation at any size | Base + all specialists + adversarial pass |
+| Depth        | Criteria (default intuition)                              | Coverage                                        |
+| ------------ | --------------------------------------------------------- | ----------------------------------------------- |
+| **Quick**    | Small diff (order of <100 lines, a handful of files)      | Base review only                                |
+| **Standard** | Medium (order of 100-500 lines, or several files)         | Base + conditional domain checklists            |
+| **Deep**     | Large, or touches auth/payments/data mutation at any size | Base + all domain checklists + adversarial pass |
 
 State the depth before proceeding.
 
 Explicit depth language overrides the size thresholds. "All", "全部", "deep", "深入", or "仔细" means whole-scope coverage of the resolved inventory, even when the textual diff is small; it does not permit skipping untracked files, generated mirrors (files auto-produced by a build step that mirror source, e.g. `dist/`, `build/`, `generated/`), required artifacts, or pending reviewers.
 
-Static content diffs can stay quick even when they touch several generated files: version strings, dates, release-copy mirrors, sitemap dates, or one-for-one localization copy changes usually need line-by-line readback plus grep consistency, not a specialist fleet. Escalate only when the diff changes logic, generation rules, public distribution behavior, or user-facing semantics beyond the literal text replacement.
+Static content diffs can stay quick even when they touch several generated files: version strings, dates, release-copy mirrors, sitemap dates, or one-for-one localization copy changes usually need line-by-line readback plus grep consistency, not the full checklist fleet. Escalate only when the diff changes logic, generation rules, public distribution behavior, or user-facing semantics beyond the literal text replacement.
 
 ## Did We Build What Was Asked?
 
 Before reading code, check scope drift: do the diff and the stated goal match? Label: **on target** / **drift** / **incomplete**.
 
-When a specialist or subagent runs the completeness check, forward the original requirement verbatim (issue/PR description, commit message, task brief) — paraphrased handoffs lose constraints, and the drift verdict must be grounded in the source text, not a retelling.
+When the completeness check is delegated, forward the original requirement verbatim (issue/PR description, commit message, task brief) — paraphrased handoffs lose constraints, and the drift verdict must be grounded in the source text, not a retelling.
 
 Also check surgical traceability: every changed file and every new public surface must trace back to the user's stated goal. If a file, dependency, config knob, abstraction, generated artifact, workflow permission, or release behavior cannot be explained in one sentence from the request, label it drift until proven necessary.
 
@@ -153,7 +153,7 @@ When the diff contains a recurring or hard-to-observe bug, output-string branchi
 ## Red Flags
 
 - Writing "I verified" or "tests pass" without the shell output in the current transcript
-- Signing off while any active specialist reviewer or verification command is still pending
+- Signing off while any delegated review pass or verification command is still pending
 - Manufacturing findings to justify the invocation — a clean review with zero findings is a valid output
 - Publishing or shipping over your own open findings without explicit "known, shipping anyway" confirmation
 - Stating "all read" or "full audit complete" while delegated scopes remain unreviewed
@@ -231,7 +231,6 @@ Load the matching reference when the review enters that territory:
 | A multi-file or multi-slice change (scope/feature-flag/rollback discipline)                                 | `references/incremental-guardrails.md`                                                                                                                                         |
 | Removing an API/feature, migrating consumers, or a schema change                                            | `references/migration.md`                                                                                                                                                      |
 | The standing project-wide bar every change clears before done                                               | `references/definition-of-done.md`                                                                                                                                             |
-| Composing/coordinating specialist reviewers (personas don't invoke personas)                                | `references/orchestration-patterns.md`                                                                                                                                         |
 | Concrete JS/TS testing syntax (Jest, RTL, Supertest, Playwright)                                            | `references/testing-patterns.md`                                                                                                                                               |
 
 ## Knowledge Sync
@@ -240,13 +239,13 @@ When a finding recurs, or the diff introduces an invariant not yet in project do
 
 ## Specialist Review (Standard and Deep only)
 
-Load `references/persona-catalog.md` to determine which specialists activate. When the environment has an agent or sub-agent facility, launch all activated specialists in parallel, each with the full diff and its own persona brief. If no parallel reviewer facility exists, run the specialist passes sequentially in the same session.
+Specialist reviewers are agent definitions, not skill content: whether they exist and how they are dispatched depends on the harness's agent facility and the vendor's registration, so this skill ships none. When the environment provides registered specialists, dispatch the activated ones with the full diff; otherwise run the domain passes yourself through [Conformance Review](#conformance-review). Either way, the rules below govern the findings.
 
-Merge findings: when two specialists flag the same code location, keep the higher severity and note cross-reviewer agreement. Findings on different code locations are never duplicates even if they share a theme.
+Merge findings: when two passes flag the same code location, keep the higher severity and note cross-pass agreement. Findings on different code locations are never duplicates even if they share a theme.
 
-Every specialist finding is a claim to verify, not a fact to act on. For HIGH and CRITICAL claims: if the environment has a subagent facility, spawn one independent skeptic per finding whose only brief is to refute it against the actual code; a finding the skeptic refutes on direct read is dropped or downgraded regardless of which persona raised it. Without that facility, run the skeptic pass yourself in the same session: re-read the cited code this turn and confirm the claim is real and live, not already handled elsewhere, not consistent-by-design, not a latent-only risk labeled as a live bug. Parallel reviewers over-report from name-based inference and partial context; drop what dissolves on direct read, and cite the verification path before routing anything to Autofix or sign-off.
+Every pass finding is a claim to verify, not a fact to act on. For HIGH and CRITICAL claims, run a skeptic pass in the same session: re-read the cited code this turn and confirm the claim is real and live, not already handled elsewhere, not consistent-by-design, not a latent-only risk labeled as a live bug. Reviewers over-report from name-based inference and partial context; drop what dissolves on direct read, and cite the verification path before routing anything to Autofix or sign-off.
 
-Before a whole-scope verdict, reconcile a completion ledger for every delegated review: assigned scope, returned status, and uncovered remainder. Wait for every active reviewer, or name its scope as unreviewed. Never say "all read", "full audit complete", or "no issues" while any reviewer or required verification is still pending.
+Before a whole-scope verdict, reconcile a completion ledger for every delegated review: assigned scope, returned status, and uncovered remainder. Wait for every active pass, or name its scope as unreviewed. Never say "all read", "full audit complete", or "no issues" while any pass or required verification is still pending.
 
 ## Autofix Routing
 
@@ -263,7 +262,7 @@ Any fix made during review invalidates the pre-fix verdict. Re-freeze the baseli
 
 ## Adversarial Pass (Deep only)
 
-"If I were trying to break this system through this specific diff, what would I exploit?" Four angles (see `references/persona-catalog.md`): assumption violation, composition failures, cascade construction, abuse cases. When the agent facility exists, run the four angles as parallel agents, each blind to the others' findings: convergence from independent angles raises confidence, and singleton findings face the same per-finding skeptic verification as specialist claims. Suppress findings below 0.60 confidence.
+"If I were trying to break this system through this specific diff, what would I exploit?" Four angles: assumption violation, composition failures, cascade construction, abuse cases. Run each angle blind to the others' findings: convergence from independent angles raises confidence, and singleton findings face the same per-finding skeptic verification as other claims. Suppress findings below 0.60 confidence.
 
 ## Verification
 
@@ -297,7 +296,7 @@ user-visible delta: none / [entry, UI, copy, behavior added, removed, or changed
 review depth:     quick / standard / deep
 hard stops:       N found, N fixed, N deferred
 sibling sweep:    N same-shape sites checked, N fixed / none found / not applicable
-specialists:      [security, architecture] or none
+checklists:       [security, test] green/blocked or n/a
 new tests:        N
 public actions:   replied #N, closed #N, reactions done / none pending
 doc debt:         none / AGENTS.md needs X / rules need Y

@@ -24,7 +24,7 @@ Flag discipline: every flag has an owner and an expiration date; never nest feat
 
 ## Ship Decision: GO / NO-GO
 
-For a release-gate verdict over a production-bound change, run the review dimensions in parallel when the agent facility allows (multiple fresh-context reviewers), then the main session merges them into a single verdict. Issue the parallel calls in one turn so they execute concurrently; keep the fan-out flat (personas never invoke other personas — see the `orchestration-patterns` reference). Skip the parallel fan-out only when the change touches 2 files or fewer, is under 50 lines, and does not touch auth, payments, data access, or config/env.
+For a release-gate verdict over a production-bound change, run the review dimensions in parallel when the agent facility allows (multiple fresh-context reviewers), then the main session merges them into a single verdict. Issue the parallel calls in one turn so they execute concurrently; keep the fan-out flat (personas never invoke other personas). Skip the parallel fan-out only when the change touches 2 files or fewer, is under 50 lines, and does not touch auth, payments, data access, or config/env.
 
 Output contract:
 

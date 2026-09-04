@@ -200,13 +200,12 @@ my-plugin/
 │       ├── SKILL.md            #   必填 — 技能定义
 │       ├── references/         #   可选 — 参考文档
 │       ├── scripts/            #   可选 — 可运行脚本
-│       ├── agents/             #   可选 — 子代理定义
 │       ├── examples/           #   可选 — 用法示例
 │       ├── schemas/            #   可选 — JSON Schema
 │       └── assets/             #   可选 — 静态资源
 │
 ├── hooks/                      # 可选 — 客户端钩子（非便携）
-├── agents/                     # 可选 — 全局代理定义（非便携）
+├── agents/                     # 可选 — 代理定义（非便携，厂商扩展）
 ├── commands/                   # 可选 — 命令定义（非便携）
 ├── rules/                      # 可选 — 规则文件（非便携）
 ├── bin/                        # 可选 — 可执行文件
@@ -219,6 +218,10 @@ my-plugin/
     ├── init.ts
     └── plugin.json
 ```
+
+## 代理（agents）
+
+v1 便携契约只定义 skills 和 MCP servers；agents 与 commands、hooks、rules 一样属于厂商扩展。各 harness 通过带元信息（skills、mcps、tools）的专门工具加载和调度代理，技能内嵌 `agents/` 不会被加载为子代理。代理的声明与使用方式以各厂商文档为准。
 
 ## Canvas 组件
 
