@@ -8,8 +8,8 @@
  *   .claude-plugin/marketplace.json         → schemas/claude-code-marketplace.schema.json
  *
  * 用法：
- *   vpx tsx scripts/validate-schemas.ts              # 校验所有
- *   vpx tsx scripts/validate-schemas.ts --plugin dyc  # 校验指定插件
+ *   tsx scripts/validate-schemas.ts              # 校验所有
+ *   tsx scripts/validate-schemas.ts --plugin dyc  # 校验指定插件
  */
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs'

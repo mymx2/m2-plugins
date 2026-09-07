@@ -135,7 +135,7 @@ def main():
                 )
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    OUT.write_text(json.dumps(results, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     pos = [r for r in results if r["kind"] == "positive"]
     neg = [r for r in results if r["kind"] == "negative"]

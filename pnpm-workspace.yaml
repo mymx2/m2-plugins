@@ -9,6 +9,7 @@ catalog:
   vite-plus: ^0.2.7
   ajv: ^8.20.0
   ajv-formats: ^3.0.1
+  tsx: ^4.23.13
 overrides:
   vite: "catalog:"
 peerDependencyRules:
@@ -20,5 +21,9 @@ peerDependencyRules:
 
 # Prefer catalog
 catalogMode: prefer
+
+# pnpm v12 strictDepBuilds 默认开启：tsx 依赖的 esbuild postinstall 需显式放行
+allowBuilds:
+  esbuild: true
 shellEmulator: true
 ignoreWorkspaceRootCheck: false

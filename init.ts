@@ -9,8 +9,8 @@
  *     → 根目录各级 marketplace.json            本脚本同步（仅填充已存在的 version 字段）
  *
  * 用法：
- *   vpx tsx init.ts           填充并重新生成（幂等）
- *   vpx tsx init.ts --check   仅校验版本一致性，发现漂移时退出码 1
+ *   tsx init.ts           填充并重新生成（幂等）
+ *   tsx init.ts --check   仅校验版本一致性，发现漂移时退出码 1
  */
 
 /// <reference types="node" />
