@@ -1,7 +1,7 @@
 ---
 name: ui
 description: 'Produces distinctive, production-grade UI for pages, components, visual interfaces, typography, screenshot-driven polish, and DESIGN.md token contracts (lint, diff, export via the @google/design.md CLI). Use when users ask for UI, page, component, frontend, typography, design-system files, or a first-impression complaint that a screen looks unclear, ugly, or inconsistent. Not for backend logic or closing a delta against a known-good previous version (route to hunt).'
-when_to_use: '设计, 做页面, 做组件, 不好看, 不和谐, 不清晰, 很丑, 很怪, 很傻, 突兀, 不协调, 字体, 字形, 排印, 排版, 样式, 前端, UI, 截图, build page, create component, make it look good, style, design, screenshot with visual complaint, typography, font looks wrong, DESIGN.md, design tokens, 设计系统文件, 设计 token 校验, designmd, tailwind token 导出'
+when_to_use: '设计, 做页面, 做组件, 不好看, 不和谐, 不清晰, 很丑, 很怪, 很傻, 突兀, 不协调, 字体, 字形, 排印, 排版, 样式, 前端, UI, 截图, 拖拽, 手势, 动效, 滑动, build page, create component, make it look good, style, design, screenshot with visual complaint, typography, font looks wrong, drag, gesture, swipe, bottom sheet, carousel, spring animation, DESIGN.md, design tokens, 设计系统文件, 设计 token 校验, designmd, tailwind token 导出'
 ---
 
 # UI: Build It With a Point of View
@@ -52,6 +52,7 @@ Load the matching reference when the UI work enters that territory:
 | WCAG 2.1 AA accessibility checklist (keyboard, screen readers, contrast, forms)                     | `references/accessibility-checklist.md`                                        |
 | Live a11y audit on a rendered page (Lighthouse, focus flow, tap targets, contrast)                  | `references/a11y-debugging.md`                                                 |
 | Verifying the result in a real browser (screenshots, accessibility tree, clean console)             | `references/browser-devtools.md`                                               |
+| Gesture-driven surfaces (drag, swipe, sheet, carousel, slider, momentum, velocity handoff)          | `references/design-gesture-physics.md`                                         |
 | DESIGN.md token contract internals (format spec, full CLI reference; expand via `design-md-cli.md`) | `references/design-md-format-spec.md`, `references/design-md-cli-reference.md` |
 
 ## Mode Picker

@@ -2,6 +2,8 @@
 
 Load when the surface is a native app (SwiftUI, UIKit, Jetpack Compose) rather than a web page. The motion judgment in `design-reference.md` is platform-independent: frequency decides whether something animates, duration follows the element, enter and exit use ease-out, press gets acknowledged. The idioms are not, and the platform defaults actively pull the other way. Native frameworks ship a symmetric ease-in-out as the reflex curve and no press feedback at all, which is the opposite of both rules.
 
+Reduced motion follows the design-reference reference (degrade the motion, not the interaction, keep a still equivalent of any liveness cue); the reduced-motion judgment below restates it for native and does not diverge. Gesture physics on native surfaces (velocity handoff, momentum projection, rubber-banding) applies unchanged from the design-gesture-physics reference; only the spring idioms translate (rows below).
+
 ## Translating the web idioms
 
 | Web                                    | SwiftUI                                                                                               |
