@@ -12,11 +12,6 @@
   "license": "MIT",
   "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins", "waza"],
   "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    },
     "chrome-devtools": {
       "type": "stdio",
       "command": "npx",

@@ -13,11 +13,6 @@
   "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins", "waza"],
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    },
     "chrome-devtools": {
       "type": "stdio",
       "command": "npx",
