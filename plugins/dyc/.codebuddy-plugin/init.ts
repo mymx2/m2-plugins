@@ -112,6 +112,8 @@ function validateSkills(pluginRoot: string): void {
   let entries: string[]
   try {
     entries = readdirSync(dir).filter(name => {
+      // *-workspace/ 是技能评测的本地产物（.gitignore: plugins/*/skills/*-workspace/），不是技能
+      if (name.endsWith('-workspace')) return false
       try {
         return statSync(join(dir, name)).isDirectory()
       } catch {
