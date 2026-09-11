@@ -31,7 +31,7 @@ vp run qoder:dyc
 ## Prerequisites
 
 - Node.js ≥ 18
-- MCP servers auto-configured via `mcp.json` (deepwiki, context7, github, mdn, shadcn-vue, ai-elements-vue, tdesign-mcp-server)
+- MCP servers auto-configured via `mcp.json` (playwright, chrome-devtools, deepwiki, context7, github, mdn, shadcn-vue, ai-elements-vue, tdesign-mcp-server)
 
 ## Included Skills
 
@@ -60,15 +60,17 @@ vp run qoder:dyc
 
 ## MCP Configuration
 
-| Server               | Description                                                                                   | Required Env Vars              |
-| -------------------- | --------------------------------------------------------------------------------------------- | ------------------------------ |
-| `deepwiki`           | Repository knowledge retrieval via [DeepWiki](https://mcp.deepwiki.com/)                      | None                           |
-| `context7`           | Real-time library documentation via [Context7](https://github.com/upstash/context7)           | `CONTEXT7_API_KEY`             |
-| `github`             | GitHub repository access via [GitHub MCP Server](https://github.com/github/github-mcp-server) | `GITHUB_PERSONAL_ACCESS_TOKEN` |
-| `mdn`                | MDN Web Docs retrieval via [Mozilla MCP](https://github.com/mdn/mcp)                          | None                           |
-| `shadcn-vue`         | [shadcn-vue](https://www.shadcn-vue.com/docs/mcp) component library MCP                       | None                           |
-| `ai-elements-vue`    | [AI Elements Vue](https://www.ai-elements-vue.com/overview/mcp-server) registry MCP           | None                           |
-| `tdesign-mcp-server` | [TDesign](https://tdesign.tencent.com/miniprogram/mcp) component library MCP                  | None                           |
+| Server               | Description                                                                                                  | Required Env Vars              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `playwright`         | Browser automation via [Playwright MCP](https://github.com/microsoft/playwright-mcp)                         | None                           |
+| `chrome-devtools`    | Live Chrome browser control via [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | None                           |
+| `deepwiki`           | Repository knowledge retrieval via [DeepWiki](https://mcp.deepwiki.com/)                                     | None                           |
+| `context7`           | Real-time library documentation via [Context7](https://github.com/upstash/context7)                          | `CONTEXT7_API_KEY`             |
+| `github`             | GitHub repository access via [GitHub MCP Server](https://github.com/github/github-mcp-server)                | `GITHUB_PERSONAL_ACCESS_TOKEN` |
+| `mdn`                | MDN Web Docs retrieval via [Mozilla MCP](https://github.com/mdn/mcp)                                         | None                           |
+| `shadcn-vue`         | [shadcn-vue](https://www.shadcn-vue.com/docs/mcp) component library MCP                                      | None                           |
+| `ai-elements-vue`    | [AI Elements Vue](https://www.ai-elements-vue.com/overview/mcp-server) registry MCP                          | None                           |
+| `tdesign-mcp-server` | [TDesign](https://tdesign.tencent.com/miniprogram/mcp) component library MCP                                 | None                           |
 
 ### Environment Variables
 
