@@ -1,11 +1,6 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
   "mcpServers": {
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    },
     "chrome-devtools": {
       "type": "stdio",
       "command": "npx",

@@ -31,7 +31,7 @@ vp run qoder:dyc
 ## Prerequisites
 
 - Node.js ≥ 18
-- MCP servers auto-configured via `mcp.json` (playwright, chrome-devtools, deepwiki, context7, github, mdn, shadcn-vue, ai-elements-vue, tdesign-mcp-server)
+- MCP servers auto-configured via `mcp.json` (chrome-devtools, deepwiki, context7, github, mdn, shadcn-vue, ai-elements-vue, tdesign-mcp-server)
 
 ## Included Skills
 
@@ -62,7 +62,6 @@ vp run qoder:dyc
 
 | Server               | Description                                                                                                  | Required Env Vars              |
 | -------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
-| `playwright`         | Browser automation via [Playwright MCP](https://github.com/microsoft/playwright-mcp)                         | None                           |
 | `chrome-devtools`    | Live Chrome browser control via [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) | None                           |
 | `deepwiki`           | Repository knowledge retrieval via [DeepWiki](https://mcp.deepwiki.com/)                                     | None                           |
 | `context7`           | Real-time library documentation via [Context7](https://github.com/upstash/context7)                          | `CONTEXT7_API_KEY`             |

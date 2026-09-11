@@ -31,7 +31,7 @@ vp run qoder:dyc
 ## 前置条件
 
 - Node.js ≥ 18
-- MCP 服务器通过 `mcp.json` 自动配置（playwright、chrome-devtools、deepwiki、context7、github、mdn、shadcn-vue、ai-elements-vue、tdesign-mcp-server）
+- MCP 服务器通过 `mcp.json` 自动配置（chrome-devtools、deepwiki、context7、github、mdn、shadcn-vue、ai-elements-vue、tdesign-mcp-server）
 
 ## 包含技能
 
@@ -62,7 +62,6 @@ vp run qoder:dyc
 
 | 服务器               | 说明                                                                                              | 所需环境变量                   |
 | -------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `playwright`         | 通过 [Playwright MCP](https://github.com/microsoft/playwright-mcp) 进行浏览器自动化               | 无                             |
 | `chrome-devtools`    | 通过 [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) 控制真实 Chrome | 无                             |
 | `deepwiki`           | 通过 [DeepWiki](https://mcp.deepwiki.com/) 检索仓库知识                                           | 无                             |
 | `context7`           | 通过 [Context7](https://github.com/upstash/context7) 实时检索库文档                               | `CONTEXT7_API_KEY`             |
