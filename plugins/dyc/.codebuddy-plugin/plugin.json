@@ -12,11 +12,6 @@
   "license": "MIT",
   "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins", "waza"],
   "mcpServers": {
-    "chrome-devtools": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest", "--autoConnect"]
-    },
     "deepwiki": {
       "type": "http",
       "url": "https://mcp.deepwiki.com/mcp"

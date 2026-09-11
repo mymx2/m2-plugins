@@ -1,9 +1,5 @@
 {
   "mcp_servers": {
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest", "--autoConnect"]
-    },
     "deepwiki": {
       "url": "https://mcp.deepwiki.com/mcp"
     },

@@ -31,7 +31,7 @@ vp run qoder:dyc
 ## 前置条件
 
 - Node.js ≥ 18
-- MCP 服务器通过 `mcp.json` 自动配置（chrome-devtools、deepwiki、context7、github、mdn、shadcn-vue、ai-elements-vue、tdesign-mcp-server）
+- MCP 服务器通过 `mcp.json` 自动配置（deepwiki、context7、github、mdn、shadcn-vue、ai-elements-vue、tdesign-mcp-server）
 
 ## 包含技能
 
@@ -60,16 +60,15 @@ vp run qoder:dyc
 
 ## MCP 配置
 
-| 服务器               | 说明                                                                                              | 所需环境变量                   |
-| -------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `chrome-devtools`    | 通过 [chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) 控制真实 Chrome | 无                             |
-| `deepwiki`           | 通过 [DeepWiki](https://mcp.deepwiki.com/) 检索仓库知识                                           | 无                             |
-| `context7`           | 通过 [Context7](https://github.com/upstash/context7) 实时检索库文档                               | `CONTEXT7_API_KEY`             |
-| `github`             | 通过 [GitHub MCP Server](https://github.com/github/github-mcp-server) 访问 GitHub 仓库            | `GITHUB_PERSONAL_ACCESS_TOKEN` |
-| `mdn`                | 通过 [Mozilla MCP](https://github.com/mdn/mcp) 检索 MDN 文档                                      | 无                             |
-| `shadcn-vue`         | [shadcn-vue](https://www.shadcn-vue.com/docs/mcp) 组件库 MCP                                      | 无                             |
-| `ai-elements-vue`    | [AI Elements Vue](https://www.ai-elements-vue.com/overview/mcp-server) 注册表 MCP                 | 无                             |
-| `tdesign-mcp-server` | [TDesign](https://tdesign.tencent.com/miniprogram/mcp) 组件库 MCP                                 | 无                             |
+| 服务器               | 说明                                                                                   | 所需环境变量                   |
+| -------------------- | -------------------------------------------------------------------------------------- | ------------------------------ |
+| `deepwiki`           | 通过 [DeepWiki](https://mcp.deepwiki.com/) 检索仓库知识                                | 无                             |
+| `context7`           | 通过 [Context7](https://github.com/upstash/context7) 实时检索库文档                    | `CONTEXT7_API_KEY`             |
+| `github`             | 通过 [GitHub MCP Server](https://github.com/github/github-mcp-server) 访问 GitHub 仓库 | `GITHUB_PERSONAL_ACCESS_TOKEN` |
+| `mdn`                | 通过 [Mozilla MCP](https://github.com/mdn/mcp) 检索 MDN 文档                           | 无                             |
+| `shadcn-vue`         | [shadcn-vue](https://www.shadcn-vue.com/docs/mcp) 组件库 MCP                           | 无                             |
+| `ai-elements-vue`    | [AI Elements Vue](https://www.ai-elements-vue.com/overview/mcp-server) 注册表 MCP      | 无                             |
+| `tdesign-mcp-server` | [TDesign](https://tdesign.tencent.com/miniprogram/mcp) 组件库 MCP                      | 无                             |
 
 ### 环境变量
 
