@@ -41,7 +41,8 @@ Docs: [Plugin docs](https://code.claude.com/docs/en/discover-plugins)
 # List installed plugins
 /plugin list
 
-# Update plugin to the latest version (CLI form; restart to apply)
+# Update marketplace catalog, then the plugin (restart to apply)
+claude plugin marketplace update m2-plugins
 claude plugin update dyc@m2-plugins
 
 # Disable / enable / uninstall
@@ -121,7 +122,8 @@ Docs: [Plugin docs](https://docs.qoder.com/zh/cli/plugins)
 # List installed plugins
 qodercli plugins list
 
-# Update plugin to the latest version from its marketplace
+# Update marketplace catalog, then the plugin (/plugins reload to apply)
+qodercli plugins marketplace update m2-plugins
 qodercli plugins update dyc@m2-plugins
 
 # Disable / enable / uninstall
@@ -166,7 +168,8 @@ Docs: [Plugin docs](https://www.codebuddy.cn/docs/cli/plugin-marketplaces)
 # Open the plugin manager (Discover / Installed / Marketplaces / Errors)
 /plugin
 
-# Update plugin to the latest version (CLI form; restart to apply)
+# Update marketplace catalog, then the plugin (/reload-plugins to apply)
+codebuddy plugin marketplace update m2-plugins
 codebuddy plugin update dyc@m2-plugins
 
 # Disable / enable / uninstall
