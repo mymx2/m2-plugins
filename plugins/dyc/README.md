@@ -8,7 +8,7 @@ Eleven engineering workflow skills for AI agents — planning, review, debugging
 
 - **Multi-vendor**: one `plugin.json` source of truth, adapted to Claude Code, Codex, and Qoder via `extensions` + `init.ts`
 - **11 skills** covering the full engineering workflow: plan → build → review → debug → document
-- **Writing rules** for Chinese and English prose, anti-patterns, and durable context
+- **Writing rules** for Chinese and English prose
 - **9 MCP servers** for browser automation, documentation, component libraries, and repository knowledge
 
 ## Installation
@@ -51,12 +51,9 @@ vp run qoder:dyc
 
 ## Rules
 
-| File                       | Purpose                                                |
-| -------------------------- | ------------------------------------------------------ |
-| `rules/anti-patterns.md`   | Common anti-patterns to avoid in code and workflow     |
-| `rules/chinese.md`         | Chinese writing conventions and style guide            |
-| `rules/english.md`         | English writing conventions and style guide            |
-| `rules/durable-context.md` | Durable context patterns for long-lived agent sessions |
+| File               | Purpose                                            |
+| ------------------ | -------------------------------------------------- |
+| `rules/writing.md` | English coaching and Chinese anti-AI writing rules |
 
 ## MCP Configuration
 
