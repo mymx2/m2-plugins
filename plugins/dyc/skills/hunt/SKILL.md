@@ -69,11 +69,11 @@ Load the matching reference when the hunt enters that territory:
 - **Behavioral / lifecycle / async bugs: instrument as part of forming the hypothesis, not after a failed fix.** The moment the hypothesis involves "this callback fires before/after that one" or "this state should be X when Y runs", add the log before writing any fix. Two guesses without runtime evidence is the hard-stop signal. Distinguish from visual-rendering bugs (compositor behavior needs DevTools, not logs) and pure-logic bugs where static analysis is sufficient.
 - **Tuning magic numbers past round three: stop, unify.** When a spacing / sizing / threshold value has been adjusted three times and still looks wrong, the bug is structural, not numeric. Replace the N independent values with one named token (`Spacing.s4`, `--gap-content`, etc.) and verify the asymmetry was hiding a missing constraint. Asymmetry that survives tuning is structural; more tuning will not converge.
 - **Performance complaints need numbers.** For "slow", "laggy", or memory-growth reports outside Native App Freeze Mode, measure the baseline first (wall-clock time, profile sample, memory footprint), fix, then re-measure and report before/after numbers. "Feels faster" is not evidence.
-- **Fix the cause, not the symptom.** If the fix touches more than 5 files, pause and confirm scope with the user.
+- **Fix the cause, not the symptom.** Continue necessary fixes within the user's authorized scope. Ask only when the fix expands that scope or requires a user decision; file count alone is not an approval boundary.
 
 ## Fix Scope Discipline
 
-If the bug genuinely needs a refactor first (e.g. the cause cannot be addressed without changing a shared interface), pause, name the refactor explicitly, and ask. Do not silently bundle it. A bug fix that grew into a refactor is a separate PR.
+If the bug needs a prerequisite refactor (e.g. a shared interface must change), state why it is necessary and check the authorized scope. Continue if that work is covered; ask before expanding the scope or choosing an unresolved behavior tradeoff. Keep unrelated refactors separate.
 
 ## Bisect Mode
 

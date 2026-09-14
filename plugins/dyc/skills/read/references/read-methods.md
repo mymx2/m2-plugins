@@ -1,40 +1,42 @@
 # Read Methods Reference
 
-## Proxy Cascade
+## Helper Directory
 
-Try in order. Success = non-empty output with readable content. If a proxy returns empty, an error page, or fewer than 5 lines, treat it as failed and try the next:
-
-### 1. defuddle.md
+Resolve once for the built-in fetcher, Feishu, or WeChat helper. Replace `<skill-base-dir>` with the installed read skill's base directory (or the repo root's `skills/read` in a source checkout):
 
 ```bash
-curl -sL "https://defuddle.md/{url}"
+READ_SCRIPT_DIR=""
+for candidate in \
+  "<skill-base-dir>/scripts" \
+  "<skill-base-dir>/skills/read/scripts"; do
+  if [ -f "$candidate/fetch.sh" ]; then
+    READ_SCRIPT_DIR="$candidate"
+    break
+  fi
+done
+if [ -z "$READ_SCRIPT_DIR" ]; then
+  echo "read helper scripts not found under the installed skill base; reinstall the read skill" >&2
+  exit 1
+fi
 ```
 
-Cleaner output with YAML frontmatter. Try this first.
-
-### 2. r.jina.ai
+## Built-in Fetcher
 
 ```bash
-curl -sL "https://r.jina.ai/{url}"
+bash "$READ_SCRIPT_DIR/fetch.sh" "{url}"
 ```
 
-Wide coverage, preserves image links. Use if defuddle.md returns empty or errors.
-
-### 3. Web search plugin reader (if available)
-
-If a web search plugin is installed (e.g., PipeLLM), the cascade tries its reader tool before local fallback. Handles JavaScript-rendered pages better than free proxies.
-
-### 4. Local tools
+The script owns extraction order and content checks: request the source site and extract locally first. On failure, inspect its structured stderr. Only when the user has opted into third-party extraction for a public URL, run:
 
 ```bash
-defuddle parse "{url}" -m
+bash "$READ_SCRIPT_DIR/fetch.sh" --use-proxy "{url}"
 ```
 
-Last resort if both proxies fail. `defuddle parse -m` outputs Markdown directly.
+Do not send authenticated, internal, or otherwise sensitive URLs to third-party extraction services or reader plugins. An installed plugin is an optional reader under the same privacy boundary, not automatic permission to disclose a URL. If a reader returns JSON, extract its Markdown-bearing field before answering or saving.
 
 ## GitHub URLs
 
-GitHub file URLs (`github.com/user/repo/blob/...`) render heavy HTML. The proxy cascade often returns partial or nav-heavy content. Prefer:
+GitHub file URLs (`github.com/user/repo/blob/...`) render heavy HTML. The built-in fetcher often returns partial or nav-heavy content. Prefer:
 
 ```bash
 # Raw file content (fastest)
@@ -44,24 +46,21 @@ curl -sL "https://raw.githubusercontent.com/{user}/{repo}/{branch}/{path}"
 gh api repos/{user}/{repo}/contents/{path} --jq '.content' | base64 -d
 ```
 
-Use the proxy cascade only as a fallback for GitHub pages that are not raw file views (e.g., issue threads, README renders).
+Use the built-in fetcher only as a fallback for public GitHub pages that are not raw file views (e.g. issue threads, README renders). Keep private content on the authenticated `gh` path.
 
 ## PDF to Markdown
 
 ### Remote PDF URL
 
-r.jina.ai handles PDF URLs directly:
+Download from the source site into a session temp directory and extract locally:
 
 ```bash
-curl -sL "https://r.jina.ai/{pdf_url}"
+READ_PDF_DIR=$(mktemp -d)
+curl -fL "{pdf_url}" -o "$READ_PDF_DIR/input.pdf"
+pdftotext -layout "$READ_PDF_DIR/input.pdf" -
 ```
 
-If that fails, download and extract locally:
-
-```bash
-curl -sL "{pdf_url}" -o /tmp/input.pdf
-pdftotext -layout /tmp/input.pdf -
-```
+If local extraction fails, a third-party PDF reader may be used only for a public URL with user opt-in, under the same boundary as the built-in fetcher. Never treat failure as consent.
 
 ### Local PDF file
 
@@ -72,7 +71,7 @@ marker_single /path/to/file.pdf --output_dir "${READ_OUTPUT_DIR:-/tmp/read-outpu
 # Fast, text-heavy PDFs (requires: brew install poppler)
 pdftotext -layout /path/to/file.pdf - | sed 's/\f/\n---\n/g'
 
-# No-dependency fallback
+# Python fallback (requires pypdf)
 python3 -c "
 import pypdf, sys
 r = pypdf.PdfReader(sys.argv[1])
@@ -84,25 +83,7 @@ Use `marker` when layout matters (papers, tables). Use `pdftotext` for speed.
 
 ## Feishu / Lark Document
 
-Resolve the built-in helper script directory once. This works from a single-skill install or a source checkout of the skills repo:
-
-```bash
-READ_SCRIPT_DIR=""
-for candidate in \
-  "<skill-base-dir>/scripts" \
-  "<skill-base-dir>/skills/read/scripts"; do
-  if [ -f "$candidate/fetch_feishu.py" ]; then
-    READ_SCRIPT_DIR="$candidate"
-    break
-  fi
-done
-if [ -z "$READ_SCRIPT_DIR" ]; then
-  echo "read helper scripts not found under the installed skill base; reinstall the read skill" >&2
-  exit 1
-fi
-```
-
-Replace `<skill-base-dir>` with the installed read skill base directory (or the repo root in a source checkout).
+Use `READ_SCRIPT_DIR` from [Helper Directory](#helper-directory).
 
 Requires `requests` and Feishu app credentials:
 
@@ -128,9 +109,9 @@ lark-cli docs +fetch --doc "{url}" --format json
 
 ## WeChat Public Account
 
-Use the proxy cascade (r.jina.ai / defuddle.md). Works for most articles without any extra tools.
+Use [Built-in Fetcher](#built-in-fetcher) first, including its opt-in boundary for third-party extraction.
 
-If the proxy is blocked, use the built-in Playwright script as a last resort (requires ~300 MB one-time install):
+If extraction fails, use the built-in Playwright script to read the source page in a local browser (requires ~300 MB one-time install):
 
 ```bash
 pip install playwright beautifulsoup4 lxml && playwright install chromium

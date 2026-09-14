@@ -34,6 +34,8 @@ Reframe vague requirements as concrete success criteria ("make the dashboard fas
 
 **Gated workflow:** do not advance to the next phase until the current one is validated. The spec, the plan, and the task list each get explicit user confirmation before implementation begins.
 
+**External spec tools:** this workflow is format-agnostic. If the project already uses OpenSpec or another specification system, keep that system's artifact format and storage conventions instead of creating a duplicate `SPEC.md`. This mode owns the clarification, content, and approval gates; the external tool owns how the approved spec is represented.
+
 ## Plan → Tasks
 
 - The plan identifies components, dependencies, implementation order, risks, what can parallelize, and verification checkpoints.

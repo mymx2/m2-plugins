@@ -11,6 +11,7 @@ Load and work this checklist when reviewing a feature that will run in productio
 - [ ] Log lines are structured (JSON) with a stable event name and machine-readable fields, not string interpolation.
 - [ ] A correlation/request ID is generated at the system boundary and attached to every log line and outbound call.
 - [ ] Correlation ID propagated on every outbound call and async boundary (HTTP headers, queue metadata).
+- [ ] Any log stream written by more than one entry point (scheduler, replay endpoint, manual run) carries an entry-point field, set where the run starts and propagated alongside the correlation ID.
 - [ ] Log levels consistent: `error` = invariant broken; `warn` = degraded but handled; `info` = significant business event; `debug` = off in production.
 - [ ] No secrets, tokens, passwords, or full PII in log lines; fields are allowlisted (no whole request/response bodies, no auth headers).
 - [ ] Actual output spot-checked: structured fields, not `[object Object]`.
@@ -33,6 +34,7 @@ Load and work this checklist when reviewing a feature that will run in productio
 
 - [ ] Alerts are on symptoms users feel, not causes (CPU/memory).
 - [ ] Every alert is actionable, links a runbook, has a threshold justified by SLO/data, and uses two severities (page / ticket).
+- [ ] Runbook answers three questions without requiring the reader to think: what is happening, what to check first, who to call if that doesn't resolve it. Expand beyond that only when the first check is not enough to decide; update it as part of closing every incident it was used in.
 - [ ] Each new alert test-fired once: reached the right channel, runbook link works; no alerts that fire daily and get acknowledged without action.
 
 ## Dashboards

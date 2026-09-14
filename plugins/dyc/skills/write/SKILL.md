@@ -19,7 +19,7 @@ Write strips AI patterns from prose and rewrites it to sound human. The skill is
 - Outcome: the prose preserves the author's intent while sounding natural for its audience and surface.
 - Done when: meaning, factual claims, and structure are preserved unless the user asked to change them, and AI-like wording is removed; punctuation and CJK/Latin mixing pass the Punctuation Gate for the output language.
 - Evidence: supplied text, target audience, project style references, release or product state, and requested language.
-- Output: the edited prose only, unless the user asked for notes, variants, or review comments.
+- Output: edited prose for pasted text; for repository edits, a scoped diff and the requested verification or delivery receipt.
 
 ## When to Use
 
@@ -34,19 +34,19 @@ Write strips AI patterns from prose and rewrites it to sound human. The skill is
 This skill is a catalog of smells, not a checklist to run top to bottom. Use it to recognize AI taste, then make judgment calls. The reference files are catalogs; do not try to apply every rule to every text. Applying more rules is not doing a better job.
 
 - **Over-editing is failure, equal to under-editing.** If a sentence is already natural, clear, and stable, leave it. Most polish is subtraction (cut repetition, summary-tone, restated conclusions), not phrase-by-phrase replacement.
-- **A piece has a speaker.** The reader's test is not "any banned words" but "can I tell who is talking". Prose that reads smooth and could have been written by anyone has already failed, whatever its word choice; unattributable fluency is the defect, not a neutral outcome. A speaker becomes legible through something this person knows, a judgment they would defend, and a thing they dislike. So the author's voice wins: keep their existing colloquial words, cadence, and stance, and when a rule collides with a deliberate authorial or genre choice (a question title in a narrative piece, a list they want kept), the author wins. Rules are defaults, not laws. Keep the sentences only this author would write and cut the ones anyone would.
-- **Banned-phrase lists and replacement tables are examples, not find-and-replace.** A flagged word that reads naturally in context stays. Match the smell, not the string.
+- **A piece has a speaker.** Smooth prose that could belong to anyone has lost something. Keep the author's colloquial words, cadence, knowledge and judgments; deliberate authorial or genre choices take precedence over these defaults. The author's affection, frustration, pride, gratitude and personal convictions are content, even when abstract or phrased as a conclusion. Preserve their intensity; do not require external evidence for a feeling or replace it with a neutral observation. Read nearby paragraphs and author revisions to separate a real stance from stock rhetoric. If that distinction is uncertain, keep the sentence. Do not invent emotion or turn "what I did" into "what you must do."
+- **Banned-phrase lists and replacement tables are examples, not find-and-replace.** A flagged word that reads naturally in context stays. Match the smell, not the string. When source material exists, check it before flagging the author's wording; restore their words rather than paraphrasing them. When restoring copy, trace that passage's diffs to the nearest version before the unwanted edit and compare the restored text exactly; do not choose an older, shorter version or rewrite unrelated paragraphs.
 - **Prefer fewer, stronger edits.** Three changes that matter beat thirty mechanical swaps that flatten the voice.
 
 When distilling a new lesson into this skill, fold it into an existing principle instead of appending another banned phrase. This skill must not grow monotonically; collapsing specifics back into principles is part of maintaining it.
 
 ## Pre-flight
 
-1. **Text present?** If the user gave only an instruction with no actual prose to edit, ask for the text in one sentence. Do not proceed.
+1. **Locate the text.** Read named files or discover posts in the supplied repository before asking the user to paste anything. For "latest N," freeze the dated article set and its language mirrors, then account for each as edited, unchanged with reason, or unavailable.
 2. **Audience locked?** If the intended audience is unclear and cannot be inferred from the text (blog reader vs RFC vs email), ask before editing. Junior engineer and senior architect prose should read completely different.
 3. **Language detected from the text being edited**, not the user's command:
    - Contains Chinese characters + release notes or social post mode → load `references/write-zh-release-notes.md`
-   - Contains Chinese characters + bilingual or translation review → load `references/write-zh-bilingual.md`
+   - Bilingual or translation review → load `references/write-zh-bilingual.md` and the language references for both versions
    - Product/site/app localization review across multiple locales → load `references/write-product-localization.md`; also load `references/write-zh-bilingual.md` when Chinese copy is present
    - Contains Chinese characters (default prose) → load `references/write-zh.md`
    - Otherwise → load `references/write-en.md`
@@ -102,14 +102,14 @@ When the task is writing or reviewing project documentation (README, inline comm
 
 ## Hard Rules
 
-- **Meaning first, style second.** If removing an AI pattern would change the author's intended meaning, keep the original.
+- **Meaning first, style second.** If removing an AI pattern would change the author's intended meaning, keep the original. Removing promotion does not remove legitimate product descriptions, licensing information, or related-product explanations. Broad copy cleanup does not authorize rewriting attributed quotations or testimonials; preserve their wording unless explicitly included in the edit scope, and distinguish any paraphrase from a verbatim quote.
 - **No silent restructuring.** Do not reorganize headings, reorder paragraphs, or merge sections unless structural changes are explicitly requested. Edit in place. Structural assets are not cleanup noise: image placeholders, links, frontmatter, and example blocks stay unless the user asked to remove them, and any deletion gets listed with its reason instead of discovered later in the diff. (Exception: `references/mode-long-form.md` treats structural cuts and merges as in-scope, since structure is the main problem there; it still proposes them as change-points first instead of doing them silently.)
 - **No invented first-person experience.** When ghostwriting as the author, every personal anecdote, tool history, opinion, and quote must come from the supplied material or the author's published writing. The material lacking an example is a question to ask, not a gap to fill. Before drafting in the author's voice (rather than editing supplied text), read one or two of their published pieces as the voice and length baseline.
 - **Material gate before drafting long-form.** When asked to write rather than edit, count what you actually hold before choosing a length: supplied experience, numbers, quotes, actions, and verifiable public sources. A category name is not a material, and a restated idea is not a second material. Reasoning connects material; it does not breed material. If you cannot name a distinct material for each planned section, the plan is longer than the evidence. Resolve it by researching first, asking at most three questions in one round, or shipping a shorter piece. A target word count is not a reason to pad with invented examples or a fourth phrasing of the same point.
 - **Shorter than the first draft wants to be.** Outward copy (README paragraphs, tweets, release notes, maintainer replies) defaults to the length of the user's previously accepted pieces; when a physical constraint exists (tweet fold line, single-line rendering), derive the budget from the constraint before writing, not after the user trims it.
 - **Artifact-grounded claims.** For launch copy, release notes, social posts, product pages, and public replies, ground factual claims in real source material: current app behavior, runnable artifact, screenshot, product page, release page, changelog, issue/PR, or user-provided draft. Do not present handoffs, plans, old memory, or stale screenshots as current product truth, and do not turn concrete product evidence into generic marketing language.
 - **No em-dash.** Never produce em-dash (U+2014) or en-dash (U+2013) in Chinese or English output. Em-dash is the strongest AI-tone fingerprint in this style of writing. Use commas, periods, colons, semicolons, or parentheses to break clauses. Hyphen-minus (`-`) inside compound words is allowed; replace it with a space or a period when possible. When editing a draft that contains em-dashes, replace every one before returning the text.
-- **Stop after output.** Deliver the rewritten text. Do not append a list of changes, a justification, or a closer. (Exception: `references/mode-long-form.md` returns change-points for review instead of a rewritten blob.)
+- **Match the requested handoff.** Pasted-text rewrites need no explanation. Repository edits need the scoped diff and verification; complete explicitly authorized commit/push steps under the project's rules. A prose-only output convention must not hide unfinished delivery.
 
 ## Punctuation Gate
 
@@ -147,14 +147,14 @@ Route to the `check` skill, which owns document audits (style compliance, privac
 
 Activate when: "连贯性", "段落连贯", "可读性", "coherence", "flow check", "段落顺不顺"
 
-Do not rewrite. Instead, work through each paragraph in sequence:
+For review requests, report issues; for explicit rewrite or file-edit requests, apply the minimal authorized fixes. Check each paragraph for:
 
 1. Flag transitions that abruptly shift topic without a signal.
 2. Flag paragraphs where the opening sentence does not follow from the previous paragraph's close.
 3. Flag rhythm issues: monotone sentence length (all short or all long across a whole paragraph).
 4. Suggest the minimal fix for each: one word, one reordered clause, one bridging sentence.
 
-Output: a numbered list of issues, each with the paragraph location and a one-line fix suggestion. Then ask if the user wants any applied.
+Output: for review, a numbered list with paragraph locations and minimal fix suggestions; for rewriting, the revised text or scoped file changes. Do not ask again to apply already-authorized edits.
 
 ## Tweet / Social Post Mode
 
@@ -172,4 +172,4 @@ Apply the 推文五规则 in `references/write-zh-release-notes.md` (community l
 
 ## Output
 
-Return only the edited prose. If the text was truncated or if multiple versions were possible, note that in one sentence after the body. Otherwise, no wrapper, no preamble, no postscript.
+Follow the Outcome Contract. For batch edits, reconcile the original article set and mirrors before reporting completion. State missing source or verification without treating it as a pass.

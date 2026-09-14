@@ -22,6 +22,10 @@ Deploy to staging (full suite + smoke) → deploy to production behind a feature
 
 Flag discipline: every flag has an owner and an expiration date; never nest feature flags (exponential combinations); test both flag states (on and off) in CI.
 
+## Error Budget Release Gate
+
+When the service tracks an SLO, its remaining error budget is an objective gate, not a negotiation: budget above 20% ships normally under monitoring; 0-20% allows slow rollouts only, no high-risk changes; an exhausted budget freezes feature work in favor of reliability; a reset resumes normal pace and bakes in the fix that recovered it. A high burn rate during canary (consuming budget faster than baseline) is a hold signal, same as an elevated error rate.
+
 ## Ship Decision: GO / NO-GO
 
 For a release-gate verdict over a production-bound change, run the review dimensions in parallel when the agent facility allows (multiple fresh-context reviewers), then the main session merges them into a single verdict. Issue the parallel calls in one turn so they execute concurrently; keep the fan-out flat (personas never invoke other personas). Skip the parallel fan-out only when the change touches 2 files or fewer, is under 50 lines, and does not touch auth, payments, data access, or config/env.

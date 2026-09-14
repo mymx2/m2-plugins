@@ -52,6 +52,7 @@ When sweeping whole repos, exclude `node_modules/`, `dist/`, `build/`, `.next/`,
 - [ ] Passwords hashed with bcrypt (>= 12 rounds), scrypt, or argon2
 - [ ] Session cookies `httpOnly`, `secure`, `sameSite: 'lax'`; session expiration configured
 - [ ] Rate limiting on login (<= 10 attempts per 15 min); account lockout after repeated failures
+- [ ] Rate-limit counters in a shared store once more than one process serves traffic: an in-memory limiter behind a load balancer makes the effective limit `max × instances`, and a serverless/edge runtime starts each invocation from zero, so the limit may never fire
 - [ ] Password reset tokens time-limited (<= 1 hour) and single-use
 - [ ] MFA supported for sensitive operations (optional, recommended)
 
@@ -69,6 +70,40 @@ When sweeping whole repos, exclude `node_modules/`, `dist/`, `build/`, `.next/`,
 - [ ] File uploads: type restricted, size limited, content verified (magic bytes)
 - [ ] SQL queries parameterized; HTML output encoded
 - [ ] URLs validated before redirect (no open redirect); server-side URL fetches allowlisted with private/reserved IPs blocked, incl. loopback and link-local `169.254.169.254` (cloud metadata, the #1 SSRF target) — and note the **TOCTOU gap**: the fetch resolves DNS again after the check, so a short-TTL record can rebind to an internal IP between validation and connection; high-risk surfaces resolve once and connect to the pinned IP, or sit behind a filtering agent
+- [ ] Destructive path operations (delete/move/overwrite): symlinks resolved, allowlisted root, minimum depth, ownership evidence read before the call
+
+### Destructive Path Operations
+
+Containment for a target named by data. Resolve first, then decide — and treat the result as a candidate, not as authorization:
+
+```typescript
+import { realpath, readFile } from 'node:fs/promises'
+import { resolve, relative, isAbsolute, join, sep } from 'node:path'
+
+const ALLOWED_ROOTS = ['/var/lib/myapp/sessions'] // an allowlist, not a pattern
+const MIN_DEPTH = 1 // so a root is never the target
+
+async function resolveDeletable(candidate: string, expectedOwner: string) {
+  const target = await realpath(resolve(candidate)) // symlinks resolved BEFORE the check
+  const inRoot = ALLOWED_ROOTS.some(root => {
+    const rel = relative(root, target)
+    // `rel === '..'` / `'../'` only — a plain `startsWith('..')` would also
+    // reject a legitimate child named `..cache`.
+    if (rel === '' || rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) return false
+    return rel.split(sep).length >= MIN_DEPTH
+  })
+  if (!inRoot) throw new Error(`refusing: outside allowed roots (${target})`)
+
+  const owner = await readFile(join(target, '.owner'), 'utf8').catch(() => null)
+  if (owner?.trim() !== expectedOwner) throw new Error(`refusing: unproven owner (${target})`)
+  return target
+}
+```
+
+What this does not do, and must be said where the snippet is copied from:
+
+- **The marker is self-attestation.** Anything that can write inside the root can write `.owner`. `expectedOwner` has to come from authenticated state, and the marker needs integrity protection (restrictive ownership, or a MAC) before it is authorization rather than a consistency check against a misderived target.
+- **Returning a path leaves a check/use race.** Where an untrusted process can swap an ancestor between the check and the call, operate on a descriptor with no-follow, beneath-the-root semantics, or guarantee the hierarchy is immutable for the duration.
 
 ## Security Headers & CORS
 

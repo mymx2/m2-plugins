@@ -139,7 +139,7 @@ Offer without being asked when the decision is taste, not correctness: icon, wei
 
 - Writing component code before all five direction dimensions are resolved by evidence, assumption, or clarification
 - Accepting "feels like Linear" as a direction without extracting concrete properties from it
-- Handing off without opening the rendered surface in a real browser at full width and 375px
+- Handing off without opening the rendered surface at the product's supported viewport range
 - Proposing a wholesale platform restyle for a native app that already has a coherent direction
 - Shipping a first viewport with default-prompt tells (reflex font, purple-to-blue gradient, three identical cards)
 - Fixing a visual complaint by redesigning the whole surface instead of the smallest material change
@@ -148,7 +148,7 @@ Offer without being asked when the decision is taste, not correctness: icon, wei
 
 1. Re-read the visual thesis from direction lock; check for drift toward generic defaults.
 2. Run the aesthetic review checklist (Output: Aesthetic Review section) before handoff.
-3. Render at full width and at 375px yourself; fix mobile breakage before handing off. Hand the user the exact view to check only when the host cannot render.
+3. Render the product's supported viewport range yourself; fix breakage before handing off. Hand the user the exact view to check only when the host cannot render.
 4. Scan the first viewport for default-prompt tells (reflex font, gradient, identical cards, centered hero with two CTAs).
 
 ## Hard Rules
@@ -161,18 +161,18 @@ Direction lock loads `references/design-reference.md` for the full rewrites, typ
 
 ## Gotchas
 
-| What happened                                                                     | Rule                                                                                                                                                                                                                     |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Used Inter as the display font                                                    | It communicates nothing. Pick something with a personality.                                                                                                                                                              |
-| Chose glassmorphism, ignored the mobile constraint                                | `backdrop-filter` is expensive on low-power devices. Name the tradeoff.                                                                                                                                                  |
-| Light-mode app: white panel on white background, visually indistinguishable       | Adjacent nested surfaces must differ visually. Either background step (sidebar vs main ≥4% lightness difference) or shadow minimum `0 1px 3px rgba(0,0,0,0.10)`.                                                         |
-| Fixed visual polish by redesigning the whole surface                              | Locate the concrete visual delta first, then make the smallest material, opacity, geometry, or typography change that addresses it.                                                                                      |
-| Regenerated an image a third time after two "ugly" verdicts                       | Two rejections on look means the subject is the disagreement, not the palette. Stop generating and re-align on what the image says.                                                                                      |
-| Added a setting or louder control to solve UI noise                               | Remove the misleading affordance or choose a quiet default first                                                                                                                                                         |
-| English looked fine, localized text overflowed                                    | Test long words and localized strings before handoff, especially inside buttons, tabs, nav, and compact cards.                                                                                                           |
-| Relied on `…` truncation to fit text in a fixed-width slot                        | Guarantee fit instead: compact the format, cap to whole segments, or hard-trim with no glyph. Metric and label footers must never tail-truncate into an ellipsis.                                                        |
-| One extra word pushed a line into a wrap; the last line held a single orphan word | Before handoff, sweep every user-visible text block for near-wrap and orphan-line states. Fix by tightening the copy, not by shrinking type; one instance found means sweep the whole document, all instances get fixed. |
-| Five text styles inside one small card                                            | One text style per role inside a card, hierarchy by order; more than three distinct text styles in a small block is the smell.                                                                                           |
+| What happened                                                                     | Rule                                                                                                                                                                                                |
+| --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Used Inter as the display font                                                    | It communicates nothing. Pick something with a personality.                                                                                                                                         |
+| Chose glassmorphism, ignored the mobile constraint                                | `backdrop-filter` is expensive on low-power devices. Name the tradeoff.                                                                                                                             |
+| Light-mode app: white panel on white background, visually indistinguishable       | Adjacent nested surfaces must differ visually. Either background step (sidebar vs main ≥4% lightness difference) or shadow minimum `0 1px 3px rgba(0,0,0,0.10)`.                                    |
+| Fixed visual polish by redesigning the whole surface                              | Locate the concrete visual delta first, then make the smallest material, opacity, geometry, or typography change that addresses it.                                                                 |
+| Regenerated an image a third time after two "ugly" verdicts                       | Two rejections on look means the subject is the disagreement, not the palette. Stop generating and re-align on what the image says.                                                                 |
+| Added a setting or louder control to solve UI noise                               | Remove the misleading affordance or choose a quiet default first                                                                                                                                    |
+| English looked fine, localized text overflowed                                    | Test long words and localized strings before handoff, especially inside buttons, tabs, nav, and compact cards.                                                                                      |
+| Relied on `…` truncation to fit text in a fixed-width slot                        | Guarantee fit instead: compact the format, cap to whole segments, or hard-trim with no glyph. Metric and label footers must never tail-truncate into an ellipsis.                                   |
+| One extra word pushed a line into a wrap; the last line held a single orphan word | Inspect the container and forced breaks first; tighten repetition without losing meaning, never shrink type for a widow. Sweep sibling blocks for the same layout cause, not every short last line. |
+| Five text styles inside one small card                                            | One text style per role inside a card, hierarchy by order; more than three distinct text styles in a small block is the smell.                                                                      |
 
 ## Output: Aesthetic Review
 
@@ -189,7 +189,7 @@ Run these checks before the handoff summary:
 - Would the design still feel premium if all decorative shadows were removed?
 - AI Slop Test: scan the first screen for default patterns (reflex font, purple-to-blue gradient, centered hero with two CTAs side by side, three identical cards, generic top nav). If any appear unintentionally, fix typography, color, or layout until none remain.
 
-If any check fails, fix first. Render at full width and at 375px yourself (Responsive & Screen Verification in `references/design-reference.md`); if the layout breaks at mobile width, fix before handing off. Only when the host cannot render, say so and hand the user the exact view to check.
+If any check fails, fix first. Render the product's supported viewport or window range yourself: web breakpoints on both sides, and native minimum width, minimum height, their combination, and normal size. Test samples do not require new layout branches. Only when the host cannot render, say so and hand the user the exact view to check.
 
 End with:
 

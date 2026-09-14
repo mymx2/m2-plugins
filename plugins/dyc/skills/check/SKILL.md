@@ -140,6 +140,12 @@ Drift signals (examples, not exhaustive -- any one is enough to label drift):
 - A new abstraction or helper was introduced that is not required by the goal
 - A maintainability, review, or cleanup change quietly adds user-visible UI, default config, workflow permissions, or release behavior
 
+## Question the Approach, Not Just the Diff
+
+Scope drift checks the diff against the stated goal; this checks the goal against the approach. Skip when the user declares the route settled or the repo's design docs record the decision -- do not re-litigate deliberate trade-offs.
+
+When findings cluster on one root cause -- the same bug class patched repeatedly, permission or state problems that follow from the architecture itself, a simple problem made complex -- stop listing patches and state the route verdict first: keep / adjust / replace / insufficient information. Compare a real alternative only when it eliminates the problem class at an acceptable migration cost; never manufacture one to fill the report. No patch list before the verdict.
+
 ## Behavior Contract Impact
 
 Beyond whether the diff does what was asked, check what else it touches. Sweep these contract surfaces for new side effects or regressions the diff introduces: public API and default behavior, schema and config shape, global or shared state, I/O and persistence, concurrency and ordering, registered hooks/callbacks/listeners, implicit dependencies (load order, singletons, caches), and downstream-visible drift (output format, logs, metrics, events). Pre-existing issues outside the diff's scope are not findings; report only regressions the diff itself introduces.
@@ -172,7 +178,7 @@ Examples, not exhaustive -- flag any diff that could cause irreversible harm if 
 - **Security findings gate the handoff**: when a review surfaces security findings and the same task continues toward commit, push, PR/MR, merge, release, or deploy, present every finding first (severity, CWE, file:line, vulnerable snippet, remediation, data-flow summary), then get an explicit fix-or-continue decision on the findings shown; an earlier handoff request or scan approval never implies fix approval. After approved fixes, report changed files and verification, then halt for a new user message — fixing is not authorization to commit or push. Never chain `git add && git commit && git push` into one command; commit, then stop at the gate before any handoff command. Full protocol: `references/security-checklist.md` (Security Handoff Gate).
 - **Injection and validation**: SQL, command, path injection at system entry points. Credentials hardcoded, logged, committed, or copied into public docs.
 - **Dependency changes**: unexpected additions or version bumps in package.json, Cargo.toml, go.mod, requirements.txt. Flag any new dependency not obviously required by the diff. The inverse is a finding too: a declared dependency or linked SDK with zero imports across the repo gets flagged to the maintainer, not silently removed (it may be staged for an upcoming feature, and unused analytics/telemetry SDKs still drag app review and privacy manifests). Removal needs the maintainer's go-ahead in the current turn, a grep proving zero references first, and a full build after.
-  - **Verify a lockfile by regenerating it, not by reading it.** For any PR that edits a lockfile, run the package manager's own update command for that one package in a clean worktree off the PR's base (`pnpm update <pkg> --lockfile-only`, `npm install <pkg>@<v> --package-lock-only`) and diff your result against theirs. Byte-identical means a real tool produced it; divergence means it was hand-edited and the manifest and lockfile may now disagree in ways `--frozen-lockfile` will reject at release time. For automated security PRs, also diff the full manifest (whole-file reserialization -- the package manager rewriting the file with its own formatter -- can escape non-ASCII or reorder keys) and confirm the package is actually built into the shipped artifact before repeating the advisory's severity.
+  - **Verify lockfile consistency in the project's declared environment.** Check the full manifest, overrides, resolver configuration, and dependency diff, then run the project's frozen/locked verification. Regenerate in an isolated checkout only to investigate a concrete discrepancy, using the complete proposed inputs and declared toolchain. Equal bytes do not prove provenance; differences require explanation, not an assumption of hand-editing. Confirm that the resolved dependency graph implements the requested change.
 - **Safety sinks**: destructive file operations, shell or AppleScript construction, cwd/path/symlink traversal, approval or sandbox boundary changes, signing/appcast flows, and auth prompts need explicit review of validation, rollback, and user-confirmation behavior.
 
 ## Finding Quality Gate
@@ -249,14 +255,14 @@ Before a whole-scope verdict, reconcile a completion ledger for every delegated 
 
 ## Autofix Routing
 
-| Class        | Definition                                                                 | Action                                                             |
-| ------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `safe_auto`  | Unambiguous, risk-free: typos, missing imports, style inconsistencies      | Apply only after explicit write authorization; otherwise report it |
-| `gated_auto` | Likely correct but changes behavior: null checks, error handling additions | Batch into one user confirmation block                             |
-| `manual`     | Requires judgment: architecture, behavior changes, security tradeoffs      | Present in sign-off                                                |
-| `advisory`   | Informational only                                                         | Note in sign-off                                                   |
+| Class        | Definition                                                                         | Action                                                                                                |
+| ------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `safe_auto`  | Unambiguous, risk-free: typos, missing imports, style inconsistencies              | Apply only after explicit write authorization; otherwise report it                                    |
+| `gated_auto` | Behavior fixes with a clear intended result: null checks, error handling additions | Apply within explicit repair authorization; ask only for scope expansion or an unresolved user choice |
+| `manual`     | Architecture or security tradeoffs with no settled intended result                 | Resolve from project context; present any remaining user decision                                     |
+| `advisory`   | Informational only                                                                 | Note in sign-off                                                                                      |
 
-After explicit write authorization, apply `safe_auto` fixes before surfacing the `gated_auto` confirmation block. In report-only mode, do not modify the worktree.
+Write authorization covers necessary fixes within its scope, including behavior changes needed for the requested result. A routing class does not create another approval step. In report-only mode, do not modify the worktree.
 
 Any fix made during review invalidates the pre-fix verdict. Re-freeze the baseline, re-run the check that exposed the finding, refresh the sibling sweep, and complete the final adversarial pass required by the review depth before declaring ready.
 
@@ -266,9 +272,9 @@ Any fix made during review invalidates the pre-fix verdict. Re-freeze the baseli
 
 ## Verification
 
-When project docs or CI name a verification command (see [Project Context Extraction](#project-context-extraction)), run that command. Otherwise run `bash <skill-base-dir>/scripts/run-tests.sh` from the target project root (`<skill-base-dir>` is this skill's base directory; the script auto-detects the project's test command from the current working directory). Auto-detection is a fallback heuristic — when it conflicts with the project's own toolchain, the project command wins. Paste the full output.
+When project docs or CI name a verification command (see [Project Context Extraction](#project-context-extraction)), run that command. Otherwise run `bash <skill-base-dir>/scripts/run-tests.sh` from the target project root (`<skill-base-dir>` is this skill's base directory; the script auto-detects the project's test command from the current working directory). Auto-detection is a fallback heuristic — when it conflicts with the project's own toolchain, the project command wins. Report the exit status and summary, with relevant failure output rather than full passing logs.
 
-If the script exits non-zero or prints `(no test command detected)`: halt. Do not claim done. Ask the user for the verification command before proceeding. If the user also cannot provide one, document this explicitly in the sign-off as `verification: none -- no command available` and flag it as a structural gap, not a pass.
+A failed check needs diagnosis; no detected command is a discovery gap, not proof of failure or of no verification surface. Inspect project docs, manifests, and CI for an appropriate check. Complete a read-only review with explicit evidence limits when no check is available. Block a fix or readiness claim only when required evidence is missing or failing, and ask for a command only if it cannot be recovered from project context.
 
 For bug fixes: a regression test that fails on the old code must exist before the fix is done.
 

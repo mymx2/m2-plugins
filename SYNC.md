@@ -33,47 +33,57 @@ Guidelines for deciding what flows from upstream into `plugins/dyc`:
 
 - **Source:** `vendor/addyosmani/agent-skills`
 - **Upstream:** https://github.com/addyosmani/agent-skills
-- **Git SHA:** `d2c37ef18a008c0dc233d4e1a34b7fe15f132cbd`
-- **Synced:** 2026-09-03
-- **Changes since last sync:** 19 commits — skill content updates (performance, constraints, planning) out of dyc distillation scope
-- **Skipped this sync:** `skill-lint.js` workflow-step gate (`## The X Workflow` step-section pairing) — deferred until a dyc skill uses that pattern
+- **Git SHA:** `be4e44a9fbc5e8df0beaefadbb28bd22ee61cc39`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** 32+ commits — `context-engineering` gained Context Budget Management (trim at 75%, compress before dropping, recency ordering) and Restartable Session Boundaries; `reference/security-checklist.md` gained Destructive Path Operations (resolved symlinks, allowlisted root, minimum depth, ownership evidence, plus self-attestation and check/use-race limits); `observability-checklist.md` gained the multi-entry-point log field; security hardening gained the shared-store rate-limit rule; shipping gained the Error Budget Release Gate; spec-driven gained the external-spec-tool delegation rule
+- **Distilled into dyc:** `health/references/context-engineering.md` (budget management + restartable boundaries + context-cliff anti-pattern), `think/references/spec-mode.md` (external spec tools), `check/references/security-checklist.md` (destructive path operations + shared-store rate limiting), `check/references/observability-checklist.md` (entry-point field + runbook shape), `check/references/shipping.md` (error budget gate)
+- **Skipped this sync:** `scripts/run-evals.js` null-expectation guard (dyc has its own eval harness); `docs/*` vendor-local setup guides; per-skill frontmatter wording touches with no dyc counterpart
 
 ## mattpocock/skills
 
 - **Source:** `vendor/mattpocock/skills`
 - **Upstream:** https://github.com/mattpocock/skills
-- **Git SHA:** `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76`
-- **Synced:** 2026-08-26
+- **Git SHA:** `3cca18b368ae95cdbdebbff572ccafa662551015`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** 2 commits — `scripts/link-skills.sh` stops linking `misc/` into local skill directories
+- **Skipped this sync:** vendor-local scripting only, no distillation surface
 
 ## anthropics/claude-plugins-official
 
 - **Source:** `vendor/anthropics/claude-plugins-official`
 - **Upstream:** https://github.com/anthropics/claude-plugins-official
-- **Git SHA:** `340e33aef211d95769d252324854497af871dafe`
-- **Synced:** 2026-08-24
+- **Git SHA:** `022b3c274938ddfb9fd928fc582eb9b9ed0f537f`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** marketplace entry bumps only
+- **Skipped this sync:** all — per principle 5, marketplace churn is not a distillation surface
 
 ## openai/plugins
 
 - **Source:** `vendor/openai/plugins`
 - **Upstream:** https://github.com/openai/plugins
-- **Git SHA:** `11c74d6ba24d3a6d48f54a194cd00ef3beea18f9`
-- **Synced:** 2026-08-24
+- **Git SHA:** `1dc195897af4161d039b80d8471ec0a10c9bbc89`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** 7 commits — curated marketplace additions (Qodo, CrowdStrike), plugin images, Codex Security sync
+- **Skipped this sync:** all — marketplace registry churn only
 
 ## tw93/Waza
 
 - **Source:** `vendor/tw93/Waza`
 - **Upstream:** https://github.com/tw93/Waza
-- **Git SHA:** `610b53af44eff1ec1dd19b4a5f6ccdb29c33a85d`
-- **Synced:** 2026-09-03
-- **Changes since last sync:** 9 commits — skill skeletons aligned with duplicate gotchas folded; ui consolidated around measurement-based verification; write catalogs deduplicated (`write-zh-prose.md` removed, bilingual slimmed to pointers); health audit false positives reduced (doc-refs symlink tri-state, markdown fence/inline-code skip, rustdoc exemption, actionable command gating, Swift surface, mirror-collapse count)
-- **Skipped this sync:** Document Review Mode (dyc routes document audits to `check`); Punctuation Gate dual-path wording (dyc keeps the single `check_punctuation.py` gate); `write-zh.md` redactions (dyc keeps the original concrete examples); `dispatch_intent` frontmatter field (dyc routing metadata stays in `when_to_use`); `design-aesthetic-quality.md` file deletion (dyc keeps its redirect stub); health SKILL.md section-anchor notes (dyc collector structure differs); `llms.txt` + `build_metadata.py` (vendor-local artifact)
+- **Git SHA:** `ba60df6efd4ff9a8332e939c6027f156440d2eb8`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** 23 commits — think gained the Simplicity Gate and moved Evaluation/Triage Mode bodies into references; check gained "Question the Approach", the lockfile-verification rewrite, broader write authorization in Autofix Routing, and the verification-evidence rewrite; hunt retired the file-count approval boundary and corrected ime-unicode offset/ordering guidance; read moved to helper-directory + built-in-fetcher structure with a tightened third-party opt-in boundary; write hardened author-voice/emotion preservation, English core rules, long-form scope, product-localization coverage ledger, and identity redaction; health hardened secret-assignment regexes across four scripts, made the skill-description snapshot single-pass, softened MCP/verifier severity claims, and widened verifier discovery to npm defaults; ui reworked widow/text-wrap/breathing rules and viewport verification
+- **Distilled into dyc:** the corresponding dyc files under `plugins/dyc/skills/` (think, check, hunt, read, write, health, ui, learn) and the repo-root `agents/health/inspector-{context,control}.md` briefs
+- **Skipped this sync:** `dispatch_intent` frontmatter field (dyc routing metadata stays in `when_to_use`); Waza packaging/metadata codegen; `agent-skills`-style per-skill `agents/` embedding (dyc keeps briefs at repo root, see `docs/agents.md`)
 
 ## upstash/context7
 
 - **Source:** `vendor/upstash/context7`
 - **Upstream:** https://github.com/upstash/context7
-- **Git SHA:** `63a40c6a6a95ba7b4bf8823e6d817454a84be572`
-- **Synced:** 2026-08-24
+- **Git SHA:** `6f42b66f3b6dee20ba870dd6f70f1b565eb62e6e`
+- **Synced:** 2026-09-14
+- **Changes since last sync:** 33 commits — product releases, SDK/MCP features, docs restructure
+- **Skipped this sync:** all — vendor-local product repository, no distillation surface
 
 ## Updating
 

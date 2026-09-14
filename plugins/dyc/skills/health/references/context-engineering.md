@@ -42,21 +42,36 @@ Every move except **Continue** turns a primary source into a secondary one: the 
 
 **Writing a handoff (option 3):** save it to the OS temp directory, not the workspace; include a "suggested skills" note naming which skills the next session should reach for; reference existing artifacts (specs, plans, diffs) by path instead of duplicating them; redact secrets and personal data.
 
+**Restartable session boundaries.** A fresh session is safe at a completed task boundary, not at an arbitrary token count. Before leaving, persist: the accepted scope and decisions in the spec or plan; current task status and the next pending task; the working-tree state; the exact verification commands and outcomes; and unresolved questions, risks, and required approvals. In the fresh session, read the rules, plan, task status, and actual `git status` before acting, and re-run verification when its recorded baseline is missing or the code has moved. Do not infer approval from a previous conversation unless the durable artifact records it.
+
+## Context Budget Management
+
+The context window is not a filing cabinet, it is a working desk. Budget proactively: waiting until the window is full causes abrupt quality drops; managing regularly keeps the agent coherent through long tasks. Start trimming at 75% capacity, not 100% — by the time the window is genuinely full, attention is already fragmented.
+
+**What to cut first:** past failed attempts and their error output (once past them — keep the conclusion, not the journey); verbose tool output after extracting what was needed; conversational back-and-forth once the decision is reached; earlier drafts of replaced code, immediately on replacement.
+
+**What to protect until the end:** the original task definition and key constraints; the current error message or failing test output being debugged; the file currently being edited or its most recent version; any hard constraints the agent was asked to enforce.
+
+**Compress before dropping.** Summarizing beats deleting: reduce a long stretch of exploration to one sentence capturing the conclusion. The detail is gone; the decision is preserved, and the summary is a breadcrumb for re-investigation.
+
+**Order for recency.** Keep stable rules and specs at the start of context and put the active task material last, closest to the generation point — content at the start and end of the window is recalled more reliably than the middle.
+
 **Where a fix belongs after a retro.** When a session retro surfaces an environment improvement, route it by kind: a missing navigation pointer goes to a rules file; a missing automated check goes to a verifier; a coding-standard enforcement belongs on the _review_ side, not the _implementation_ side — the implementing agent is under the most context pressure, so standards that must hold are cheapest to enforce at review.
 
 ## Anti-Patterns
 
-| Anti-pattern       | Problem                                              | Fix                                                               |
-| ------------------ | ---------------------------------------------------- | ----------------------------------------------------------------- |
-| Context starvation | Agent invents APIs, ignores conventions              | Load rules + relevant files before each task                      |
-| Context flooding   | Agent loses focus past ~5k lines of non-task context | Include only what's relevant; aim <2k focused lines               |
-| Stale context      | Agent references outdated patterns                   | Start fresh when context drifts                                   |
-| Missing examples   | Agent invents a new style                            | Include one pattern example                                       |
-| Implicit knowledge | Agent doesn't know project rules                     | Write them in rules files — if it's not written, it doesn't exist |
-| Silent confusion   | Agent guesses when it should ask                     | Surface ambiguity explicitly                                      |
+| Anti-pattern       | Problem                                                                                                                  | Fix                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Context starvation | Agent invents APIs, ignores conventions                                                                                  | Load rules + relevant files before each task                      |
+| Context flooding   | Agent loses focus past ~5k lines of non-task context                                                                     | Include only what's relevant; aim <2k focused lines               |
+| Stale context      | Agent references outdated patterns                                                                                       | Start fresh when context drifts                                   |
+| Missing examples   | Agent invents a new style                                                                                                | Include one pattern example                                       |
+| Implicit knowledge | Agent doesn't know project rules                                                                                         | Write them in rules files — if it's not written, it doesn't exist |
+| Silent confusion   | Agent guesses when it should ask                                                                                         | Surface ambiguity explicitly                                      |
+| Context cliff      | Waiting until the window is full before managing it — attention fragments and output quality drops abruptly at the limit | Start trimming at 75% capacity; compress rather than cut          |
 
 ## Red Flags
 
 - Agent output doesn't match conventions; invents APIs/imports that don't exist
-- Re-implements utilities that already exist; quality degrades as conversation lengthens
+- Re-implements utilities that already exist; quality degrades mid-task as the conversation grows — failed attempts, replaced drafts, and verbose tool output are not being trimmed
 - No rules file; external data treated as trusted instructions without verification

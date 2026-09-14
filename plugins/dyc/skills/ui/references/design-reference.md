@@ -116,7 +116,7 @@ Once motion is earned, duration follows the element: press feedback 100-160ms, t
 
 ### Typography Details
 
-- Text wrapping: `text-wrap: balance` on headings and short text blocks (≤6 lines in Chromium, ≤10 in Firefox); `text-wrap: pretty` on body paragraphs and longer text; leave default on code blocks and pre-formatted text
+- Text wrapping: keep natural wrapping by default. Use balancing for a deliberately composed headline only after inspecting the actual container and locales; do not force explanatory prose into a headline shape or add manual breaks merely to equalize lines. Keep code and pre-formatted text unchanged.
 - Font smoothing: apply `-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale` once on the root layout (macOS only)
 - Tabular numbers: use `font-variant-numeric: tabular-nums` for counters, timers, prices, number columns, or any dynamically updating numbers
 - Letter-spacing scales with font size: display type needs negative tracking to look engineered rather than stretched. Two tiers: roughly -0.022em for display sizes (32px and above), -0.012em for mid-range (20–28px), normal at 16px and below. Apply to any display-weight typeface, not just geometric sans. Positive letter-spacing on large headlines is always wrong.
@@ -152,7 +152,7 @@ A redesign request inverts the rule: keep product truth, content, and function, 
 ### Responsive & Screen Verification
 
 - Verify the rendered surface, not a type check or CSS-balance read. Several regressions (early wraps, orphaned separator dots, table overflow) are invisible in source and only show in the render. Screenshot at phone (375px, plus 320px for buttons) and desktop (1280px), in every shipped locale.
-- Line widows: eliminate 1-2 word last lines by trimming the copy so the block rebalances, not by adding a `max-width` cap (a cap narrower than its container wraps early and leaves empty space on the right, which reads as a premature break). Detect objectively: flag any text block whose last line is under ~13% of its widest line; eyeballing misses them, and nested `<code>` hides them from greps.
+- Line widows: inspect short last lines in the rendered block, including nested inline code. Check container width and imposed breaks before changing copy; tighten repetition only when meaning and qualifications survive. A short last line alone does not justify deleting useful content, shrinking type, or adding a narrower width cap. Apply line budgets to the named component, not every paragraph.
 - Mobile CTA resting state: natural width, left-aligned to the surrounding text edge, height unchanged. Centering reads as floating; full-width `flex: 1` reads heavy; dropping button height to relieve a "too full" feel treats a width problem as a height one.
 - Spacing is a system, not a per-gap value. Run section spacing as one responsive ladder; when a page reads too airy or too tight, scale the whole set by a single factor across all breakpoints rather than tuning one gap. Asymmetry that survives tuning is structural.
 - Long-form and documentation surfaces stay light: a borderless prev/next text pager (not bordered cards), a sidebar active state as a thin rail rather than a filled block, and build-time zero-runtime-JS code highlighting (bake static spans, plain code stays the source) over a shipped highlighter.
