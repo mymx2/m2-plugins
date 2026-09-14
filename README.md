@@ -41,8 +41,8 @@ Docs: [Plugin docs](https://code.claude.com/docs/en/discover-plugins)
 # List installed plugins
 /plugin list
 
-# Update plugin to the latest version
-/plugin update dyc@m2-plugins
+# Update plugin to the latest version (CLI form; restart to apply)
+claude plugin update dyc@m2-plugins
 
 # Disable / enable / uninstall
 /plugin disable dyc@m2-plugins
@@ -166,8 +166,8 @@ Docs: [Plugin docs](https://www.codebuddy.cn/docs/cli/plugin-marketplaces)
 # Open the plugin manager (Discover / Installed / Marketplaces / Errors)
 /plugin
 
-# Update plugin to the latest version
-/plugin update dyc@m2-plugins
+# Update plugin to the latest version (CLI form; restart to apply)
+codebuddy plugin update dyc@m2-plugins
 
 # Disable / enable / uninstall
 /plugin disable dyc@m2-plugins

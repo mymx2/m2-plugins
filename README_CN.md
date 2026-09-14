@@ -41,8 +41,8 @@ AI Agent 插件市场，支持 **Claude Code**、**Codex**、**Qoder**、**CodeB
 # 列出已安装插件
 /plugin list
 
-# 更新插件到最新版本
-/plugin update dyc@m2-plugins
+# 更新插件到最新版本（CLI 形式，重启后生效）
+claude plugin update dyc@m2-plugins
 
 # 禁用 / 启用 / 卸载
 /plugin disable dyc@m2-plugins
@@ -165,8 +165,8 @@ vp run qoder:dyc
 # 打开插件管理器（发现 / 已安装 / 市场 / 错误）
 /plugin
 
-# 更新插件到最新版本
-/plugin update dyc@m2-plugins
+# 更新插件到最新版本（CLI 形式，重启后生效）
+codebuddy plugin update dyc@m2-plugins
 
 # 禁用 / 启用 / 卸载
 /plugin disable dyc@m2-plugins
