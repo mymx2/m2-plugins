@@ -36,6 +36,7 @@ plugins/<name>/
   .claude-plugin/          # 厂商适配目录，由 init.ts 生成，不手动维护
   .codex-plugin/
   .qoder-plugin/
+  .codebuddy-plugin/
   skills/<skill>/SKILL.md  # 技能定义（frontmatter: name + description，description 带 "Use when..."）
 ```
 
@@ -51,10 +52,11 @@ plugins/<name>/
 - `.claude-plugin/marketplace.json`：Claude Code marketplace 注册表（受 schema 校验）
 - `.agents/plugins/marketplace.json`：Codex marketplace 注册表
 - `.qoder-plugin/marketplace.json`：Qoder marketplace 注册表
+- `.codebuddy-plugin/marketplace.json`：CodeBuddy marketplace 注册表
 - `.github/workflows/plugin-gate.yml`：CI 门禁（push/PR to main）
 - `.vite-hooks/`：Git hooks（`pre-commit` → `vp staged`；`commit-msg` → Conventional Commits 校验）
 
-**每个插件必须同时在三个 marketplace 注册。**
+**每个插件必须同时在四个 marketplace 注册。**
 
 ### 配置入口
 
@@ -146,7 +148,7 @@ plugins/<name>/
 - **plugin.json 是唯一事实源**：厂商目录下的 plugin.json 由 init.ts 生成，不手动维护
 - **版本号事实源是 package.json**：改版本只动 package.json，跑 `vp run init` 填充到全部 manifest 和 marketplace；`vp run validate:version` 校验漂移
 - **init.ts 必须幂等**：重复运行结果一致，每次都从标准源重新生成
-- **三个 marketplace**：新插件必须同时注册 `.claude-plugin/marketplace.json`（Claude Code）、`.agents/plugins/marketplace.json`（Codex）和 `.qoder-plugin/marketplace.json`（Qoder）
+- **四个 marketplace**：新插件必须同时注册 `.claude-plugin/marketplace.json`（Claude Code）、`.agents/plugins/marketplace.json`（Codex）、`.qoder-plugin/marketplace.json`（Qoder）和 `.codebuddy-plugin/marketplace.json`（CodeBuddy）
 - **技能校验门禁**：description 40-500 字且必须包含 "Use when..." 触发句式；推荐 section: Overview / When to Use / Common Rationalizations / Red Flags / Verification
 - **跨技能引用**：按名引用（不用路径），路径引用过不了 isolation 门
 - **when_to_use 用半角逗号**：校验器按 `,` 切分触发词，改成全角会把整串解析成一个关键词，触发区分度门失效
@@ -185,11 +187,11 @@ plugins/<name>/
 
 1. 在 `plugins/<name>/` 创建目录（kebab-case）
 2. 编写 `plugin.json`（符合 `schemas/plugin.schema.json`，`$schema` 和 `name` 必填）
-3. 按需添加 extensions（`.claude-plugin/`、`.codex-plugin/`、`.qoder-plugin/`）及各厂商 `init.ts`
+3. 按需添加 extensions（`.claude-plugin/`、`.codex-plugin/`、`.qoder-plugin/`、`.codebuddy-plugin/`）及各厂商 `init.ts`
 4. 运行 `vp run init` 生成各厂商 manifest，并从 package.json 填充/同步版本
 5. 运行 `python scripts/validate_repo.py . -p <name>` 确认结构合规
 6. 运行 `vpx tsx scripts/validate-schemas.ts --plugin <name>` 确认 schema 合规
-7. 在 `.claude-plugin/marketplace.json`、`.agents/plugins/marketplace.json` 和 `.qoder-plugin/marketplace.json` 分别注册条目（version 字段留由 `vp run init` 同步）
+7. 在 `.claude-plugin/marketplace.json`、`.agents/plugins/marketplace.json`、`.qoder-plugin/marketplace.json` 和 `.codebuddy-plugin/marketplace.json` 分别注册条目（version 字段留由 `vp run init` 同步）
 8. 更新上方 **Current Plugins** 表
 
 ### 为插件添加新技能

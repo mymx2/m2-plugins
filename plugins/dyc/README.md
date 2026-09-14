@@ -6,7 +6,7 @@ Eleven engineering workflow skills for AI agents — planning, review, debugging
 
 ## Features
 
-- **Multi-vendor**: one `plugin.json` source of truth, adapted to Claude Code, Codex, and Qoder via `extensions` + `init.ts`
+- **Multi-vendor**: one `plugin.json` source of truth, adapted to Claude Code, Codex, Qoder, and CodeBuddy via `extensions` + `init.ts`
 - **11 skills** covering the full engineering workflow: plan → build → review → debug → document
 - **Writing rules** for Chinese and English prose
 - **9 MCP servers** for browser automation, documentation, component libraries, and repository knowledge
@@ -26,6 +26,10 @@ codex plugin add dyc@m2-plugins
 
 # Qoder
 vp run qoder:dyc
+
+# CodeBuddy
+/plugin marketplace add mymx2/m2-plugins
+/plugin install dyc@m2-plugins
 ```
 
 ## Prerequisites

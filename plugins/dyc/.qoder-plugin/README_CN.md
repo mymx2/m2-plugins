@@ -53,8 +53,8 @@ vp run qoder:dyc
 
 # 从市场安装
 qodercli plugins marketplace add mymx2/m2-plugins
-qodercli plugins install dyc
+qodercli plugins install dyc@m2-plugins
 
 # 管理
-qodercli plugins list / uninstall dyc / enable dyc / disable dyc
+qodercli plugins list / uninstall dyc@m2-plugins / enable dyc@m2-plugins / disable dyc@m2-plugins
 ```

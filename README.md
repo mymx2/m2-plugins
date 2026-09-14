@@ -127,9 +127,9 @@ qodercli plugins marketplace update m2-plugins
 qodercli plugins update dyc@m2-plugins
 
 # Disable / enable / uninstall
-qodercli plugins disable dyc
-qodercli plugins enable dyc
-qodercli plugins uninstall dyc
+qodercli plugins disable dyc@m2-plugins
+qodercli plugins enable dyc@m2-plugins
+qodercli plugins uninstall dyc@m2-plugins
 ```
 
 **Local development**

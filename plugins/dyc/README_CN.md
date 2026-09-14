@@ -6,7 +6,7 @@
 
 ## 特性
 
-- **多厂商适配**：`plugin.json` 为唯一事实源，通过 `extensions` + `init.ts` 适配 Claude Code、Codex、Qoder
+- **多厂商适配**：`plugin.json` 为唯一事实源，通过 `extensions` + `init.ts` 适配 Claude Code、Codex、Qoder、CodeBuddy
 - **11 个技能**覆盖完整工程工作流：规划 → 构建 → 审查 → 调试 → 文档
 - **写作规则**：中英文写作规范
 - **9 个 MCP 服务器**：浏览器自动化、文档检索、组件库、仓库知识
@@ -26,6 +26,10 @@ codex plugin add dyc@m2-plugins
 
 # Qoder
 vp run qoder:dyc
+
+# CodeBuddy
+/plugin marketplace add mymx2/m2-plugins
+/plugin install dyc@m2-plugins
 ```
 
 ## 前置条件
