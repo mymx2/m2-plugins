@@ -40,6 +40,7 @@ cases:
   files:
     - evals/cases/de-ai-chinese-prose.yaml
     - evals/cases/release-notes.yaml
+    - evals/cases/standards-tone.yaml
   # 所有用例继承的默认约束，可被单个用例覆盖。
   defaults:
     # 单用例 5 分钟预算（含 agent + judge），保证可稳定回归。

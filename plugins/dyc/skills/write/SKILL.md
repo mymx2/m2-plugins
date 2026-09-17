@@ -1,7 +1,7 @@
 ---
 name: write
-description: 'Rewrites and polishes prose in Chinese or English, removes AI-like wording, and authors technical documentation with the writing rulebook. Use when users ask to rewrite or polish supplied prose, remove AI-like wording, draft release notes or launch/social copy, localize copy, or write or revise technical docs. Not for code comments, commit messages, or auditing docs against the rulebook (use check — check flags rule violations, write applies the wording fixes).'
-when_to_use: '帮我写, 改稿, 润色, 去AI味, 写一段, 本地化文案, 多语言文案, i18n copy, localization copy, 推特, twitter, X推文, tweet, social post, 连贯性, 段落连贯, draft, proofread, sound natural, polish, rewrite, write docs, 技术文档, 写作规范, documentation style, 文档写作'
+description: 'Rewrites and polishes prose in Chinese or English, removes AI-like wording, and authors technical documentation with the writing rulebook. Use when users ask to rewrite or polish supplied prose, remove AI-like wording, draft release notes or launch/social copy, localize copy, or write or revise technical docs and coding standards. Not for code comments, commit messages, or auditing docs against the rulebook (use check — check flags rule violations, write applies the wording fixes).'
+when_to_use: '帮我写, 改稿, 润色, 去AI味, 写一段, 本地化文案, 多语言文案, i18n copy, localization copy, 推特, twitter, X推文, tweet, social post, 连贯性, 段落连贯, draft, proofread, sound natural, polish, rewrite, write docs, 技术文档, 写作规范, 规约, 编码规范, 规范文件, coding standard, documentation style, 文档写作'
 ---
 
 # Write: Cut the AI Taste
@@ -26,6 +26,7 @@ Write strips AI patterns from prose and rewrites it to sound human. The skill is
 - Rewriting or polishing prose in Chinese or English.
 - Removing AI-like wording from drafts.
 - Authoring technical documentation with the writing rulebook.
+- Drafting or revising coding standards, spec clauses, or team conventions.
 - Drafting release notes, social posts, maintainer replies, or long-form articles.
 - Route to `check` for auditing docs against the rulebook; route to `learn` for multi-source research before writing.
 
@@ -44,7 +45,8 @@ When distilling a new lesson into this skill, fold it into an existing principle
 
 1. **Locate the text.** Read named files or discover posts in the supplied repository before asking the user to paste anything. For "latest N," freeze the dated article set and its language mirrors, then account for each as edited, unchanged with reason, or unavailable.
 2. **Audience locked?** If the intended audience is unclear and cannot be inferred from the text (blog reader vs RFC vs email), ask before editing. Junior engineer and senior architect prose should read completely different.
-3. **Language detected from the text being edited**, not the user's command:
+3. **Genre check.** Coding standard, spec clause set, or team convention (规约/规范/标准)? Load `references/writing-standards.md`; its tone rules replace the general prose defaults for this document.
+4. **Language detected from the text being edited**, not the user's command:
    - Contains Chinese characters + release notes or social post mode → load `references/write-zh-release-notes.md`
    - Bilingual or translation review → load `references/write-zh-bilingual.md` and the language references for both versions
    - Product/site/app localization review across multiple locales → load `references/write-product-localization.md`; also load `references/write-zh-bilingual.md` when Chinese copy is present
@@ -66,6 +68,7 @@ Default is a line-level rewrite of the supplied text. Take a mode only when its 
 | Product, site, or app copy across locales                                                          | [Product Localization Review](#product-localization-review-mode) |
 | Document, PDF, or white paper to review                                                            | [Document Review](#document-review-mode)                         |
 | Write or revise technical documentation (tutorial, how-to, reference, conceptual, troubleshooting) | load `references/writing-guidelines.md`                          |
+| Coding standard, spec clauses, team convention (规约/规范/标准)                                    | load `references/writing-standards.md`                           |
 | Paragraphs that read disconnected                                                                  | [Paragraph Coherence](#paragraph-coherence-mode)                 |
 | Tweet, thread, or launch post                                                                      | [Tweet / Social Post](#tweet--social-post-mode)                  |
 

@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: standards-tone
+# 用例摘要，显示在用例列表与报告中。
+title: 规约条目去讨论残留，改写成发布语
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 write 的规约语气能力：把带讨论残留的数据库规范条目
+  改写成发布语（条款下命令、理由讲机制），保留原意与注释标记，
+  不残留"承接不了/落表列"这类辩护腔与行话。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    把这条数据库规范条目改得像规范文件，意思和标记都别变：
+
+    2. **【强制】** 判定性责任人必须落表列，并标注 `--ref=sys_user.id`：审核人、拉黑登记人与解除人、开票处理人、退款发起人这类「这个结论是谁下的」语义，日志承接不了。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - '--ref=sys_user.id'
+  must_not_contain:
+    - '承接不了'
+    - '落表列'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: rule_based
+  success:
+    - output_contains:
+        all: ['审核人', '退款发起人']
