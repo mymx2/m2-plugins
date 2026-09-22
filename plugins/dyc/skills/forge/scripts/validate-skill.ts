@@ -33,6 +33,7 @@ import {
   checkSkillIsolation,
   checkTriggerOverlap,
   REF_PATTERN,
+  SCAN_EXCLUDED_DIRS,
   SCRIPT_VAR_PATTERN,
 } from './checks-content.ts'
 import { FailError, fail, parseFrontmatter, parseWhenToUseKeywords } from './skill-frontmatter.ts'
@@ -44,7 +45,7 @@ function rglobMd(dir: string): string[] {
   if (!existsSync(dir) || !statSync(dir).isDirectory()) return []
   const out: string[] = []
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === '.git') continue
+    if (SCAN_EXCLUDED_DIRS.has(entry.name)) continue
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) out.push(...rglobMd(full))
     else if (entry.isFile() && entry.name.endsWith('.md')) out.push(full)

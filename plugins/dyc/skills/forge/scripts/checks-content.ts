@@ -43,8 +43,12 @@ export const URL_PREFIXES = ['http://', 'https://', 'mailto:', 'ftp://', 'tel:',
 /** 表格分隔行（--- 与 | 组成） */
 export const SEP_RE = /^[\s|:-]+$/
 
-/** 个人主目录绝对路径，prose 中禁止硬编码 */
-export const PERSONAL_PATH_PATTERN = /\/(?:Users|home)\/[A-Za-z0-9._-]+\//
+/**
+ * 个人主目录绝对路径，prose 中禁止硬编码。
+ * 覆盖 POSIX（`/Users/x/`、`/home/x/`）与 Windows（`C:\Users\x\`、`C:/Users/x/`）两种形式。
+ */
+export const PERSONAL_PATH_PATTERN =
+  /(?:\/(?:Users|home)\/|[A-Za-z]:[\\/]Users[\\/])[A-Za-z0-9._-]+[\\/]/
 
 /** 私有项目/会话上下文特征：公开技能面禁止出现 */
 export const PRIVATE_CONTEXT_RE =
@@ -75,11 +79,28 @@ export const BARE_INVOCATION_RE = /\b(?:bash|sh|python3)\s+(?:\.\.\/)*(?:skills|
 
 // ── 文件系统小工具：walker 与路径呈现 ─────────────────────────────────────
 
-/** 递归列出目录下全部文件（跳过 .git），结果排序。 */
+/**
+ * 遍历时跳过的目录：版本控制与脚本运行环境/依赖缓存，均非技能内容。
+ * 覆盖 TS/Node（node_modules）与 Python（__pycache__、虚拟环境、包缓存）两生态，
+ * 不含 dist/build 等技能可能自带的构建产物目录。
+ */
+export const SCAN_EXCLUDED_DIRS: ReadonlySet<string> = new Set([
+  '.git',
+  'node_modules',
+  '__pycache__',
+  'venv',
+  '.venv',
+  'site-packages',
+  '.pytest_cache',
+  '.mypy_cache',
+  '.ruff_cache',
+])
+
+/** 递归列出目录下全部文件（跳过 SCAN_EXCLUDED_DIRS），结果排序。 */
 function walkFiles(dir: string): string[] {
   const out: string[] = []
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === '.git') continue
+    if (SCAN_EXCLUDED_DIRS.has(entry.name)) continue
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) {
       out.push(...walkFiles(full))
