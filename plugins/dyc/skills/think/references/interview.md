@@ -18,7 +18,7 @@ You're done when you can answer yes to: _"Can I predict the user's reaction to t
 
 ## Rationalizations
 
-"Asking too many questions wastes their time" → the cost of 4–6 targeted questions is small; the cost of building the wrong thing is enormous, and the user bears it. "I'll figure it out as I build" → switching costs after code exists are 10x; discovery during implementation is rework.
+"I'll figure it out as I build" → switching costs after code exists are 10x; discovery during implementation is rework the user pays for.
 
 ## Red Flags
 

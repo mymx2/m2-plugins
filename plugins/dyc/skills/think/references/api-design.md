@@ -4,13 +4,10 @@ Load when the plan designs APIs, module boundaries, component props, or any publ
 
 ## Core Principles
 
-- **Contract first.** Define the interface before implementing it; the contract is the spec. Types are the documentation.
+Contract-first, boundary validation, consistent error semantics, additive-only evolution, and predictable naming are default model behavior — apply them without being told. The principles worth spelling out are the non-obvious ones:
+
 - **Hyrum's Law.** With enough users, every observable behavior becomes a de facto contract — including quirks, error-message text, timing, and ordering. Be intentional about what you expose; don't leak implementation details; plan for deprecation at design time. Contract tests are not enough: even with perfect tests, a "safe" change can break real users who depend on undocumented behavior.
 - **One-Version Rule.** Design for one version at a time — extend rather than fork, to avoid diamond-dependency problems.
-- **Consistent error semantics.** Pick one strategy (HTTP status + structured error body) and use it everywhere; don't mix throw / return-null / return-`{error}`.
-- **Validate at boundaries only.** Trust internal code; validate at system edges (API routes, form handlers, external-service responses, env loading). Third-party API responses are untrusted data — validate before use. Don't validate inside already-validated internal code.
-- **Prefer addition over modification.** Extend interfaces with optional fields; never change field types or remove fields.
-- **Predictable naming.** Plural-noun REST endpoints, camelCase query params/fields, `is/has/can` boolean prefixes, `UPPER_SNAKE` enums.
 
 ## Idempotency Keys
 

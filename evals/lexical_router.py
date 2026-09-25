@@ -28,7 +28,7 @@ DESCRIPTION_RE = re.compile(r"^description:\s*(.*)$", re.MULTILINE)
 
 
 def load_descriptions():
-    """现读 11 个 SKILL.md 的 frontmatter description,不存副本。
+    """现读 12 个 SKILL.md 的 frontmatter description,不存副本。
 
     早期版本把 description 手抄成内嵌 dict,导致 SKILL.md 改了而 router 用旧文本,
     路由结果悄悄过时。改为从 SKILL.md 解析,单一事实源,改 description 即生效。

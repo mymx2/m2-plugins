@@ -8,7 +8,7 @@ Quick reference for WCAG 2.1 AA compliance. Use alongside the `frontend-engineer
 
 - [ ] All interactive elements focusable via Tab key
 - [ ] Focus order follows visual/logical order
-- [ ] Focus is visible (outline/ring on focused elements)
+- [ ] Focus is visible (outline/ring on focused elements); use `focus-visible:ring-*` or equivalent, never `outline: none` without a replacement
 - [ ] Custom widgets have keyboard support (Enter to activate, Escape to close)
 - [ ] No keyboard traps (user can always Tab away)
 - [ ] Skip-to-content link at top of page, visible at least on keyboard focus
@@ -46,7 +46,7 @@ Quick reference for WCAG 2.1 AA compliance. Use alongside the `frontend-engineer
 - [ ] Language declared (`<html lang="en">`)
 - [ ] Page has a descriptive `<title>`
 - [ ] Links distinguish from surrounding text (not by color alone)
-- [ ] Touch targets >= 44x44px on mobile
+- [ ] Touch targets >= 44x44px (WCAG 2.1 AA 基线)
 - [ ] Meaningful empty states (not blank screens)
 
 ## Common HTML Patterns

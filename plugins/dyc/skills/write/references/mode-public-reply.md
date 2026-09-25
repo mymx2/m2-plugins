@@ -1,6 +1,6 @@
 # Public Reply Mode (GitHub issue / PR)
 
-Loaded from `write` when the deliverable is a maintainer reply on a public issue or PR thread. The `check` skill's public-reply reference is the canonical template for the reply shape and the posting, editing, and closure mechanics; this mode file adds the composition-side rules (two-paragraph exception, batch voice, meta-narration ban, paid users, private channels).
+Loaded from `write` when the deliverable is a maintainer reply on a public issue or PR thread. For the reply shape and the posting, editing, and closure mechanics, see the `check` skill; in short: keep it to one short paragraph, state one ship state plus the reporter's next step, and never post anything not verified in the current turn. This mode file adds the composition-side rules (two-paragraph exception, batch voice, meta-narration ban, paid users, private channels).
 
 Activate when: "回复 issue", "reply to PR", "comment on #N", "回 issue", or the user asks for the text of a GitHub issue / PR comment.
 

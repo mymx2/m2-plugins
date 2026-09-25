@@ -47,10 +47,6 @@ Reading the glossary is passive. The active work is keeping it sharp, in the mom
 4. **Cross-reference with code.** When a stated behavior contradicts what the code does, surface it: "Your code cancels entire Orders, but you said partial cancellation is possible. Which is right?"
 5. **Update inline, not batched.** The moment a term resolves, write it into `CONTEXT.md` right there. Deferred glossary updates don't happen.
 
-## Payoff
-
-A sharp glossary compounds: variables, functions, and files get named from the shared language; the codebase becomes easier for an agent to navigate; the agent spends fewer tokens re-deriving jargon it can read once. "There's a problem with the materialization cascade" is one line that replaces a paragraph of explanation, session after session.
-
 ## Red Flags
 
 - A term added with several synonyms left in active use, no `_Avoid_` list

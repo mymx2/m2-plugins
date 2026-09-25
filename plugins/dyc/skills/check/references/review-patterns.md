@@ -81,3 +81,67 @@ When the diff introduces a type, class, or domain model, audit its invariants:
 - Weigh the enforcement cost: prefer compile-time guarantees where cheap, and do not demand validation machinery that exceeds the type's role in the system.
 
 _Silent-failure and type-invariant patterns adapted from [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) pr-review-toolkit (Apache 2.0)._
+
+## Get the Diff
+
+Derive the review baseline from the user's words and current repository state. Do not ask for commits when the scope is already inferable:
+
+- **All local or uncommitted changes**: inventory staged, unstaged, and untracked files, plus local commits ahead of the configured upstream. Even when the current branch is the base branch, the scope is still inferable from staged/unstaged/untracked state.
+- **PR or branch review**: use the merge base through the reviewed head, then add any dirty files in that checkout as a separate surface.
+- **Since the last release**: use the latest published stable tag through `HEAD`, not the local version field, then add dirty files.
+- **Recent N days or an explicit ref**: resolve that time/ref boundary through `HEAD`, then add dirty files.
+- **Known-good or previous working version**: compare that ref through `HEAD`; route to `/hunt` Bisect Mode only when the regression point itself is unknown.
+- **Whole-project audit**: use Audit Mode rather than pretending one diff is the repository.
+
+Freeze the resolved base, `HEAD`, worktree inventory, generated/distribution surfaces, and delegated scopes before review. Ask one narrow question only when two plausible baselines would materially change the verdict. If review fixes are applied or repository state moves, the old verdict expires: re-read `HEAD`, status, and the full resolved diff before signing off.
+
+## Scope Classification
+
+Measure the diff and classify depth. These thresholds are default intuition, not law — a project may override them in `references/project-context.md`; explicit depth language in the request always overrides size.
+
+| Depth        | Criteria (default intuition)                              | Coverage                                        |
+| ------------ | --------------------------------------------------------- | ----------------------------------------------- |
+| **Quick**    | Small diff (order of <100 lines, a handful of files)      | Base review only                                |
+| **Standard** | Medium (order of 100-500 lines, or several files)         | Base + conditional domain checklists            |
+| **Deep**     | Large, or touches auth/payments/data mutation at any size | Base + all domain checklists + adversarial pass |
+
+State the depth before proceeding. Explicit depth language overrides the size thresholds. "All", "全部", "deep", "深入", or "仔细" means whole-scope coverage of the resolved inventory, even when the textual diff is small; it does not permit skipping untracked files, generated mirrors (files auto-produced by a build step that mirror source, e.g. `dist/`, `build/`, `generated/`), required artifacts, or pending reviewers.
+
+Static content diffs can stay quick even when they touch several generated files: version strings, dates, release-copy mirrors, sitemap dates, or one-for-one localization copy changes usually need line-by-line readback plus grep consistency, not the full checklist fleet. Escalate only when the diff changes logic, generation rules, public distribution behavior, or user-facing semantics beyond the literal text replacement.
+
+## Scope Drift Detection
+
+Before reading code, check scope drift: do the diff and the stated goal match? Label: **on target** / **drift** / **incomplete**.
+
+When the completeness check is delegated, forward the original requirement verbatim (issue/PR description, commit message, task brief) — paraphrased handoffs lose constraints, and the drift verdict must be grounded in the source text, not a retelling.
+
+**Promise-by-promise verification (when an upstream spec exists).** Run the Spec Axis promise-by-promise three-state table per `references/review-quality.md` (Spec Axis) before the generic findings list.
+
+Also check surgical traceability: every changed file and every new public surface must trace back to the user's stated goal. If a file, dependency, config knob, abstraction, generated artifact, workflow permission, or release behavior cannot be explained in one sentence from the request, label it drift until proven necessary.
+
+For every new public setting, flag, environment variable, command, or service, ask who will change it and why one correct default cannot serve them. If there is no evidenced user split, treat the knob as scope drift and fix the default path instead.
+
+Drift signals (examples, not exhaustive -- any one is enough to label drift):
+
+- A changed file has no connection to the stated goal
+- The diff includes pure refactoring (renames, formatting, restructuring) when the goal was a bug fix or feature
+- A new dependency appears that the goal did not mention
+- Code unrelated to the goal was deleted or commented out
+- A new abstraction or helper was introduced that is not required by the goal
+- A maintainability, review, or cleanup change quietly adds user-visible UI, default config, workflow permissions, or release behavior
+
+## Question the Approach, Not Just the Diff
+
+Scope drift checks the diff against the stated goal; this checks the goal against the approach. Skip when the user declares the route settled or the repo's design docs record the decision -- do not re-litigate deliberate trade-offs.
+
+When findings cluster on one root cause -- the same bug class patched repeatedly, permission or state problems that follow from the architecture itself, a simple problem made complex -- stop listing patches and state the route verdict first: keep / adjust / replace / insufficient information. Compare a real alternative only when it eliminates the problem class at an acceptable migration cost; never manufacture one to fill the report. No patch list before the verdict.
+
+## Behavior Contract Impact
+
+Beyond whether the diff does what was asked, check what else it touches. Sweep these contract surfaces for new side effects or regressions the diff introduces: public API and default behavior, schema and config shape, global or shared state, I/O and persistence, concurrency and ordering, registered hooks/callbacks/listeners, implicit dependencies (load order, singletons, caches), and downstream-visible drift (output format, logs, metrics, events). Pre-existing issues outside the diff's scope are not findings; report only regressions the diff itself introduces.
+
+## Pattern-Fix Completeness
+
+When the diff fixes one instance of a class-of-bug (a missing validation, a wrong selector, an off-by-one, a missing lock), the same shape often lives elsewhere. Extract the pattern signature, `grep -rn` it across the repo (exclude generated dirs), and confirm sibling instances were also handled. List any unswept sibling: flag it as a hard stop when it carries the same risk, advisory when lower-risk.
+
+When the diff contains a recurring or hard-to-observe bug, output-string branching, guessed waits, consolidation or dead-code deletion, history-sensitive restoration, broad destructive matchers, duplicated derivations, test-only seams, never-shipped migrations, unknown identifiers, error-handling changes, or new type definitions, load the matching section of `references/review-patterns.md`. Do not load that catalog for unrelated diffs.

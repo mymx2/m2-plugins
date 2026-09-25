@@ -1,5 +1,7 @@
 # Idea Refine: From Vague Idea to Actionable Concept
 
+Canonical home of the think skill's Pressure Test: `SKILL.md` only offers and gates it (user-assent required); the four checks and verdict format live here — do not maintain a second copy in `SKILL.md`.
+
 Activate when an idea is still vague, when you need to stress-test assumptions before committing to a plan, or when you want to expand options before converging. Works best as an interactive dialogue.
 
 ## Process
@@ -10,14 +12,8 @@ Activate when an idea is still vague, when you need to stress-test assumptions b
 
 ## Rules
 
-- Be honest, not supportive. Push back on weak ideas with specificity and kindness. A good ideation partner is not a yes-machine.
-- The "Not Doing" list is the most valuable part — focus is saying no to good ideas.
-- Don't generate 20+ ideas; 5–8 considered variations beat 20 shallow ones.
-- Don't skip "who is this for". Every good idea starts with a person and their problem.
-- Don't produce a plan without surfacing assumptions — untested assumptions are the #1 killer of ideas.
-- Don't just list ideas — tell a story. Each variation should have a reason it exists.
+- The "Not Doing" list is mandatory in the one-pager — focus is saying no to good ideas.
 - Persist the one-pager (e.g. `docs/ideas/[idea-name].md`) only after the user confirms the direction.
-- Don't over-engineer the process; three phases, each doing one thing well.
 
 ## Red Flags
 
@@ -51,3 +47,97 @@ Two tools for Evaluate & Converge beyond the step-2 stress test:
 
 - **Assumption audit** — classify each assumption: **Must be true** (dealbreaker, validate first), **Should be true** (important, adjustable), **Might be true** (nice-to-have, defer).
 - **Decision matrix** — high value + high feasibility = do first; high value + low feasibility = worth the risk; low value = skip. Use differentiation as the tiebreaker.
+
+## Post-Convergence Four-Check Pressure Test
+
+Run after a direction is chosen, before finalizing a high-stakes plan. `SKILL.md` offers and gates this test; this section is the canonical content.
+
+1. **User match** — does this serve the users' highest-priority problem, or a secondary one? Would they recognize it as solving _their_ problem without explanation? Red flag: it solves an engineering problem, or requires users to change behavior significantly before benefiting.
+2. **Job completeness** — walk the job-to-be-done step by step and show how the direction completes it. Is there a shorter path to the same job? If this direction did not exist, what would users do, and is that actually worse? Red flag: the job is vague enough to rationalize any direction.
+3. **Key assumptions** — list the top 3 assumptions with confidence (high/med/low) and the cheapest test for each. The critical assumption is lowest confidence × highest cost of being wrong; name it as the first thing to test.
+4. **Differentiation** — why build this instead of pointing users at an existing solution? What do the nearest 2-3 alternatives do here, and where is this meaningfully, defensibly different? Red flag: "we'll just do it better" is not differentiation.
+
+Deliver a verdict, never a neutral summary: **holds** (proceed; name the top risk to retire first), **holds with conditions** (name the exact conditions that must be true and resolve them first), or **fundamental problem** (name which check killed it and what to rethink instead). A verdict you did not earn is worse than one that sends the direction back.
+
+## Check for Official Solutions First
+
+Before proposing custom implementations, check framework built-ins and official patterns against live docs — full process and source hierarchy in `references/source-driven.md`. Climb in order and stop at the first rung that holds: an existing helper or pattern in this codebase → the standard library → a native platform feature → an already-installed dependency → only then, new code. Never propose a new dependency for what a few lines or a platform feature already covers.
+
+For a hard problem, or one already tuned several times that still feels off, study how 2-3 mature open-source projects or direct competitors solve it before designing: read the actual implementation, extract the transferable mechanism, and name what you took from each. First-principles design next to a proven implementation discards the iterations someone else already paid for.
+
+## Propose Approaches
+
+Give one recommended approach with rationale. Include effort, risk, and what existing code it builds on. Mention one alternative only if the tradeoff is genuinely close (>40% chance the user would prefer it).
+
+Anything that asks a person to install or configure something (hook, MCP server, editor plugin, config key, pricing tier, per-day limit) is a setup cost paid by every user. Default to the zero-setup form: a built-in command plus a skill, a fixed sensible default, a doc line. Offer the setup-requiring form only after naming why the zero-setup one cannot do the job.
+
+When the plan is about distilling lessons from one project into a reusable skill set or shared rules, split the plan into **promote** and **do not promote**. Promote only reusable workflow constraints. Explicitly reject project-specific commands, paths, release checklists, safety boundaries, and private local context unless the user asks to update that project itself.
+
+For the recommendation, identify the most fragile assumption (premise collapse) and state it explicitly: "This plan assumes X. If X does not hold, Y happens." If the assumption is load-bearing and fragile, deform the design to survive its failure.
+
+Run the **confidence check** on that load-bearing assumption and record the level in the plan: name the assumption, its evidence level (evidence-backed / reasoned but unvalidated / pure intuition), and the cheapest validation. Offer the validation before building when the level is below evidence-backed.
+
+**Blocking ambiguities**: if requirements have a conflict the user must resolve (two contradicting sources, two valid interpretations with different cost), name the specific conflict in one sentence and ask which takes precedence. Do not silently pick.
+
+**Additional attack angles** (run only when the plan involves external dependencies, high concurrency, or data migration):
+
+| Attack angle       | Question                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------- |
+| Dependency failure | If an external API, service, or tool goes down, can the plan degrade gracefully?        |
+| Scale explosion    | At 10x data volume or user load, which step breaks first?                               |
+| Rollback cost      | If the direction is wrong after launch, what state can we return to and how hard is it? |
+
+If an attack holds, deform the design to survive it. If it shatters the approach entirely, discard it and tell the user why. Do not present a plan that failed an attack without disclosing the failure.
+
+Get approval before proceeding.
+
+## Pressure Test (optional, user-gated)
+
+Before finalizing a high-stakes direction, offer the pressure test (defined in `references/idea-refine.md`): "I can stress this direction before we lock it. Want it?" Run it only on assent. When Multi-Perspective Plan Design below applies, it covers the same ground and replaces this test; for a direction that is high-stakes but cheap to reverse, run the pressure test alone.
+
+## Multi-Perspective Plan Design (high-stakes only)
+
+When the decision is expensive to reverse (new system, large refactor, irreversible schema or data decisions) and a subagent facility exists, replace single-line design with generate → critique → synthesize:
+
+1. **Generate in parallel**: three read-only planning agents, each producing a complete plan from one perspective — simplicity & maintainability, performance & scalability, minimal change & risk reduction. Each plan must cite concrete file paths and name its key trade-off. Planning agents never modify files or run state-changing commands.
+2. **Critique**: evaluate each plan on completeness (every requirement addressed), feasibility (realistic against the current codebase — verify by reading the critical files the agents named), risk (missed edge cases), and trade-offs.
+3. **Synthesize**: take the strongest plan as the foundation, graft superior elements from the others, and record a Rejected Alternatives section with one-line reasons for each.
+
+Skip this for routine tasks: one recommended approach ([Propose Approaches](#propose-approaches)) remains the default. This mode exists for decisions where a wrong call costs more than three planning agents.
+
+## Validate Before Handing Off
+
+- More than 8 files or 1 new service? Acknowledge it explicitly. (Threshold is a heuristic, not a hard limit.)
+- More than 3 components exchanging data? Draw an ASCII diagram. Look for cycles.
+- Every meaningful test path listed: happy path, errors, edge cases.
+- Can this be rolled back without touching data?
+- Every API key, token, and third-party account the plan requires listed with one-line explanations; if none, state N/A. No credential requests mid-implementation.
+- Every MCP server, external API, and third-party CLI the plan depends on verified as reachable before approval.
+
+## Simplicity Gate
+
+Skip for one-file bug fixes or when the user explicitly chose the minimal option.
+
+When the plan adds files, abstractions, error layers, config knobs, or retries the user did not ask for:
+
+- **Minimal path:** the brute-force version in one line; the chosen plan must beat it on risk, rollback, or latency, not elegance.
+- **Defensive layers:** every try/catch, retry, fallback, or flag maps to one named failure mode; delete layers that only "might" fail.
+- **Surface delta:** list new commands, env vars, flags, or services; prefer +0 unless a user split needs a knob.
+- **Compensating complexity:** if the plan is mostly workaround machinery around a misbehaving API, stop and change the approach — swap the container, restructure the layout, pick a different API — rather than building around the misbehavior.
+
+If the gate fails, shrink the plan or switch to the minimal option before asking for approval.
+
+## Implementation Handoff
+
+A finished plan must be executable by another engineer or agent without re-deciding the direction. Include:
+
+- Scope and non-scope.
+- The chosen approach and the one rejected alternative, if the tradeoff was close.
+- Public API, schema, command, config, or file-interface changes, if any.
+- Verification commands and manual acceptance checks.
+- Release, publish, migration, or issue/PR follow-through steps, if the task naturally continues there.
+- Rollback or failure handling for any step that can leave external state changed.
+
+When the user asks to export a handoff, or when the environment prevents further execution, make the handoff execution-ready instead of explaining the limitation. Include file targets, key constants or selectors, exact commands, runtime or visual checklist, and risk boundaries. If the work depends on a screenshot or artifact, name the artifact and the pass/fail delta.
+
+When the user says "Implement the plan", "just do it", "可以干", "直接改", "整", or otherwise explicitly requests implementation, leave planning and execute the approved direction without another approval round. State which plan is being executed and check for repo drift; stop only if specific drift makes it unsafe. Approval of the design alone does not authorize implementation or public actions.

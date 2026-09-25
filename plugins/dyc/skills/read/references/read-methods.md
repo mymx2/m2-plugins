@@ -2,23 +2,7 @@
 
 ## Helper Directory
 
-Resolve once for the built-in fetcher, Feishu, or WeChat helper. Replace `<skill-base-dir>` with the installed read skill's base directory (or the repo root's `skills/read` in a source checkout):
-
-```bash
-READ_SCRIPT_DIR=""
-for candidate in \
-  "<skill-base-dir>/scripts" \
-  "<skill-base-dir>/skills/read/scripts"; do
-  if [ -f "$candidate/fetch.sh" ]; then
-    READ_SCRIPT_DIR="$candidate"
-    break
-  fi
-done
-if [ -z "$READ_SCRIPT_DIR" ]; then
-  echo "read helper scripts not found under the installed skill base; reinstall the read skill" >&2
-  exit 1
-fi
-```
+Scripts ship inside the read skill: `<skill-base-dir>/scripts`. Set `READ_SCRIPT_DIR` to that directory; if `fetch.sh` is absent there, the skill install is broken — reinstall it.
 
 ## Built-in Fetcher
 
@@ -26,7 +10,7 @@ fi
 bash "$READ_SCRIPT_DIR/fetch.sh" "{url}"
 ```
 
-The script owns extraction order and content checks: request the source site and extract locally first. On failure, inspect its structured stderr. Only when the user has opted into third-party extraction for a public URL, run:
+The script owns extraction order and content checks: request the source site and extract locally first. On failure, inspect its structured stderr. The script retries each tier once (total 2 attempts) with a 2s backoff; do not add extra retries around it. Only when the user has opted into third-party extraction for a public URL, run:
 
 ```bash
 bash "$READ_SCRIPT_DIR/fetch.sh" --use-proxy "{url}"
@@ -36,7 +20,7 @@ Do not send authenticated, internal, or otherwise sensitive URLs to third-party 
 
 ## GitHub URLs
 
-GitHub file URLs (`github.com/user/repo/blob/...`) render heavy HTML. The built-in fetcher often returns partial or nav-heavy content. Prefer:
+Prefer raw content or `gh` first:
 
 ```bash
 # Raw file content (fastest)
@@ -94,7 +78,7 @@ export FEISHU_APP_SECRET=your_app_secret
 python3 "$READ_SCRIPT_DIR/fetch_feishu.py" "{url}"
 ```
 
-Supports: docx and wiki pages. Legacy `/docs/` pages are not supported by this script; convert them to docx first, or use a public-page fallback if the document is accessible without the API. App needs `docx:document:readonly` and `wiki:wiki:readonly` permissions.
+Supports: docx and wiki pages. Legacy `/docs/` pages are not supported by this script; convert them to docx first. The script returns an error for unsupported or failed pages; it does not fall back automatically. App needs `docx:document:readonly` and `wiki:wiki:readonly` permissions.
 Output: YAML frontmatter (title, document_id, url) + Markdown body.
 
 Do not tell every user to install `lark-cli` up front. Use it as the user-login fallback when the API helper fails because app credentials are missing, or when the user explicitly prefers OAuth login over `FEISHU_APP_ID` / `FEISHU_APP_SECRET`:
@@ -117,3 +101,5 @@ If extraction fails, use the built-in Playwright script to read the source page 
 pip install playwright beautifulsoup4 lxml && playwright install chromium
 python3 "$READ_SCRIPT_DIR/fetch_weixin.py" "{url}"
 ```
+
+Output defaults to Markdown; pass `--json` when piping to another tool.

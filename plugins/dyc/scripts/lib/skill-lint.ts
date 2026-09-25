@@ -1,7 +1,6 @@
 /**
  * skill-lint.ts — 跨厂商共享的技能校验规则
  *
- * 提炼自 addyosmani/agent-skills/scripts/lib/skill-lint.js 和 docs/skill-anatomy.md。
  * 被 .claude-plugin/init.ts 和 .codex-plugin/init.ts 引用。
  *
  * 设计原则：
@@ -12,7 +11,7 @@
 
 // ─── 约束常量 ─────────────────────────────────────────────────────────────
 
-/** skill description 硬性上限（字符）。addyosmani 定为 1024，因为 description 注入 system prompt */
+/** skill description 硬性上限（字符）。1024，因为 description 注入 system prompt */
 export const MAX_DESCRIPTION_LENGTH = 1024
 
 /** 目录名必须是 kebab-case */
@@ -30,7 +29,6 @@ const DESCRIPTION_TRIGGER_NEGATE =
 /**
  * SKILL.md 推荐包含的 section。
  * 每个条目是一组可接受的标题别名——第一个匹配即可。
- * 这些是 addyosmani/agent-skills 从大量实践中提炼的标准骨架。
  */
 export const REQUIRED_SECTIONS = [
   ['## Overview'],

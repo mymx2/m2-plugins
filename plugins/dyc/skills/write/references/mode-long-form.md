@@ -14,4 +14,4 @@ Workflow:
 4. **Then line-level de-AI**, section by section, using the relevant language references. For mirrors, check both meaning and native rhythm.
 5. **Return the requested artifact.** For repository edits, preserve frontmatter, code, media, links and substantive explanations, run the site's build, and report the scoped diff. A pasted-text rewrite returns the prose. Run the Punctuation Gate on edited prose without changing technical examples to satisfy a style rule.
 
-Do not single-pass rewrite a long article: it silently overwrites the author's hand-tuned phrasing and cannot be reviewed as a diff. See the `write-zh` reference, 结构级重复与表格复读（长文专项）, for the matching content rules.
+Do not single-pass rewrite a long article: it silently overwrites the author's hand-tuned phrasing and cannot be reviewed as a diff. See `write-zh-structure.md`, 结构级重复与表格复读（长文专项）, for the matching content rules.

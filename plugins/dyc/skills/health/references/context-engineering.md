@@ -1,14 +1,8 @@
 # Context Engineering: Feed Agents the Right Information
 
+For health fixes, jump to Anti-Patterns and Red Flags; the rest is background for deeper context work.
+
 Load when auditing or improving how a project loads agent context — rules files, spec/source loading, error feedback, and conversation management. Context is the single biggest lever for agent output quality: too little and the agent hallucinates, too much and it loses focus.
-
-## The Context Hierarchy (most → least persistent)
-
-1. **Rules files** (CLAUDE.md / AGENTS.md / `.cursorrules`) — always loaded, project-wide. Highest leverage. Cover tech stack, commands, code conventions, boundaries, and one style example.
-2. **Spec / architecture docs** — loaded per feature/session. Load the relevant section, not the whole 5000-word spec.
-3. **Relevant source files** — loaded per task. Read the files you'll modify, related tests, one example of a similar pattern, and the involved types.
-4. **Error output / test results** — loaded per iteration. Feed the specific error, not 500 lines of log.
-5. **Conversation history** — accumulates, compacts. Start fresh sessions when switching major features; summarize progress when context gets long.
 
 ## Trust Levels for Loaded Files
 
@@ -18,9 +12,7 @@ Load when auditing or improving how a project loads agent context — rules file
 
 ## Packing Strategies
 
-- **Brain dump** — structured project context block at session start (goal, stack, spec excerpt, constraints, files, patterns, gotchas).
-- **Selective include** — only what's relevant to the current task (task, relevant files, pattern to follow, constraint).
-- **Hierarchical summary** — a project map index; load only the relevant section.
+Default to selective include — only what's relevant to the current task (task, relevant files, pattern to follow, constraint); for large projects, first hand over a hierarchical project-map index so the agent can pull the relevant section on demand.
 
 ## Confusion Management
 
@@ -60,15 +52,15 @@ The context window is not a filing cabinet, it is a working desk. Budget proacti
 
 ## Anti-Patterns
 
-| Anti-pattern       | Problem                                                                                                                  | Fix                                                               |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Context starvation | Agent invents APIs, ignores conventions                                                                                  | Load rules + relevant files before each task                      |
-| Context flooding   | Agent loses focus past ~5k lines of non-task context                                                                     | Include only what's relevant; aim <2k focused lines               |
-| Stale context      | Agent references outdated patterns                                                                                       | Start fresh when context drifts                                   |
-| Missing examples   | Agent invents a new style                                                                                                | Include one pattern example                                       |
-| Implicit knowledge | Agent doesn't know project rules                                                                                         | Write them in rules files — if it's not written, it doesn't exist |
-| Silent confusion   | Agent guesses when it should ask                                                                                         | Surface ambiguity explicitly                                      |
-| Context cliff      | Waiting until the window is full before managing it — attention fragments and output quality drops abruptly at the limit | Start trimming at 75% capacity; compress rather than cut          |
+| Anti-pattern       | Problem                                                                                                                  | Fix                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Context starvation | Agent invents APIs, ignores conventions                                                                                  | Load rules + relevant files before each task                                                       |
+| Context flooding   | Agent loses focus past ~5k lines of non-task context; raw logs dump the whole run instead of the failing lines           | Include only what's relevant; aim <2k focused lines; feed the specific error, not 500 lines of log |
+| Stale context      | Agent references outdated patterns                                                                                       | Start fresh when context drifts                                                                    |
+| Missing examples   | Agent invents a new style                                                                                                | Include one pattern example                                                                        |
+| Implicit knowledge | Agent doesn't know project rules                                                                                         | Write them in rules files — if it's not written, it doesn't exist                                  |
+| Silent confusion   | Agent guesses when it should ask                                                                                         | Surface ambiguity explicitly                                                                       |
+| Context cliff      | Waiting until the window is full before managing it — attention fragments and output quality drops abruptly at the limit | Start trimming at 75% capacity; compress rather than cut                                           |
 
 ## Red Flags
 

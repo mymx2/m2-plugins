@@ -1,6 +1,6 @@
 # Browser Verification with DevTools
 
-Load when verifying that UI looks and behaves correctly in a real browser - before/after screenshots, accessibility, and clean console. Complements `frontend-engineering.md` (build) and hunt's `browser-devtools.md` (debug). Intentional divergence, not a synced copy: verification guidance lives here, while hunt's copy is the canonical source for the debugging workflow, the console ERROR/WARN/LOG classification, and the security boundary rules (both are only summarized here).
+Load when verifying that UI looks and behaves correctly in a real browser - before/after screenshots, accessibility, and clean console. Complements `frontend-engineering.md` (build) and hunt's `browser-devtools.md` (debug). Intentional divergence, not a synced copy: verification guidance lives here, while hunt's copy is the canonical source for the debugging workflow and the security boundary rules (only summarized here). Browser mechanics (server config, profile, CLI) belong to the chrome skill.
 
 ## Screenshot-Based Verification
 
@@ -16,7 +16,7 @@ Especially for CSS changes, responsive layouts at different viewports, loading/t
 
 ## Clean Console Standard
 
-A production-quality page has **zero** console errors and warnings; fix them before shipping. ERROR/WARN/LOG classification follows hunt's `browser-devtools.md` (Console Standards).
+A production-quality page has **zero** console errors and warnings; fix them before shipping. This zero-console bar is a ship-gate for UI verification (check territory), not a fix-during-diagnosis scope for hunt.
 
 ## Accessibility Verification with DevTools
 
@@ -28,9 +28,7 @@ A production-quality page has **zero** console errors and warnings; fix them bef
 
 For the full tool-driven audit workflow (Lighthouse baseline, tap targets, contrast measurement), load the `a11y-debugging` reference.
 
-## Test Plans for Complex UI Bugs
-
-For complex UI issues, write a structured test plan the agent can follow in the browser: **Setup** (starting URL, required state), then numbered **Steps**, each with the action, the _Expected_ visible behavior, and _Check_ lines for console (no errors), network (exact request/method/payload, no duplicates), and DOM state. Close with a **Verification** checklist: all steps clean, network correct, visual state matches, and accessibility (status changes announced to screen readers).
+Structured test plans for complex UI bugs belong to hunt (its debugging workflow already covers Triage/Reproduce/Isolate); this file handles verification only.
 
 ## Security Boundaries
 

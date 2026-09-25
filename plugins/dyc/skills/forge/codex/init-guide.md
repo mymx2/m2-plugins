@@ -56,11 +56,11 @@ const NAMESPACE = '.codex-plugin'
 
 ### .agents/plugins/marketplace.json 生成
 
-Waza 项目展示了 `.agents/plugins/marketplace.json` 模式（Codex 仓库级 marketplace）。init 可以从根 plugin.json 自动生成此文件。
+`.agents/plugins/marketplace.json` 是 Codex 仓库级 marketplace 模式。init 可以从根 plugin.json 自动生成此文件。
 
-### 与上游 Codex 规范对齐
+### 与 Codex 规范对齐
 
-参考 `vendor/openai/plugins/plugins/` 中的实际插件（如 vercel、build-ios-apps），定期更新 `interface` 字段校验规则。
+参考 OpenAI 官方插件仓库（如 vercel、build-ios-apps 等示例插件），定期更新 `interface` 字段校验规则。
 
 ## 用法
 

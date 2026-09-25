@@ -1,16 +1,14 @@
 ---
 name: think
-description: 'Turns rough ideas into approved, decision-complete plans with validated structure before coding. Use when users ask for planning, architecture, design direction, feasibility, value judgment, or whether a feature is worth doing before implementation, or triaging a bundle of mixed requests/feedback into accept/reject buckets. Not for bug fixes or small edits.'
-when_to_use: "出方案, 给方案, 深入分析, 怎么设计, 用什么方案, 判断要不要做, 判断值不值得, 有没有必要, 值不值得, what's the best approach, plan this, how should I, should we keep this"
+description: 'Turns rough ideas into approved, decision-complete plans with validated structure before coding. Use when users ask for a design direction, a worth-doing judgment on a feature, restructuring tangled modules, or triaging a bundle of mixed requests/feedback into accept/reject buckets. Not for bug fixes or small edits.'
+when_to_use: '出方案, 要不要做, 可行性, architecture, design direction, feasibility, worth it, plan before build, should we keep this'
 ---
 
 # Think: Design and Validate Before You Build
 
-Put 🥷 at the very start of your first sentence (no blank line before it).
-
 Turn a rough idea into an approved plan. No code, no scaffolding, no pseudo-code until the user approves.
 
-Give opinions directly. Take a position and state what evidence would change it. Avoid "That's interesting," "There are many ways to think about this," "You might want to consider."
+Give opinions directly. Take a position and state what evidence would change it.
 
 ## Overview
 
@@ -22,6 +20,7 @@ Think turns rough ideas into approved, decision-complete plans before any code i
 - Done when: the goal, success criteria, constraints, chosen approach, rejected tradeoffs, tests, and handoff steps are concrete enough to execute without re-deciding.
 - Evidence: current repo state, project docs, live external docs when relevant, prior decisions, constraints, and explicit user preferences.
 - Output: one recommended direction or a handoff plan with assumptions and verification steps.
+- Authorization: planning only. Design approval does not authorize implementation, file writes, or public actions.
 
 ## When to Use
 
@@ -29,40 +28,41 @@ Think turns rough ideas into approved, decision-complete plans before any code i
 - Evaluating whether something should exist, be kept, or be removed (Kill/Keep/Pivot).
 - Triaging a bundle of requests or issues into actionable categories.
 - Proposing approaches with rationale and rejected tradeoffs.
-- Route to `hunt` for debugging and root-cause diagnosis; route to `check` for code review; route to `learn` for multi-source research.
+- Route to `hunt` for debugging and root-cause diagnosis; route to `check` for code review; route to `learn` for multi-source research; route to `pm` for product deliverables (PRD, backlog ranking, roadmap) and PM decision frameworks.
 
 ## Process
 
 1. Pick the mode (Lightweight, Evaluation, Triage, or full planning) from the user's ask.
-2. Ground the plan: read current repo state, project docs, prior decisions, and live external docs — never plan from memory.
+2. Ground the plan: read current repo state, project docs, prior decisions (skim matching ADRs/design docs if the project tracks them), and live external docs — never plan from memory.
 3. Check for official/built-in solutions before proposing custom ones.
 4. Propose one recommended approach with rationale, the most fragile assumption, and rejected tradeoffs.
-5. Validate before handoff: test paths, rollback, dependencies, no placeholders, phase independence — then get approval.
+5. Validate before handoff: test paths, rollback, dependencies — then get approval.
 
 ## Durable Context Preflight
 
-When the user names memory, a prior decision, or a memory path, apply the durable-context rules: current state wins over memory, memory is never authorization for state changes, and the redaction gate applies before any of it becomes a durable rule.
+When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules (`rules/durable-context.md` when present): current repo state and live docs override memory; memory alone never authorizes state changes. Lock durable decisions and preferences before asking questions.
 
-For `/think`: current repo state and live docs override memory. Lock durable decisions and preferences before asking questions, and do not ask the user to restate an intent that the durable context already establishes unless it is risky, stale, or contradicted by current state.
-
-Before outputting any plan, scan any project-level agent instruction files present (`AGENTS.md`, `CLAUDE.md`, `.claude/rules/*`, `.codex/rules/*`, `.qoder/rules/*`, or equivalent), and any local agent-memory summary if the user pointed at one. If the proposed plan contradicts a "hard rule", "never X", "must Y", or "prefer Z" stated in those files, surface the contradiction in the plan output (one sentence: which rule, which step contradicts it, recommended resolution). Do not silently override the rule. If the rule blocks the plan, stop and ask before continuing.
+项目指令文件中的硬规则与计划冲突时，显式摆出冲突并停下问，不静默覆盖。
 
 ## Reference Library
 
 Load the matching reference when the planning task enters that territory:
 
-| When the ask involves                                                | Load                            |
-| -------------------------------------------------------------------- | ------------------------------- |
-| Underspecified ask; need to extract what the user really wants       | `references/interview.md`       |
-| Rough idea needing exploration / stress-testing before committing    | `references/idea-refine.md`     |
-| New project/feature needing requirements written down before code    | `references/spec-mode.md`       |
-| A plan that must be decomposed into implementable tasks              | `references/task-breakdown.md`  |
-| Framework-specific code that must match official docs                | `references/source-driven.md`   |
-| Choosing between a new library, a stdlib call, or a platform feature | `references/platform-native.md` |
-| Designing APIs, module boundaries, or public interfaces              | `references/api-design.md`      |
-| Designing or restructuring modules for testability and navigation    | `references/deep-modules.md`    |
-| Project terminology being used loosely or named for the first time   | `references/domain-language.md` |
-| A significant, hard-to-reverse architectural decision                | `references/adr.md`             |
+| When the ask involves                                                 | Load                            |
+| --------------------------------------------------------------------- | ------------------------------- |
+| Underspecified ask; need to extract what the user really wants        | `references/interview.md`       |
+| Rough idea needing exploration / stress-testing before committing     | `references/idea-refine.md`     |
+| New project/feature needing requirements written down before code     | `references/spec-mode.md`       |
+| Value, viability, or keep/remove judgment about a single target       | `references/mode-evaluation.md` |
+| A bundle of items to accept/reject ("are these worth doing")          | `references/mode-triage.md`     |
+| A plan that must be decomposed into implementable tasks               | `references/task-breakdown.md`  |
+| Framework-specific code that must match official docs                 | `references/source-driven.md`   |
+| Choosing between a new library, a stdlib call, or a platform feature  | `references/platform-native.md` |
+| Ranking several competing items where a gut verdict is not defensible | `references/prioritization.md`  |
+| Designing APIs, module boundaries, or public interfaces               | `references/api-design.md`      |
+| Designing or restructuring modules for testability and navigation     | `references/deep-modules.md`    |
+| Project terminology being used loosely or named for the first time    | `references/domain-language.md` |
+| A significant, hard-to-reverse architectural decision                 | `references/adr.md`             |
 
 ## Lightweight Mode
 
@@ -72,97 +72,7 @@ Give one recommended fix in 2-3 sentences: what changes, where (file:line if kno
 
 Upgrade when you can name 3 approaches that differ in at least one of: data model, failure mode, or dependency surface.
 
-## Evaluation Mode
-
-For value, viability, commercialization, or keep/remove judgments about a single target, load `references/mode-evaluation.md`.
-
-## Triage Mode
-
-For a bundle of independently accepted or rejected asks or screenshots, including "are these worth doing", load `references/mode-triage.md`; use its per-item table rather than Evaluation Mode's single verdict.
-
-## Before Reading Any Code
-
-- If the project tracks prior decisions (ADRs, design docs, issue threads), skim the ones matching the problem before proposing. Skip if none exist.
-- If the plan involves a default value, env var, or config field, open the project's actual config file (e.g. `app.config.json`, `tauri.conf.json`, `package.json`, `.env`) and lift the live value. Never quote a default from memory or docs.
-
-## Check for Official Solutions First
-
-Before proposing custom implementations, check framework built-ins, official patterns, and ecosystem standards against live docs (use the environment's doc-lookup tools when available). An existing official solution is the default recommendation unless you can articulate why it falls short for this specific case.
-
-Climb in order and stop at the first rung that holds: an existing helper or pattern in this codebase → the standard library → a native platform feature (`<input type="date">` over a picker library, CSS over JS, a DB constraint over application code) → an already-installed dependency → only then, new code. Never propose a new dependency for what a few lines or a platform feature already covers.
-
-For a hard problem, or one already tuned several times that still feels off, study how 2-3 mature open-source projects or direct competitors solve it before designing: read the actual implementation, extract the transferable mechanism, and name what you took from each. First-principles design next to a proven implementation discards the iterations someone else already paid for.
-
-## Propose Approaches
-
-Give one recommended approach with rationale. Include effort, risk, and what existing code it builds on. Mention one alternative only if the tradeoff is genuinely close (>40% chance the user would prefer it). Always include one minimal option.
-
-Anything that asks a person to install or configure something (hook, MCP server, editor plugin, config key, pricing tier, per-day limit) is a setup cost paid by every user. Default to the zero-setup form: a built-in command plus a skill, a fixed sensible default, a doc line. Offer the setup-requiring form only after naming why the zero-setup one cannot do the job.
-
-When the plan is about distilling lessons from one project into a reusable skill set or shared rules, split the plan into **promote** and **do not promote**. Promote only reusable workflow constraints. Explicitly reject project-specific commands, paths, release checklists, safety boundaries, and private local context unless the user asks to update that project itself.
-
-For the recommendation, identify the most fragile assumption (premise collapse) and state it explicitly: "This plan assumes X. If X does not hold, Y happens." If the assumption is load-bearing and fragile, deform the design to survive its failure.
-
-**Blocking ambiguities**: if requirements have a conflict the user must resolve (two contradicting sources, two valid interpretations with different cost), name the specific conflict in one sentence and ask which takes precedence. Do not silently pick.
-
-**Additional attack angles** (run only when the plan involves external dependencies, high concurrency, or data migration):
-
-| Attack angle       | Question                                                                                |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| Dependency failure | If an external API, service, or tool goes down, can the plan degrade gracefully?        |
-| Scale explosion    | At 10x data volume or user load, which step breaks first?                               |
-| Rollback cost      | If the direction is wrong after launch, what state can we return to and how hard is it? |
-
-If an attack holds, deform the design to survive it. If it shatters the approach entirely, discard it and tell the user why. Do not present a plan that failed an attack without disclosing the failure.
-
-Get approval before proceeding.
-
-## Multi-Perspective Plan Design (high-stakes only)
-
-When the decision is expensive to reverse (new system, large refactor, irreversible schema or data decisions) and a subagent facility exists, replace single-line design with generate → critique → synthesize:
-
-1. **Generate in parallel**: three read-only planning agents, each producing a complete plan from one perspective — simplicity & maintainability, performance & scalability, minimal change & risk reduction. Each plan must cite concrete file paths and name its key trade-off. Planning agents never modify files or run state-changing commands.
-2. **Critique**: evaluate each plan on completeness (every requirement addressed), feasibility (realistic against the current codebase — verify by reading the critical files the agents named), risk (missed edge cases), and trade-offs.
-3. **Synthesize**: take the strongest plan as the foundation, graft superior elements from the others, and record a Rejected Alternatives section with one-line reasons for each.
-
-Skip this for routine tasks: one recommended approach plus one minimal option ([Propose Approaches](#propose-approaches)) remains the default. This mode exists for decisions where a wrong call costs more than three planning agents.
-
-## Validate Before Handing Off
-
-- More than 8 files or 1 new service? Acknowledge it explicitly.
-- More than 3 components exchanging data? Draw an ASCII diagram. Look for cycles.
-- Every meaningful test path listed: happy path, errors, edge cases.
-- Can this be rolled back without touching data?
-- Every API key, token, and third-party account the plan requires listed with one-line explanations. No credential requests mid-implementation.
-- Every MCP server, external API, and third-party CLI the plan depends on verified as reachable before approval.
-
-## Simplicity Gate
-
-Skip for one-file bug fixes or when the user explicitly chose the minimal option.
-
-When the plan adds files, abstractions, error layers, config knobs, or retries the user did not ask for:
-
-- **Minimal path:** the brute-force version in one line; the chosen plan must beat it on risk, rollback, or latency, not elegance.
-- **Defensive layers:** every try/catch, retry, fallback, or flag maps to one named failure mode; delete layers that only "might" fail.
-- **Surface delta:** list new commands, env vars, flags, or services; prefer +0 unless a user split needs a knob.
-- **Compensating complexity:** if the plan is mostly workaround machinery around a misbehaving API, stop and change the approach — swap the container, restructure the layout, pick a different API — rather than building around the misbehavior.
-
-If the gate fails, shrink the plan or switch to the minimal option before asking for approval.
-
-## Implementation Handoff
-
-A finished plan must be executable by another engineer or agent without re-deciding the direction. Include:
-
-- Scope and non-scope.
-- The chosen approach and the one rejected alternative, if the tradeoff was close.
-- Public API, schema, command, config, or file-interface changes, if any.
-- Verification commands and manual acceptance checks.
-- Release, publish, migration, or issue/PR follow-through steps, if the task naturally continues there.
-- Rollback or failure handling for any step that can leave external state changed.
-
-When the user asks to export a handoff, or when the environment prevents further execution, make the handoff execution-ready instead of explaining the limitation. Include file targets, key constants or selectors, exact commands, runtime or visual checklist, and risk boundaries. If the work depends on a screenshot or artifact, name the artifact and the pass/fail delta.
-
-When the user says "Implement the plan", "just do it", "可以干", "直接改", "整", or otherwise explicitly requests implementation, leave planning and execute the approved direction without another approval round. State which plan is being executed and check for repo drift; stop only if specific drift makes it unsafe. Approval of the design alone does not authorize implementation or public actions.
+For approach design, pressure testing, multi-perspective design, validation, simplicity gate, and handoff, load `references/idea-refine.md`.
 
 ## Common Rationalizations
 
@@ -174,16 +84,14 @@ When the user says "Implement the plan", "just do it", "可以干", "直接改",
 - Quoting a default value, env var, or config field from memory instead of opening the live config file
 - Proposing a custom implementation before checking framework built-ins and official patterns against live docs
 - Presenting a plan that failed an attack angle without disclosing the failure
-- Approving a plan that still contains TBD, TODO, or "details to be determined"
 - Treating design approval as implementation or public-action authorization
 - Classifying a bundle item as a gap before grepping for the existing affordance
 
 ## Verification
 
-1. Every step is concrete (no TBD/TODO/placeholders) before approval.
-2. Phase independence: each phase is independently mergeable; after Phase N ships, the system is usable.
-3. Validate Before Handing Off checklist: >8 files acknowledged, >3 components diagrammed, test paths listed, rollback checked.
-4. Attack angles (when applicable): dependency failure, scale explosion, rollback cost all addressed.
+1. Every step is concrete and executable by another engineer without re-deciding.
+2. Validate Before Handing Off checklist: >8 files acknowledged, >3 components diagrammed, test paths listed, rollback checked.
+3. Attack angles (when applicable): dependency failure, scale explosion, rollback cost all addressed.
 
 ## Hard Rules
 
@@ -193,12 +101,9 @@ When the user says "Implement the plan", "just do it", "可以干", "直接改",
 
 ## Gotchas
 
-| What happened                                                       | Rule                                                                                                               |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Rejected design restarted from scratch                              | Ask what specifically failed, re-enter with narrowed constraints                                                   |
-| Picked a regional or locale-specific API variant without checking   | List all regional or locale differences before writing integration code                                            |
-| Introduced a second language or runtime into a single-stack project | Never add a new language or runtime without explicit approval                                                      |
-| User said "判断一下这个报错" and got Evaluation Mode                | "判断一下" + error/bug context = debugging, route to `hunt`. Evaluation Mode is for value/existence judgments only |
+| What happened                                        | Rule                                                                                                               |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| User said "判断一下这个报错" and got Evaluation Mode | "判断一下" + error/bug context = debugging, route to `hunt`. Evaluation Mode is for value/existence judgments only |
 
 ## Output
 

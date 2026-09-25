@@ -25,7 +25,7 @@ Scope by load surface, not just by layer. A rule kept in the project still pays 
 
 **Missing stable verifier entrypoint.** Treat `wrapper_findings` as discovery leads. Check the documented default and its executable coverage across package scripts, native build tools, task runners, scripts, and CI; a Makefile is not required. Report a Structural `WARN` only when fragmented checks cause required verification to be missed and no usable default covers it. A named target that only prints success does not supply verification.
 
-Quick check from the project root, reusing `$HEALTH_SCRIPT` resolved in Step 1:
+Quick check from the project root, reusing `$HEALTH_SCRIPT` resolved in Step 1 (replace `summary` with `deep` for deep audits):
 
 ```powershell
 & "$POWERSHELL" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$HEALTH_LAUNCHER" maintainability . summary
@@ -35,18 +35,6 @@ On Linux and macOS:
 
 ```bash
 BASH_ENV= ENV= /bin/bash -p "${HEALTH_SCRIPT%/*}/check-maintainability.sh" . summary
-```
-
-For deep audits:
-
-```powershell
-& "$POWERSHELL" -NoLogo -NoProfile -ExecutionPolicy Bypass -File "$HEALTH_LAUNCHER" maintainability . deep
-```
-
-On Linux and macOS:
-
-```bash
-BASH_ENV= ENV= /bin/bash -p "${HEALTH_SCRIPT%/*}/check-maintainability.sh" . deep
 ```
 
 Keep actions concrete and non-invasive: add or fix the smallest useful routed instruction surface, add one executable validation command at the real failure layer, repair a generated-mirror check, or repair the broken reference. Split only when the boundary is already clear. Do not propose broad rewrites from the script output alone.

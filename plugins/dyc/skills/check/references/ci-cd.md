@@ -11,10 +11,6 @@ Load when reviewing build/deploy pipeline changes, automated checks, or deployme
 
 Every change passes lint → type check → unit tests → build → integration → (E2E) → security audit → bundle size before merge. **No gate can be skipped** — if lint fails, fix lint, don't disable the rule; if a test fails, fix the code, don't skip the test.
 
-## Feeding CI Failures Back to Agents
-
-The power of CI with agents is the feedback loop. When CI fails, copy the failure output and hand it to the agent with an explicit instruction: "The CI pipeline failed with this error: [paste]. Fix the issue and verify locally before pushing again." The agent fixes, pushes, CI runs again. Route by failure class: lint failure → run the linter's `--fix` and commit; type error → read the error location and fix the type; test failure → follow the debugging flow (`/hunt`); build error → check config and dependencies. Never paste "CI failed" without the actual output — the error text is the evidence.
-
 ## Deployment Strategies
 
 - **Preview deployments** — every PR gets a preview for manual testing.
@@ -29,12 +25,7 @@ The power of CI with agents is the feedback loop. When CI fails, copy the failur
 ## Automation Beyond CI
 
 - Dependabot/Renovate for dependency updates.
-- **Build Cop role** — someone responsible for keeping CI green; when the build breaks, the Build Cop fixes/reverts, not the author of the break.
 - PR checks: required reviews, required status checks, branch protection (no force-push to main), optional auto-merge.
-
-## CI Optimization (when pipeline > 10 min)
-
-Cache dependencies → run jobs in parallel → path-filter what changed → matrix builds/sharding → optimize the test suite → use larger runners.
 
 ## Red Flags
 

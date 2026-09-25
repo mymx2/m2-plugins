@@ -8,7 +8,7 @@ Load when reviewing commits, branches, or release/versioning decisions. Git is y
 - **Atomic commits.** Each commit does one logical thing. A commit that "adds feature, fixes sidebar, updates deps, refactors utils" is a failure.
 - **Descriptive messages.** Explain the _why_, not the _what_. Format: `<type>: <short description>` + body explaining why. Types: `feat`/`fix`/`refactor`/`test`/`docs`/`chore`.
 - **Keep concerns separate.** Don't mix formatting with behavior, or refactors with features — separate commits, ideally separate PRs.
-- **Size your changes.** ~100 lines per commit/PR; ~300 acceptable for one logical change; ~1000 → split.
+- **Size your changes.** Keep commits/PRs small; the sizing thresholds live in `review-quality.md` (Change Sizing).
 
 ## Trunk-Based Development (Recommended)
 
@@ -20,7 +20,7 @@ Check `git diff --staged`; ensure no secrets (`grep -i "password\|secret\|api_ke
 
 ## Using Git for Debugging
 
-`git bisect` to find the commit that introduced a bug; `git log --oneline -20` / `git diff HEAD~5..HEAD` for recent changes; `git blame` for who changed a line; `git log --grep` to search messages.
+`git log --oneline -20` / `git diff HEAD~5..HEAD` for recent changes; `git blame` for who changed a line; `git log --grep` to search messages. When the regression point itself is unknown, that is a `/hunt` job — route to the `hunt` skill's Bisect Mode rather than running bisect inside a review.
 
 ## Resolving Merge Conflicts
 

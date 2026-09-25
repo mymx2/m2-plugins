@@ -38,7 +38,7 @@ Move focus with `press_key` (`Tab`, `Shift+Tab`), then `take_snapshot` and locat
 
 ### 6. Tap targets
 
-Targets should be at least 48×48px with adequate spacing. The accessibility tree does not carry sizes — run the "Measure Tap Target Size" snippet, passing the element `uid` from the snapshot as the `evaluate_script` argument.
+Targets should meet the 44×44px baseline, with 48×48px as the touch-comfort target, plus adequate spacing. The accessibility tree does not carry sizes — run the "Measure Tap Target Size" snippet, passing the element `uid` from the snapshot as the `evaluate_script` argument.
 
 ### 7. Color contrast
 

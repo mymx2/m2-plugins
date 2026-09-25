@@ -13,27 +13,9 @@
 - **Evidence**: skills.sh 排行榜或 `npx skills find` 的实际输出，不是凭印象报名字。
 - **Authorization**: 搜索和查证可以直接做；执行安装会改动用户环境，先给命令、经用户同意后再代跑。
 
-## 何时使用此技能
-
-当用户出现以下情况时，请使用此技能：
-
-- 询问“我该如何做X”，其中X可能是一项已有技能对应的常见任务
-- 表示“为X找一个技能”或“有没有针对X的技能”
-- 询问“你能做 X 吗”，且 X 属于某项专业能力
-- 表达出扩展智能体能力的兴趣
-- 希望搜索工具、模板或工作流
-- 提到希望在设计、测试、部署等特定领域获得帮助
-
 ## 什么是 Skills CLI？
 
 Skills CLI（`npx skills`）是开放智能体技能生态系统的包管理器。技能是模块化包，可通过专业知识、工作流和工具来扩展智能体的能力。
-
-**核心命令：**
-
-- `npx skills find [query]` - 以交互方式或通过关键词搜索技能
-- `npx skills add <package>` - 从 GitHub 或其他来源安装技能
-- `npx skills check` - 检查技能更新
-- `npx skills update` - 更新所有已安装的技能
 
 **浏览技能请访问：** https://skills.sh/
 
@@ -136,8 +118,7 @@ npx skills add <owner/repo@skill> -g -y
 
 1. 说明未找到现有技能
 2. 提供利用你的通用能力直接协助完成该任务
-3. 建议用户可通过 `npx skills init` 自行创建技能
-4. 如果项目中已经存在 `skills` 目录，会导致命名撞车（name collision），造成错误，可使用 `pnpx` 或 `vpx` 运行
+3. 建议用户可通过 `npx skills init` 自行创建技能（`npx` 命名冲突问题见 `cli-guide.md` 开头说明）
 
 示例：
 

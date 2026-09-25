@@ -2,6 +2,14 @@
 
 > 区分：本文件讲的是可 lint 的 DESIGN.md token 契约（`@google/design.md` CLI），不是 `design-reference` reference 里那份 9 节设计方向脚手架。
 
+三个 DESIGN.md 文件各管一段，先按任务选文件：
+
+| 任务                                        | 文件                         |
+| ------------------------------------------- | ---------------------------- |
+| 新建 DESIGN.md、查 token schema 与文件结构  | `design-md-format-spec.md`   |
+| 查 lint/diff/export 完整命令、选项、错误码  | `design-md-cli-reference.md` |
+| 写 prose、定方向、走 create→lint→交付工作流 | 本文件                       |
+
 DESIGN.md 把设计系统写成 agent 可读的契约：YAML token 给出精确值，prose 解释为什么。只写 prose 不写 token 的"设计规范"对 agent 是装饰品，lint 过的 token 才是事实源。
 
 ## Outcome Contract

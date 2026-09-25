@@ -2,6 +2,8 @@
 
 Load when writing or reviewing project documentation, README structure, changelogs, or inline comments. Document the _why_, not just the _what_.
 
+边界声明：本文管仓库级文档结构与 agent 文档纪律；单页文档行文规则正本在 `writing-guidelines.md`；changelog 发布文案在 `mode-release-notes.md`。
+
 ## Inline Documentation
 
 - **Comment the why, not the what.** "// Rate limit uses a sliding window…" (intent) beats "// Increment counter by 1" (restates the code). Comments on _why_ are stable; comments on _what_ go stale — that is why you only write the former.

@@ -1,6 +1,6 @@
 ---
 name: forge
-description: '插件与技能的全生命周期管理：基于 Agent Plugins Spec 创建标准插件、通过 extensions + init 模式适配多厂商（Claude Code / Qoder / Codex），以及发现、安装、编写、校验技能。Use when users ask to create a plugin, scaffold multi-vendor plugin, write plugin.json, generate init.ts, find/install skills, or author/validate SKILL.md. Not for runtime debugging of deployed skills (route to hunt) or reviewing plugin code quality (route to check).'
+description: '插件与技能的全生命周期管理：基于 Agent Plugins Spec 创建标准插件、通过 extensions + init 模式适配多厂商（Claude Code / Qoder / Codex），以及发现、安装、编写、校验技能。Use when creating a plugin, scaffolding a multi-vendor plugin, writing plugin.json, generating init.ts, finding/installing skills, or authoring/validating SKILL.md. Not for runtime debugging of deployed skills (route to hunt) or reviewing plugin code quality (route to check).'
 when_to_use: 'plugin, 插件, create plugin, 创建插件, plugin.json, init.ts, extensions, manifest, 多厂商, multi-vendor, scaffold, 脚手架, 厂商适配, claude-plugin, qoder-plugin, codex-plugin, find skills, 找技能, skills.sh, skills cli, npx skills, 安装技能, create skill, write SKILL.md, author skill, 新建技能, 编写技能, skill template, validate skill, 校验技能'
 license: MIT
 metadata:
@@ -43,18 +43,17 @@ Forge 是插件与技能的全生命周期路由层：判断任务属于哪个�
 | Ask                                           | Load                                                                                                          |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | 创建插件、plugin.json、标准骨架               | `references/plugin-spec.md`                                                                                   |
-| 多厂商适配、extensions、init.ts               | `references/extensions-pattern.md` + 对应厂商目录（`claude/`、`qoder/`、`codex/`）                            |
+| 多厂商适配、extensions、init.ts               | `references/extensions-pattern.md` → 按其指引再读 `<vendor>/init-guide.md`（`claude/`、`qoder/`、`codex/`）   |
 | 找技能、推荐技能、"有没有 X 的技能"           | `references/find-plugins.md`                                                                                  |
 | Skills CLI 命令用法、安装/更新/移除/CI 自动化 | `references/cli-guide.md`                                                                                     |
 | 新建或编写 SKILL.md、技能结构规范             | `references/skill-authoring.md`                                                                               |
+| 审计、精简、改写既有 SKILL.md / AGENTS.md     | `references/next-gen-context.md`（新一代模型上下文规则 + 删除测试清单）                                       |
 | 编写 README、插件说明文档                     | `references/readme-guide.md`                                                                                  |
 | 校验技能合规、修复门禁报错                    | 运行 `scripts/validate-skill.ts <skill-dir>`（规则说明见 `references/skill-authoring.md` 的 Evidence Ladder） |
 
 ## Common Rationalizations
 
 - "插件结构很简单，不需要 spec" — Agent Plugins Spec 的封闭字段集和 extensions 模式避免了厂商锁定；跳过 spec 意味着每个厂商都要手动维护。
-- "init.ts 跑一次就够了" — 不幂等的 init 在每次 rebase 后都会产生 diff；幂等性比速度重要。
-- "凭经验推荐热门技能" — 排行榜和 `npx skills find` 的输出才是证据；记忆中的安装量可能已过期。
 
 ## Red Flags
 
@@ -66,47 +65,25 @@ Forge 是插件与技能的全生命周期路由层：判断任务属于哪个�
 ## Verification
 
 1. 插件创建/修改后：`scripts/validate-plugin.ts <plugin-root>` 退出码 0。
-2. 技能编写/修改后：`scripts/validate-skill.ts <skill-dir>` 全部门禁绿。
-3. 安装/更新/移除后：`npx skills list` 状态与预期一致。
+2. 厂商适配后：运行对应 `.<vendor>-plugin/init.ts`，确认生成的 `.<vendor>-plugin/plugin.json` 存在且内容正确。
+3. 技能编写/修改后：`scripts/validate-skill.ts <skill-dir>` 全部门禁绿。
+4. 安装/更新/移除后：`npx skills list` 状态与预期一致。
 
 ## Output Summary
 
-完成插件创建或修改后，输出以下摘要：
-
-```markdown
-### Plugin
-
-- **Plugin**: <插件根目录绝对路径>
-- **Skill(s)**: <skills/<name>/SKILL.md 列表或 none>
-- **Vendors**: <已适配厂商列表：claude / qoder / codex>
-- **Validation**: `validate-plugin.ts` 退出码 + 警告数
-- **Next**: 下一步建议（如安装测试、提交 git）
-```
-
-完成技能编写或校验后，输出以下摘要：
-
-```markdown
-### Skill
-
-- **Skill**: <技能目录绝对路径>/SKILL.md
-- **Gates**: `validate-skill.ts` 七门结果（全绿，或失败门清单 + 修复建议）
-- **Supporting files**: <references/ scripts/ 列表或 none>
-- **Next**: 下一步建议（如真实输入 dogfood、提交 git）
-```
+Close with plugin path, vendors, validation exit code, next step.
 
 ## Hard Rules
 
 - **根 plugin.json 是唯一事实源**：厂商目录下的 plugin.json 是 init.ts 生成的衍生物，不手动维护。
 - **init.ts 可增长但必须幂等**：重复运行结果一致，每次都从标准源重新生成。
 - **推荐前先验证**：安装量、来源信誉、GitHub Star 数，三者核实后再推荐；找不到就明说并用通用能力直接帮忙。
-- **frontmatter 契约不可协商**：name 匹配 kebab-case 目录名；description 40–500 字带触发与排除线索；不跨技能路径引用；脚本目录内自包含，三方依赖必须可选且缺失时优雅降级。
+- **frontmatter 契约**：见 `references/skill-authoring.md`（Evidence Ladder），不可协商。
 - **安装即环境改动**：`add` / `update` / `remove` 一律先给命令、经同意后执行。
-- **项目里已有 `skills` 目录时**：`npx` 可能命名冲突，改用 `pnpx` 或 `vpx`。
 
 ## Gotchas
 
-| What happened                    | Rule                                     |
-| -------------------------------- | ---------------------------------------- |
-| description 不足 40 字被门禁拒绝 | 起草时就按 40–500 字写，不是校验失败再补 |
-| 跨技能用路径引用导致安装副本断链 | 按名引用，路径引用过不了 isolation 门    |
-| 技能目录留空文件夹               | 目录只在有文件时创建                     |
+| What happened                    | Rule                                  |
+| -------------------------------- | ------------------------------------- |
+| 跨技能用路径引用导致安装副本断链 | 按名引用，路径引用过不了 isolation 门 |
+| 技能目录留空文件夹               | 目录只在有文件时创建                  |

@@ -101,7 +101,7 @@ argument-hint: <expected input>
 
 > **原则**：Qoder 扩展字段最丰富，约束主要来自平台限制和展示需求。rules 的 100,000 字符上限是平台硬性限制。
 
-## Skill 编写规则（来自 addyosmani/agent-skills 实践）
+## Skill 编写规则
 
 此表与三个厂商目录的 manifest-rules 同步，改动需三处一起。
 

@@ -15,7 +15,6 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-# 技能脚本源自 tw93/Waza，放宽部分规则
 "plugins/dyc/skills/*/scripts/*.py" = [
   "E501", # line too long
   "E701", # multiple statements on one line (colon)

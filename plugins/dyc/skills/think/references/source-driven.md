@@ -24,4 +24,4 @@ Docs change, so a cached doc read is suspect by default. If you reuse a previous
 
 ## Rationalizations
 
-"I'm confident about this API" → confidence is not evidence; training data contains outdated patterns that look correct and break against current versions. "Fetching docs wastes tokens" → hallucinating an API wastes more. "I'll just mention it might be outdated" → a disclaimer doesn't help; verify and cite, or flag as unverified.
+"I'm confident about this API" → confidence is not evidence; training data contains outdated patterns that look correct and break against current versions.

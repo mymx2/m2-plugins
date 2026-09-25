@@ -1,6 +1,8 @@
 # Memory Leak Debugging with Heap Snapshots
 
-Load when the symptom is high memory usage, OOM errors, or a leak suspicion in a JavaScript or Node.js application, and chrome-devtools-mcp memory tools are available. Heap inspection requires the MCP server started with `--memoryDebugging`; if the heap tools are absent from the tool list, ask the user to add the flag and restart (server setup mechanics live in the chrome skill).
+适用范围：browser 与 Node.js 的 JavaScript 堆内存问题；原生应用（Swift/Rust/C++ 等）内存问题本文件不适用。
+
+Heap snapshot workflow for JavaScript and Node.js leaks using the chrome-devtools-mcp heap tools; if the heap tools are absent, ask the user to enable memory debugging in the chrome skill (server setup mechanics live there).
 
 ## Core Principles
 

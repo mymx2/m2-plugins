@@ -10,7 +10,7 @@ Three calibrations:
 
 1. Prefix/glob permission rules cannot reliably match pipes, so recommend the host's pre-execution hook for pipe-to-shell blocking instead of inventing glob variants, and name the hook's own tradeoff (string-matching hooks also fire on quoted text and heredocs that merely contain the pattern).
 2. Before predicting an outbound-shell deny's blast radius, check which layer it matches at: a command-prefix deny on `ssh` only blocks the agent invoking `ssh` directly and leaves git's internal SSH transport alone, while a process- or sandbox-level block does break git-over-SSH push.
-3. When a runtime has no command-level deny surface (Codex: the levers are `sandbox_mode` and `approval_policy`), name that lever once as a user tradeoff instead of recommending deny keys the runtime cannot express.
+3. When a runtime has no command-level deny surface (Codex: the levers are `sandbox_mode` and `approval_policy`; verify key names against the installed Codex version), name that lever once as a user tradeoff instead of recommending deny keys the runtime cannot express.
 
 If no agent settings surface exists at all, report the deny-list as not applicable rather than a failure.
 

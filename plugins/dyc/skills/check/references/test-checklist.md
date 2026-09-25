@@ -11,7 +11,7 @@ Load and work this checklist when reviewing a change that implements logic, fixe
 - [ ] Tests are self-contained (DAMP over DRY) — each test tells a complete story without the reader tracing through shared helpers.
 - [ ] Test names read like a specification (describe behavior, not "works" / "test 3").
 - [ ] Tests use the repository's real test command and config, not a guessed default — the focused-test command during the loop, the full-suite command before completion (they are different commands).
-- [ ] No test command was re-run on unchanged code — after a clean run, repeating the same command adds no information; run again only after edits that could affect the result.
+- [ ] No verification command was re-run on unchanged code (discipline owned by `incremental-guardrails.md`, Verification Command Discipline).
 - [ ] No tests were skipped or disabled to make the suite pass.
 - [ ] Tests are placed per the project's conventions; coverage hasn't decreased (if tracked).
 - [ ] The suite actually exercised the path — a "pass" from a skipped/empty run is a hollow green.
@@ -23,7 +23,7 @@ Load and work this checklist when reviewing a change that implements logic, fixe
 
 ## Note
 
-This checklist is the _review-time_ gate for test quality. The build-time TDD discipline (write the failing test _before_ the code) is enforced during implementation; here you verify the evidence exists and is sound. When a review finds the tests below were never run as a discipline, point the author at the build-time rules in the next section.
+This checklist is the _review-time_ gate for test quality. The build-time TDD discipline (write the failing test _before_ the code) is enforced during implementation; here you verify the evidence exists and is sound. When a review finds the tests below were never run as a discipline, point the author at the build-time rules in the next section. Concrete JS/TS syntax examples live in `testing-patterns.md`, not here.
 
 ## Build-Time TDD Discipline
 

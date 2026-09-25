@@ -1,6 +1,6 @@
 # Shipping & Launch Readiness
 
-Load for release-worthiness checks that complement the Release Gate 2.0 matrix in the `project-context` reference. Ship with confidence: deploys should be reversible, observable, and incremental.
+Load for release-worthiness checks that complement the Release Gate 2.0 matrix in the `project-context` reference. The canonical release-worthiness verdict and ship follow-through flow lives in `mode-ship.md` (Release Worthiness Analysis / Ship Follow-through); this file holds the broader launch-readiness checklists. Ship with confidence: deploys should be reversible, observable, and incremental.
 
 ## Pre-Launch Checklist (condensed)
 
@@ -20,7 +20,7 @@ Load for release-worthiness checks that complement the Release Gate 2.0 matrix i
 
 Deploy to staging (full suite + smoke) → deploy to production behind a feature flag OFF → enable for team (24h window) → canary 5% (24–48h) → gradual 25/50/100 → full rollout (monitor 1 week, then clean up the flag — within 2 weeks of full rollout at the latest). Advance/hold/roll back on thresholds: error rate within 10% of baseline (advance), 10–100% above (hold), >2x (roll back); p95 latency within 20% (advance), 20–50% (hold), >50% (roll back); client JS errors no new types (advance), new errors <0.1% of sessions (hold), >0.1% (roll back); business metrics neutral or positive (advance), decline <5% (hold — may be noise), decline >5% (roll back).
 
-Flag discipline: every flag has an owner and an expiration date; never nest feature flags (exponential combinations); test both flag states (on and off) in CI.
+Flag lifecycle rules (owner, expiration, no nesting, both-states testing) are canonical in `ci-cd.md` (Deployment Strategies).
 
 ## Error Budget Release Gate
 

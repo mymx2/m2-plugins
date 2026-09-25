@@ -2,7 +2,7 @@
 
 Loaded from `check` Mode Picker when the request is issue/PR triage. Shared review surface (Scope, Hard Stops, Autofix, Specialist Review, Verification, Sign-off) still applies from `SKILL.md`.
 
-Activate when the user mentions: issue, PR, "review all", triage, "batch", or "批量处理". Skip the diff flow and run this instead.
+Skip the diff flow and run this instead.
 
 **Action-first rule:** Items with a clear disposition (already fixed, duplicate, already released) get acted on immediately without analysis paragraphs. When analyzing screenshots or images, state what you see and the suggested action in one message. Only ask the user when the disposition is genuinely ambiguous.
 

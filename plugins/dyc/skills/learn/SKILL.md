@@ -1,12 +1,10 @@
 ---
 name: learn
-description: 'Runs a six-phase research workflow that turns unfamiliar domains, source bundles, or collected material into publish-ready output. Use when users ask to research, study, deep-dive, compile sources, synthesize unfamiliar material, or turn a source bundle into a coherent reference. Not for quick lookups or single-file reads.'
-when_to_use: '学习一下, 深入研究, 研究一下, 整理成文章, 把这批材料整理, 一站式参考, 一篇就够, 整理成长文, research, deep dive, help me understand, compile sources, unfamiliar domain'
+description: 'Runs a six-phase research workflow that turns unfamiliar domains, source bundles, or collected material into publish-ready output. Use when users ask for multi-source research: deep-dives, compiling sources, synthesizing unfamiliar material, or turning a source bundle into a coherent reference. Not for quick lookups or single-URL fetches (route to read).'
+when_to_use: '深入研究, 学习一下, 整理成文章, 一站式参考, 一篇就够, 技术选型调研, 对比调研, research, deep dive, help me understand, compile sources, unfamiliar domain'
 ---
 
 # Learn: From Raw Materials to Published Output
-
-Prefix your first line with 🥷 inline, not as its own paragraph.
 
 Support the user's thinking; do not replace it.
 
@@ -20,19 +18,18 @@ Learn runs a six-phase research workflow: collect primary sources, digest them i
 - Done when: primary sources are collected or supplied, contradictions are handled explicitly, and the final structure teaches the topic without hiding uncertainty.
 - Evidence: source URLs or files, fetched content, notes from digestion, outline decisions, and self-review against the requested output.
 - Output: research notes, outline, publish-ready draft, or canonical reference, matching the chosen mode.
-
-**Boundary**: single URL that only needs fetching belongs in `/read`. A single URL that needs summary or analysis can use `/read` as the fetch step, but the final answer should satisfy the user's requested summary or analysis. `/learn` is for multi-source research that produces a new structured output.
+- Authorization: research and drafting only. No publishing, no external posting, no code changes without current-turn approval.
 
 ## When to Use
 
 - Multi-source research that produces a new structured output (article, reference, notes set).
 - Turning unfamiliar domains or collected materials into publish-ready content.
 - Building a canonical reference that covers a topic so thoroughly readers need nothing else.
-- Route to `read` for single-URL fetches; route to `think` for planning without research; route to `write` for prose polishing without research.
+- Route to `read` for single-URL fetches; route to `think` for planning without research; route to `write` for prose polishing without research; route to `pm` for product deliverables (PRD, backlog ranking) and product/market competitive analysis with fixed PM frameworks.
 
 ## Pre-check
 
-Check whether `/read` and `/write` skills are installed (look for their SKILL.md in the skills directories). Warn if missing, do not block:
+Check whether the `read` and `write` skills are available in the current registered-skills list. Warn if missing, do not block:
 
 - `/read` missing -- Phase 1 fetch falls back to native `WebFetch` / `curl`; coverage on paywalled, JS-heavy, and Chinese-platform pages degrades.
 - `/write` missing -- Phase 5 AI-pattern stripping falls back to manual scan. Phases 1-4 are unaffected.
@@ -50,9 +47,20 @@ Infer the mode from the requested artifact and supplied materials. Ask only when
 
 If unsure, suggest Quick Reference.
 
+## Reference Library
+
+`references/research-techniques.md` has one section per row below; load the file when any row applies (each row lists the observable task shape and the section it activates). The anti-patterns gate always applies at Phase 6 regardless of whether the file was loaded earlier — the gate checklist is inlined there.
+
+| Task shape (user-observable)                                                    | File + section                                                    |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Question still fuzzy, landscape unknown, need angles to explore                 | `references/research-techniques.md` — Divergence Tools            |
+| Sources conflict or vary in reliability, material piling up                     | `references/research-techniques.md` — Convergence Tools           |
+| Comparing external entities: libraries, tools, vendors, approaches, competitors | `references/research-techniques.md` — Comparing External Entities |
+| Phase 6 gate (always applies, checklist inlined in Phase 6)                     | `references/research-techniques.md` — Research Anti-Patterns      |
+
 ## Canonical Article Mode
 
-Activate when: "一篇就够", "一站式参考", "整理成长文", "目的是大家只需要看这篇就好了", or the user wants a single authoritative reference on a topic.
+Activate when the user wants a single authoritative reference on a topic — the canonical article no one needs to search beyond.
 
 Goal: after reading the article, no one should need to search for anything else on this topic.
 
@@ -66,39 +74,21 @@ Additional requirements on top of standard Deep Research:
 
 ## Phase 1: Collect
 
-Gather primary sources only: papers that introduced key ideas, official lab/product blogs, posts from builders, canonical "build it from scratch" repositories. Not summaries. Not explainers.
+Collect papers, official blogs, builder posts, and canonical repos.
 
-Three ordered steps per source -- no shortcuts, no merging:
+Three ordered steps per source:
 
 1. **Discover** -- use an installed search plugin (e.g., PipeLLM) to map the landscape, then deep-search the 2-3 most promising sub-topics. No plugin: use the environment's native web search. Output is a URL list; do not fetch content here.
-2. **Fetch** -- every URL goes through `/read` when available. `/read` owns the proxy cascade, paywall detection, and platform routing (WeChat, Feishu, PDF, GitHub). Native fetch tools and raw `curl` silently fail on JS-heavy or paywalled sites and skip all of that. If `/read` is missing (Pre-check warned), fall back to native fetch and accept reduced coverage.
-3. **File** -- tell `/read` the research project's source directory when one exists. If no directory was specified, let `/read` use a per-session temp directory and return the saved path. Move or index saved files into sub-topic directories after fetch returns. Move, don't refetch.
+2. **Fetch** -- every URL goes through `/read` when available; fall back per Pre-check when it is not.
+3. **File** -- ask `read` to save fetched content to disk and return the saved path; if `read` does not support a caller-specified directory, use its default location and move the files afterwards. Move or index saved files into sub-topic directories after fetch returns. Move, don't refetch.
 
 Target: 5-10 sources for a blog post, 15-20 for a deep technical survey.
 
 ## Phase 2: Digest
 
-Work through the materials. For each piece: read it fully, keep what is good, cut ruthlessly what is not.
+Work through the materials. For each piece: read it fully, keep what is good, cut ruthlessly what is not. Material that is not primary-source (summaries, vendor blogs, secondhand reports) enters the digest with a medium or low confidence label per the confidence grading in `references/research-techniques.md` — Convergence Tools.
 
-For key claims, ask before including in the outline:
-
-- Does this idea appear in at least two different contexts from the same source?
-- Can this framework predict what the source would say about a new problem?
-- Is this specific to this source, or would any expert in the field say the same thing?
-
-Generic wisdom is not worth distilling. Passes two or three: belongs in the outline. Passes one: background material. Passes zero: cut it.
-
-### Conversation Or Review Distillation
-
-When the input is a recent conversation, project review, scorecard, or diagnostic report, treat it as raw material:
-
-- Prefer already-distilled summaries, memory entries, and review outputs first; open raw transcripts only to verify a disputed detail or recover the exact source of a repeated pattern.
-- Build a candidate matrix before editing durable guidance: source/project, repeated failure, transferable rule, target layer, evidence count, and redaction risk. Promote only candidates with cross-source support or a repeated failure in the same project family.
-- Extract repeated workflow failures, invariants, and verifier surfaces.
-- Drop dated line numbers, current-score framing, private paths, one-machine setup, and repo-specific commands unless the output is explicitly for that same repo.
-- Map each durable lesson to its target layer: project docs, shared rules, skill references, or deterministic scripts.
-- Prefer references or existing skill sections for adaptive workflow guidance; use scripts only for deterministic checks that can fail reliably without project-specific context.
-- Keep evidence snippets only as notes for yourself; do not paste raw conversation history into the final artifact.
+Distill only claims specific enough that not any expert would say them.
 
 ## Phase 3: Outline
 
@@ -106,7 +96,7 @@ Write the outline for the article. For each section: note the source materials i
 
 ## Phase 4: Fill In
 
-Work through the outline section by section. A section that is hard to write means the mental model is still weak there: return to Phase 2 for that sub-topic, not the whole article. Stall signals: an opening sentence rewritten three times without settling, a single-source claim with no cross-check, a source missing from Phase 1, or a claim you could not explain out loud. The outline may change, and that is fine.
+Work through the outline section by section. A section that is hard to write means the mental model is still weak there: return to Phase 2 for that sub-topic, not the whole article. The most common stall signal is an opening sentence rewritten three times without settling. The outline may change, and that is fine.
 
 ## Phase 5: Refine
 
@@ -114,7 +104,18 @@ Edits only: cut redundancy without changing meaning or voice, flag broken argume
 
 ## Phase 6: Self-review and Publish Readiness
 
-The user reads the entire article linearly before publishing. Not with AI. Mark everything that feels off, fix it, read again. Two passes minimum.
+The user reads the entire article linearly before publishing. Mark everything that feels off, fix it, read again. Two passes minimum.
+
+Before that handoff, gate the draft on the five research anti-patterns (check and signal per item live in `references/research-techniques.md` — Research Anti-Patterns; the gate applies to every research task, loaded or not). A conclusion that fails a check gets rewritten or explicitly hedged with its confidence label, not published as stated. Record the gate output in this shape, one line per check:
+
+```
+anti-pattern gate:
+- Simpson's paradox: pass | N-A (no aggregated quantitative claims) | fail → quoted per-segment rates instead
+- Survivorship bias: pass | N-A (why) | fail → action taken
+- Vanity metrics: pass | N-A (why) | fail → action taken
+- Goodhart's law: pass | N-A (why) | fail → action taken
+- Base-rate neglect: pass | N-A (why) | fail → action taken
+```
 
 When it reads clean from start to finish, the draft is ready for the user to publish.
 
@@ -128,10 +129,9 @@ When it reads clean from start to finish, the draft is ready for the user to pub
 
 - Starting Phase 4 on an outline section that has no Phase 1 source behind it
 - Silently picking one side when two sources contradict on a factual claim
-- Padding the outline with generic wisdom that passes zero of the three digest tests
+- Padding the outline with generic wisdom any expert in the field would say
 - Fetching with native tools or `curl` while `/read` is installed
 - Pasting raw conversation history into the final artifact instead of distilled notes
-- Calling the draft publish-ready before the user completed two linear read passes
 
 ## Verification
 
@@ -142,7 +142,6 @@ When it reads clean from start to finish, the draft is ready for the user to pub
 
 ## Hard Rules
 
-- **No Phase 4 before the outline is solid.** A section with no sources either does not belong or needs a source found first.
 - **Contradictions stay visible.** When two sources contradict on a factual claim, note both positions and the evidence each gives; never silently pick one.
 - **Stop at publish confirmation.** After the user confirms the article is ready, do not upload, post, distribute, or perform any publish action unless explicitly asked.
 

@@ -15,7 +15,7 @@ Before writing any spec, propose a small **capability map** — a module table (
 Two scoping heuristics when deciding whether and where to carve:
 
 - **Favor recently-changed areas.** Deepening or decomposing a module pays back by easing future change, so weight the parts of the codebase that keep coming up in `git log --oneline`. A capability nobody touches earns little from a cleaner boundary.
-- **Apply the deletion test.** To judge whether a candidate module earns its place, imagine deleting it: if complexity vanishes, it was a pass-through; if it reappears across N callers, it was real. Only the second kind deserves its own boundary in the map. (See the `deep-modules` reference for the full vocabulary.)
+- **Apply the deletion test.** To judge whether a candidate module earns its place, imagine deleting it: if complexity vanishes, it was a pass-through; if it reappears across N callers, it was real. Only the second kind deserves its own boundary in the map.
 
 ## Specify
 
@@ -30,7 +30,7 @@ Surface assumptions **immediately** ("correct me now or I'll proceed with these"
 
 Reframe vague requirements as concrete success criteria ("make the dashboard faster" → "LCP < 2.5s on 4G, initial load < 500ms, CLS < 0.1 … are these the right targets?").
 
-**Sketch the test seams first.** Before finalizing the spec, name the seams the work will be tested through — the public interfaces where behavior is observed. Prefer existing seams, keep them few, and aim for one per capability. A spec whose testing strategy points at agreed seams lands implementation effort on critical paths instead of every edge case. When the seam shape itself is unclear, load the `deep-modules` reference.
+**Sketch the test seams first.** Before finalizing the spec, name the seams the work will be tested through — the public interfaces where behavior is observed. Prefer existing seams, keep them few, and aim for one per capability. A spec whose testing strategy points at agreed seams lands implementation effort on critical paths instead of every edge case.
 
 **Gated workflow:** do not advance to the next phase until the current one is validated. The spec, the plan, and the task list each get explicit user confirmation before implementation begins.
 
@@ -47,7 +47,7 @@ Update it when decisions or scope change; commit it; reference it in PRs. The sp
 
 ## Rationalizations
 
-"Simple, I don't need a spec" → simple tasks still need acceptance criteria; a two-line spec is fine. "I'll write it after I code" → that's documentation, not specification. "The spec will slow us down" → a 15-minute spec prevents hours of rework. "It's one big feature; splitting it is overhead" → a monolithic spec forces every downstream task to reason over the whole contract; a ten-line capability map is the cheap alternative. "I'll decompose during planning" → planning slices tasks within a spec; module boundaries and dependency direction must be decided before the spec is written, not after.
+"I'll decompose during planning" → planning slices tasks within a spec; module boundaries and dependency direction must be decided before the spec is written, not after — a ten-line capability map is the cheap alternative to every downstream task reasoning over the whole contract.
 
 ## Red Flags
 

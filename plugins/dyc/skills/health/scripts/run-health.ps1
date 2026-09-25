@@ -1,3 +1,9 @@
+# Health launcher (Windows entry point). Dispatches one audit action to the
+# matching helper script in this directory via bash; run from the root of the
+# project being audited.
+# Usage: powershell -NoProfile -ExecutionPolicy Bypass -File run-health.ps1 <collect|agent-context|maintainability|doc-refs|verifier-output> [args]
+# ExecutionPolicy: scripts are unsigned; use "-ExecutionPolicy Bypass" on the
+# invocation line (as above) rather than relaxing the machine-wide policy.
 param(
     [Parameter(Mandatory = $true, Position = 0)]
     [ValidateSet("collect", "agent-context", "maintainability", "doc-refs", "verifier-output")]
@@ -262,14 +268,14 @@ function Resolve-WorkingPython([string]$Candidate, [string]$TargetRoot) {
     try {
         $probe = @(
             & $executable -I -c (
-                "import sys; print('waza-health-python-ok') " +
+                "import sys; print('dyc-health-python-ok') " +
                 "if sys.version_info >= (3, 9) else sys.exit(1)"
             ) 2>$null
         )
         if (
             $LASTEXITCODE -eq 0 -and
             $probe.Count -eq 1 -and
-            $probe[0] -eq "waza-health-python-ok"
+            $probe[0] -eq "dyc-health-python-ok"
         ) {
             return $executable
         }

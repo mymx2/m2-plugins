@@ -1,13 +1,13 @@
 # DYC
 
-Eleven engineering workflow skills for AI agents — planning, review, debugging, UI, writing, research, and more. Sourced from [tw93/Waza](https://github.com/tw93/Waza), adapted for multi-vendor runtimes.
+Twelve engineering workflow skills for AI agents — planning, review, debugging, UI, writing, research, and more. Packaged for multi-vendor runtimes.
 
 [中文](README_CN.md)
 
 ## Features
 
 - **Multi-vendor**: one `plugin.json` source of truth, adapted to Claude Code, Codex, Qoder, and CodeBuddy via `extensions` + `init.ts`
-- **11 skills** covering the full engineering workflow: plan → build → review → debug → document
+- **12 skills** covering the full engineering workflow: plan → build → review → debug → document
 - **Writing rules** for Chinese and English prose
 - **9 MCP servers** for browser automation, documentation, component libraries, and repository knowledge
 
@@ -52,6 +52,7 @@ vp run qoder:dyc
 | `forge`    | Plugin & skill lifecycle: create, adapt multi-vendor, find, install, author, validate |
 | `chrome`   | Drives a real Chrome browser via chrome-devtools-mcp for automation and analysis      |
 | `repowiki` | Generates a DeepWiki-style repository analysis report with Mermaid diagrams           |
+| `pm`       | PM deliverables: PRD, story breakdown, backlog prioritization, metrics reviews, GTM   |
 
 ## Rules
 

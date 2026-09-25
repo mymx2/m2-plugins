@@ -1,13 +1,13 @@
 # DYC
 
-十一种 AI Agent 工程化工作流技能——规划、审查、调试、UI、写作、研究等。源自 [tw93/Waza](https://github.com/tw93/Waza)，适配多厂商运行时。
+十二种 AI Agent 工程化工作流技能——规划、审查、调试、UI、写作、研究等。面向多厂商运行时打包。
 
 [English](README.md)
 
 ## 特性
 
 - **多厂商适配**：`plugin.json` 为唯一事实源，通过 `extensions` + `init.ts` 适配 Claude Code、Codex、Qoder、CodeBuddy
-- **11 个技能**覆盖完整工程工作流：规划 → 构建 → 审查 → 调试 → 文档
+- **12 个技能**覆盖完整工程工作流：规划 → 构建 → 审查 → 调试 → 文档
 - **写作规则**：中英文写作规范
 - **9 个 MCP 服务器**：浏览器自动化、文档检索、组件库、仓库知识
 
@@ -52,6 +52,7 @@ vp run qoder:dyc
 | `forge`    | 插件与技能全生命周期：创建、多厂商适配、发现、安装、编写、校验  |
 | `chrome`   | 通过 chrome-devtools-mcp 驱动真实 Chrome 浏览器进行自动化和分析 |
 | `repowiki` | 生成 DeepWiki 风格的仓库分析报告，含 Mermaid 图表               |
+| `pm`       | 产品交付物：PRD、故事拆解、需求排序、指标复盘、GTM              |
 
 ## 规则
 

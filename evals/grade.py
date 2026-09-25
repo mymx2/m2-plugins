@@ -9,7 +9,7 @@
   # 2. 合并:读 LLM 评审员按提示词产出的 JSON,校验结构、补齐 summary,落盘 results/
   python evals/grade.py merge <run_dir> --input graded.json [--out evals/results/grading-<skill>-<variant>.json]
 
-设计依据:vendor grader.md(agents/grader.md)规定 grading JSON 的字段结构
+设计依据:agents/grader.md 规定 grading JSON 的字段结构
 (expectations[].text/passed/evidence、summary、claims、eval_feedback)。判定本身
 需要读 transcript + 产物做语义判断,无法纯脚本化;脚本固化的是"输入打包"
 (把 run 目录、case expectations、判定规则拼成可复现的提示词)与"输出校验"
@@ -31,7 +31,7 @@ RESULTS = ROOT / "evals" / "results"
 
 RUN_DIR_RE = "{skill}-{variant}"
 
-# 输出 JSON 的必填字段(vendor grader.md Output Format 的子集,与既有 grading-*.json 对齐)
+# 输出 JSON 的必填字段(agents/grader.md Output Format 的子集,与既有 grading-*.json 对齐)
 REQUIRED_TOP = ["skill", "variant", "run_dir", "expectations", "summary"]
 REQUIRED_EXP = ["text", "passed", "evidence"]
 

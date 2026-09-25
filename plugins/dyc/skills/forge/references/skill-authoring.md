@@ -125,6 +125,7 @@ A skill is read by a model under a token budget, not by a person browsing. These
 - **End every step on a completion criterion.** Make it checkable and exhaustive ("every modified model accounted for," not "produce a change list"). A vague bound invites premature completion — the agent rushes to _be done_. Sharpen the bound first; only if it is irreducibly fuzzy and you observe the rush, hide the later steps across a real context boundary (a handoff or subagent dispatch).
 - **Use leading words.** A compact concept already in the model's priors (_tight loop_, _red_, _tracer bullet_) anchors a whole region of behavior in one token. Coining your own costs definition tokens a pretrained word gives free; reach for an existing word first.
 - **Prompt the positive, not the negation.** "Don't X" drags X into context; state the target behavior instead. Reserve prohibition for hard guardrails that can't be phrased positively, and pair it with the positive target.
+- **Audit old skills against next-gen rules.** When rewriting an existing SKILL.md rather than authoring fresh, run the deletion-test checklist in `next-gen-context`: rules→judgment, examples→interface design, upfront loading→progressive disclosure, repetition→single-source, prohibition→permission.
 
 ## Rationalization Smells
 

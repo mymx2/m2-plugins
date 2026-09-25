@@ -1,6 +1,6 @@
 # Codex (OpenAI): .codex-plugin/ 约定
 
-Codex 插件的 manifest 和组件组织速查卡。Codex 以 Marketplace 分发为导向，强调 `interface` 展示元数据。基于 `vendor/openai/plugins/plugins/` 蒸馏。
+Codex 插件的 manifest 和组件组织速查卡。Codex 以 Marketplace 分发为导向，强调 `interface` 展示元数据。
 
 ## 清单文件
 
@@ -102,7 +102,7 @@ Codex 没有原生 `agents/` 目录发现机制。如果插件在 Claude/Qoder �
 
 > **原则**：Codex 以 Marketplace 为导向，`interface` 字段的约束直接影响展示效果。`shortDescription` 的 200 字符上限是平台硬性限制。
 
-## Skill 编写规则（来自 addyosmani/agent-skills 实践）
+## Skill 编写规则
 
 此表与三个厂商目录的 manifest-rules 同步，改动需三处一起。
 

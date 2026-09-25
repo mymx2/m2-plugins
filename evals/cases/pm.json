@@ -1,0 +1,65 @@
+{
+  "skill_name": "pm",
+  "trigger": {
+    "positive": [
+      {
+        "prompt": "帮我写一份 PRD，包含用户故事、验收标准和边界情况",
+        "top_k": 1
+      },
+      {
+        "prompt": "We have 30 feature requests from sales. Rank them using RICE so we can plan Q1.",
+        "top_k": 1
+      },
+      {
+        "prompt": "把这份 Epic 拆成带验收标准的用户故事，按依赖关系排好序",
+        "top_k": 1
+      },
+      {
+        "prompt": "Our DAU dropped 15% last week. Break down the funnel and tell me where the leak is.",
+        "top_k": 1
+      },
+      {
+        "prompt": "竞品刚上线了一个新功能，帮我做个功能对比矩阵，看我们要不要跟",
+        "top_k": 1
+      },
+      {
+        "prompt": "Update the roadmap with the new launch dates and flag any milestones at risk.",
+        "top_k": 1
+      },
+      {
+        "prompt": "收集到的 500 条用户反馈帮我分类归因，提炼出 top 5 痛点",
+        "top_k": 1
+      },
+      {
+        "prompt": "We need a GTM strategy for the enterprise tier: pricing, channels, and positioning.",
+        "top_k": 1
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Clicking submit throws a TypeError in production. Find the root cause.",
+        "owner": "hunt"
+      },
+      {
+        "prompt": "这个函数的时间复杂度能优化吗？现在是 O(n²)，数据量大了就卡",
+        "owner": "think"
+      },
+      {
+        "prompt": "Read this RFC and summarize the key design decisions: https://example.com/rfc",
+        "owner": "read"
+      },
+      {
+        "prompt": "帮我润色这封英文邮件，语气更专业一点",
+        "owner": "write"
+      },
+      {
+        "prompt": "Research the top 3 state management libraries for React, compare their tradeoffs in depth.",
+        "owner": "learn"
+      },
+      {
+        "prompt": "The button color looks off on mobile. Fix the spacing and contrast.",
+        "owner": "ui"
+      }
+    ]
+  }
+}

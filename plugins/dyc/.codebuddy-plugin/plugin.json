@@ -1,7 +1,7 @@
 {
   "name": "dyc",
   "version": "1.0.6",
-  "description": "m2-plugins/plugins/dyc — eight core engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, and health, with additional skills for extended capabilities.",
+  "description": "m2-plugins/plugins/dyc — eight core engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, and health, with additional skills for extended capabilities including pm for product deliverables.",
   "author": {
     "name": "dyc",
     "email": "mymx2@qq.com",
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/mymx2/m2-plugins",
   "repository": "https://github.com/mymx2/m2-plugins",
   "license": "MIT",
-  "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins", "waza"],
+  "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins"],
   "mcpServers": {
     "playwright": {
       "type": "stdio",

@@ -9,7 +9,7 @@ lane, package contents, release assets, registry state) stay with the skill.
 Pure stdlib. Read-only. No network. Exits 0 even on WARN/FAIL so the harness
 does not confuse "finding surfaced" with "script broken".
 
-Run as: python3 skills/check/scripts/release_gate.py --root <path>
+Run as: python3 <skill-base-dir>/scripts/release_gate.py --root <path>
 """
 
 from __future__ import annotations

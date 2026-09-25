@@ -1,6 +1,6 @@
 # Systematic Debugging: Reproduce → Localize → Reduce → Fix → Guard
 
-Load when the hunt hits a genuinely hard or non-reproducible failure, or when you need the structured triage discipline. Complements the main hunt workflow (root cause before fix).
+For genuinely hard or non-reproducible failures that need structured reproduce→localize→reduce→fix→guard discipline.
 
 ## The Stop-the-Line Rule
 
@@ -12,23 +12,14 @@ When anything unexpected happens: **STOP** adding features/changes → **PRESERV
 2. **Localize** — narrow down WHICH layer: UI/Frontend (console, DOM, network), API/Backend (logs, request/response), Database (queries, schema, integrity), Build tooling (config, deps, env), External service (connectivity, API changes), or the test itself (false negative). Use `git bisect` for regressions.
 3. **Reduce** — create the minimal failing case: strip unrelated code/config, simplify input. A minimal repro makes the root cause obvious and prevents fixing symptoms.
 4. **Fix the root cause, not the symptom.** Ask "why does this happen?" until you reach the actual cause, not just where it manifests.
-5. **Guard against recurrence** — write a regression test that fails without the fix and passes with it. Distinguish temporary logging (remove once the bug is fixed and guarded — always remove anything containing sensitive data) from **permanent instrumentation** worth keeping: error boundaries with error reporting, API error logging with request context, performance metrics at key user flows.
+5. **Guard against recurrence** — write a regression test that fails without the fix and passes with it, in the project's test suite rather than a temporary file, with the commit message stating why the bug recurred and why this fix prevents it. Run the red-green cycle instead of assuming it: revert the fix, watch the new test fail, restore the fix, watch it pass — a test only ever seen passing pins nothing. Confirm the harness can fail at all (run a two-line minimal repro with a failing assertion), and pair every negative assertion ("output must not contain X") with a positive case. Distinguish temporary logging (remove once the bug is fixed and guarded — always remove anything containing sensitive data) from **permanent instrumentation** worth keeping: error boundaries with error reporting, API error logging with request context, performance metrics at key user flows.
 6. **Verify end-to-end** — run the specific test, the full suite, build, and manual check.
 
 ## Feedback Loop Construction (the highest-leverage step)
 
-Before any hypothesis, build a **tight pass/fail signal that goes red on this bug**. If you have one, you will find the cause; bisection, hypothesis-testing, and instrumentation all just consume it. If you don't, no amount of staring at code saves you. Spend disproportionate effort here. Ways to construct one, roughly in order of preference:
+Before any hypothesis, build a **tight pass/fail signal that goes red on this bug**. If you have one, you will find the cause; bisection, hypothesis-testing, and instrumentation all just consume it. If you don't, no amount of staring at code saves you. Spend disproportionate effort here.
 
-1. **Failing test** at whatever seam reaches the bug (unit, integration, e2e).
-2. **Curl / HTTP script** against a running dev server.
-3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
-4. **Headless browser script** (Playwright/Puppeteer) driving the UI, asserting on DOM/console/network.
-5. **Replay a captured trace** — save a real request/payload/event log to disk, replay it through the code path in isolation.
-6. **Throwaway harness** — a minimal subset of the system (one service, mocked deps) exercising the bug path with one call.
-7. **Property / fuzz loop** — for "sometimes wrong output," run 1000 random inputs and look for the failure mode.
-8. **Bisection harness** — if the bug appeared between two known states, automate "boot at state X, check, repeat" so `git bisect run` works.
-9. **Differential loop** — run the same input through old vs new version (or two configs) and diff outputs.
-10. **HITL script** — last resort. If a human must click, drive them with a step/capture script so the loop stays structured; their captured output feeds back to you.
+Default: a **failing test** at whatever seam reaches the bug (unit, integration, e2e). When no test seam exists, step down to the layer where the bug runs: a curl/HTTP script against a dev server for API bugs; a CLI invocation with a fixture input, diffing stdout against a known-good snapshot, for command-line bugs; a headless browser script (Playwright/Puppeteer) asserting on DOM/console/network for UI bugs; a replayed captured trace (real request/payload/event log saved to disk) for bugs that only fire on production-shaped input; a throwaway harness (one service, mocked deps, one call) when the full system is too heavy to boot per iteration. Escape hatch: for "sometimes wrong output", a property/fuzz loop over 1000 random inputs surfaces the failure mode; for a bug that appeared between two known states, automate "boot at state X, check, repeat" so `git bisect run` works; old-vs-new differential runs pin behavior drift between versions or configs. Last resort: a HITL step/capture script when a human must click — their captured output feeds back to you.
 
 **Tighten the loop** once one exists: make it faster (cache setup, narrow scope), sharper (assert the specific symptom, not "didn't crash"), more deterministic (pin time, seed RNG, isolate filesystem, freeze network). A 30-second flaky loop is barely better than none; a 2-second deterministic one is a superpower. For non-deterministic bugs the goal is not a clean repro but a higher reproduction rate — loop the trigger 100×, parallelise, add stress, narrow timing windows.
 
@@ -43,7 +34,7 @@ If you catch yourself reading code to build a theory before this command exists,
 
 **Redact every secret first.** Show commands, outputs, and captured artifacts with secrets replaced by `<REDACTED>`; build loops against env vars so credentials stay in the environment; quote only the lines of a captured artifact that carry the signal.
 
-**Hypothesise in ranked, falsifiable form.** Generate 3–5 ranked hypotheses before testing any; each must make a falsifiable prediction — "If X is the cause, then changing Y will make the bug disappear." A hypothesis you can't state as a prediction is a vibe. Show the ranked list to the user before testing (they often re-rank instantly from domain knowledge); don't block on it if they're away.
+**Hypothesise in ranked, falsifiable form.** Generate 3–5 ranked hypotheses before testing any; each must make a falsifiable prediction — "If X is the cause, then changing Y will make the bug disappear." A hypothesis you can't state as a prediction is a vibe. The ranking sets your internal test order; surface it to the user only when their input would change the direction of the hunt.
 
 **Tag every debug log** with a unique prefix (e.g. `[DEBUG-a4f2]`) so cleanup is a single grep — tagged logs die, untagged survive.
 

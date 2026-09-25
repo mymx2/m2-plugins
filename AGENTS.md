@@ -18,7 +18,7 @@ AI Agent 插件与技能的策划目录，遵循 Agent Plugins Spec v1.0.0，支
 | `python scripts/validate_repo.py .`                   | Agent Plugins Spec v1.0.0 仓库结构验证（全量）                            |
 | `python scripts/validate_repo.py . -p <name>`         | 验证指定插件结构                                                          |
 | `vp run up`                                           | 依赖更新检查（taze -r -w -i）                                             |
-| `python scripts/check-trigger-jaccard.py`             | 11 个技能 `when_to_use` 两两 Jaccard（≥0.5 退出 1）                       |
+| `python scripts/check-trigger-jaccard.py`             | 12 个技能 `when_to_use` 两两 Jaccard（≥0.5 退出 1）                       |
 | `python -m pytest evals/tests/ -q`                    | evals 设施单测（临时目录，不碰真实 `evals/runs/`）                        |
 | `python evals/lexical_router.py`                      | Tier 2 词面路由，重写 `evals/results/lexical-routing.json`                |
 
@@ -46,9 +46,9 @@ plugins/<name>/
 
 - `schemas/`：JSON Schema 定义，`validate-schemas.ts` 自动映射校验
 - `scripts/`：仓库级校验工具（TS + Python），测试在 `scripts/tests/`
-- `evals/`：11 个技能的三层行为评测设施（Jaccard / 词面路由 / 行为抽样），含 `cases/`、`fixtures/`、`runs/`、`results/`、`tests/`；跑法与阈值见 `evals/README.md`
+- `evals/`：12 个技能的三层行为评测设施（Jaccard / 词面路由 / 行为抽样），含 `cases/`、`fixtures/`、`runs/`、`results/`、`tests/`；跑法与阈值见 `evals/README.md`
 - `agents/`：从技能剥离的 persona brief（开发期资产，非安装产物）；`docs/agents.md`：代理机制说明、专家激活目录与编排素材，供各厂商取用定制
-- `vendor/`：Git submodules（上游参考源），不参与构建（lint/fmt/test 全局忽略）
+- `vendor/`：仅保留 `upstash/context7` 一个 Git submodule（参考源），不参与构建（lint/fmt/test 全局忽略）
 - `.claude-plugin/marketplace.json`：Claude Code marketplace 注册表（受 schema 校验）
 - `.agents/plugins/marketplace.json`：Codex marketplace 注册表
 - `.qoder-plugin/marketplace.json`：Qoder marketplace 注册表
@@ -74,9 +74,9 @@ plugins/<name>/
 
 ## Current Plugins
 
-| Plugin  | Description                                                                                              | Skills |
-| ------- | -------------------------------------------------------------------------------------------------------- | ------ |
-| **dyc** | Engineering workflow skills: think, check, hunt, ui, read, write, learn, health, forge, chrome, repowiki | 11     |
+| Plugin  | Description                                                                                                  | Skills |
+| ------- | ------------------------------------------------------------------------------------------------------------ | ------ |
+| **dyc** | Engineering workflow skills: think, check, hunt, ui, read, write, learn, health, forge, chrome, repowiki, pm | 12     |
 
 ## Code Style
 
@@ -154,7 +154,7 @@ plugins/<name>/
 - **when_to_use 用半角逗号**：校验器按 `,` 切分触发词，改成全角会把整串解析成一个关键词，触发区分度门失效
 - **目录不留空**：技能目录下只在有文件时创建子目录
 - **技能不内嵌 agents/**：harness 通过带元信息（skills/mcps/tools）的专门工具加载子代理，技能内嵌 `agents/` 不会被加载；子代理是厂商扩展，用法看各厂商文档。persona brief 集中存放仓库根 `agents/`（见 `docs/agents.md`），技能运行时不依赖它们
-- **submodule 同步**：vendor/ 改动后更新 `SYNC.md` 中的 SHA 和日期，submodule pointer 与 SYNC.md 一起提交
+- **submodule 同步**：`vendor/upstash/context7` 指针更新后在 `SYNC.md` 记录 SHA 和日期，一起提交
 - **commit message 格式**：Conventional Commits，`<type>(<scope>): <subject>`，commit-msg hook 强制校验
 - **`projects/` 目录被 gitignore**：不要在 `projects/` 下存放需要提交的内容
 
@@ -201,12 +201,6 @@ plugins/<name>/
 3. 按需添加 `references/`、`scripts/` 子目录
 4. 运行 `vpx tsx plugins/dyc/skills/forge/scripts/validate-skill.ts plugins/<name>/skills/<skill-name>` 确认七门全绿
 5. 运行 `vp run lint` 确认风格合规
-
-### 同步上游 vendor
-
-1. `git submodule update --remote vendor/<name>`
-2. Diff 新上游状态与 `SYNC.md` 中记录的 SHA
-3. 更新 `SYNC.md` 的 SHA 和日期，一起提交
 
 ### 校验全仓库
 

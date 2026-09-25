@@ -1,6 +1,6 @@
 # evals/ — 三层行为评测设施
 
-评测对象:`plugins/dyc/skills/` 下 11 个技能。全部产物在本目录,不改技能本体。
+评测对象:`plugins/dyc/skills/` 下 12 个技能。全部产物在本目录,不改技能本体。
 报告入口:`REPORT.md`。本文件说明每层怎么跑、fixture 怎么重建、结果怎么读、多少算过。
 
 入库范围:`cases/`、`fixtures/`、`results/`、`tests/`、各 `.py`、`REPORT.md`、本文件入库;
@@ -12,7 +12,7 @@
 
 | 层                      | 测什么                                                     | 脚本 / 入口                                           | 产物                                                | 通过线                                                                 |
 | ----------------------- | ---------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------- |
-| **Tier 0** 静态触发面   | 11 个 `when_to_use` 两两字面重叠                           | `python scripts/check-trigger-jaccard.py`             | 终端打印                                            | worst pairwise Jaccard **< 0.5**                                       |
+| **Tier 0** 静态触发面   | 12 个 `when_to_use` 两两字面重叠                           | `python scripts/check-trigger-jaccard.py`             | 终端打印                                            | worst pairwise Jaccard **< 0.5**                                       |
 | **Tier 2** 触发路由     | 126 条 prompt(76 positive + 50 negative)语义 / 词面 top-1  | `python evals/lexical_router.py`                      | `results/lexical-routing.json`                      | 语义判定以 `results/tier2-routing.md` 为 ground truth;词面仅作加固参考 |
 | **Tier 3** 行为抽样     | hunt / check / write 各 baseline + 压力变体,6 次子代理执行 | `python evals/run_tier3.py` + `python evals/grade.py` | `runs/<skill>-<variant>/`、`results/grading-*.json` | 每条期望 PASS/FAIL,压力变体核心契约必须全守住                          |
 | **Tier 1** 弱模型可读性 | think / check 逐句照做视角                                 | 人工审查                                              | `results/tier1-readability.md`                      | BLOCKER=0                                                              |
@@ -43,7 +43,7 @@ python evals/lexical_router.py
 ```
 
 重写 `results/lexical-routing.json`(126 条,含 top-3 得分)。description 由 `load_descriptions()`
-从 11 个 SKILL.md 的 frontmatter **现读**,无内嵌副本——改 description 即生效,不存在"改了就忘
+从 12 个 SKILL.md 的 frontmatter **现读**,无内嵌副本——改 description 即生效,不存在"改了就忘
 同步"的窗口。早期版本曾手抄副本,结果 forge 的全角冒号被抄成半角,正是这次重构消灭的漂移。
 
 读法:

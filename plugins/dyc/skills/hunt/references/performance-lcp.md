@@ -1,8 +1,8 @@
 # LCP and Page-Load Performance Debugging
 
-Load when the symptom is slow page load, poor Core Web Vitals, or "the main content takes too long to appear", and a live browser is available through chrome-devtools-mcp tools or its CLI.
+Trace-driven LCP and page-load performance debugging with a live browser (chrome-devtools-mcp tools or its CLI).
 
-Largest Contentful Paint (LCP) is the time from navigation start until the largest image or text block renders in the viewport. Good: ≤2.5s; needs improvement: 2.5–4.0s; poor: >4.0s (at the 75th percentile of visits). On 73% of mobile pages the LCP element is an image.
+LCP thresholds: good ≤2.5s, needs improvement 2.5–4.0s, poor >4.0s, measured at the 75th percentile of visits.
 
 ## The Four Subparts
 
@@ -21,7 +21,7 @@ Common pitfall: optimizing one subpart without measuring the others. If render d
 
 ## What counts as the LCP element
 
-`<img>` (first frame for animated content), `<image>` inside SVG, `<video>` (poster load or first frame, whichever is earlier), elements with `url()` background images, and block-level text containers. Chromium excludes opacity-0 elements, full-viewport covers, and low-entropy placeholders. Size is measured by visible area (intrinsic size for images when smaller); margin, padding, and borders do not count.
+`<img>` (first frame for animated content), `<image>` inside SVG, `<video>` (poster load or first frame, whichever is earlier), elements with `url()` background images, and block-level text containers. Chromium excludes opacity-0 elements, full-viewport covers, and low-entropy placeholders.
 
 ## Debugging Workflow
 

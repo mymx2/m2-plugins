@@ -1,5 +1,5 @@
 <!-- Generated from spec.mdx + spec-config.ts | version: alpha -->
-<!-- Regenerate upstream with `bun run spec:gen`; in this repo, sync against `npx -p @google/design.md designmd spec` (last synced: @google/design.md v0.4.0). -->
+<!-- Regenerate upstream with `bun run spec:gen`; in the source repository, sync against `npx -p @google/design.md designmd spec` (last synced: @google/design.md v0.4.0). -->
 
 # DESIGN.md Format
 

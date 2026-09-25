@@ -67,7 +67,7 @@ For a significant interface, don't settle for the first idea. Spin up parallel d
 - Optimise for the most common caller (make the default case trivial).
 - Design around ports & adapters for cross-seam dependencies.
 
-Compare candidates on **depth** (leverage at the interface), **locality** (where change concentrates), and **seam placement**. Then recommend one, with reasoning — and propose a hybrid if elements combine well. Be opinionated; the user wants a strong read, not a menu. (This is the design-side analogue of the multi-perspective plan pattern in the parent skill.)
+Compare candidates on **depth** (leverage at the interface), **locality** (where change concentrates), and **seam placement**. Then recommend one, with reasoning — and propose a hybrid if elements combine well. Be opinionated; the user wants a strong read, not a menu. (This is the design-side analogue of Multi-Perspective Plan Design in `SKILL.md`; the parent skill's version is canonical for plan-level decisions.)
 
 ## Red Flags
 

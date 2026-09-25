@@ -1,10 +1,8 @@
 # Browser Debugging with DevTools
 
-Load when hunting a bug that runs in a browser — layout/styling, console errors, network, or performance. Gives the agent eyes into the live browser instead of guessing at runtime.
+In-browser debugging actions for bugs that run in a browser. Gives the agent eyes into the live browser instead of guessing at runtime.
 
-## Setup
-
-Add the `chrome-devtools` MCP server (`.mcp.json`): `npx -y chrome-devtools-mcp@latest --isolated`. Use the dedicated/isolated profile for testing; `--autoConnect` only when you genuinely need logged-in state, otherwise avoid attaching to the user's real browser profile. (The chrome skill documents the default persistent-profile setup; this reference recommends `--isolated` so debugging never touches real browsing state.)
+Browser mechanics (server config, profile, CLI) belong to the chrome skill; this file covers only the debugging actions after you have a browser handle.
 
 ## The DevTools Debugging Workflow
 
@@ -13,16 +11,16 @@ Add the `chrome-devtools` MCP server (`.mcp.json`): `npx -y chrome-devtools-mcp@
 2. INSPECT   — console errors? DOM? computed styles? network? a11y tree?
 3. DIAGNOSE  — compare actual vs expected; is it HTML, CSS, JS, or data?
 4. FIX       — implement the fix in source
-5. VERIFY    — reload, screenshot (compare with step 1), confirm console clean, run tests
+5. VERIFY    — reload, screenshot (compare with step 1), confirm the symptom-related console output is gone, run tests
 ```
 
 For network issues: capture → check URL/method/headers/payload/status/timing → diagnose (4xx client, 5xx server, CORS origin, timeout payload, missing request) → fix & verify.
 
-For performance issues: **BASELINE** (record a performance trace of the current behavior) → **IDENTIFY** (LCP, CLS, INP, long tasks > 50ms, unnecessary re-renders) → **FIX** the specific bottleneck → **MEASURE** (record another trace, compare against the baseline). Keep/revert follows the decision table in the `check` skill's performance checklist — neutral is a revert.
+Page-load performance issues route to `performance-lcp.md`; this section covers only interactive-phase performance (long tasks, re-render) trace discipline: record a baseline trace of the current behavior first, record another after the fix, then keep/revert per the decision table in the check skill's performance checklist — neutral means revert.
 
-## Console Standards
+## Console 输出与症状的相关性
 
-A production-quality page has **zero** console errors and warnings. ERROR = uncaught exceptions, failed network, component warnings, security warnings; WARN = deprecations, performance, a11y; LOG = debug output. Fix warnings before shipping.
+诊断时先区分与症状相关的 console 输出和背景噪音；与根因无关的 warning 不属于本次修复范围。
 
 ## Security Boundaries
 

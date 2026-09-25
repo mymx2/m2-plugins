@@ -1,9 +1,5 @@
 # Rendering Bug Debug Reference
 
-## Rendering Bug Mode
-
-Activate when: "PDF looks wrong", "page break issue", "font not rendering", broken PDF output, print layout wrong.
-
 Static analysis first (CSS review), then reproduce if needed.
 
 ### WeasyPrint

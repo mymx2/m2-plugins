@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Collect agent configuration data for health audit.
+# Collect agent configuration data for health audit (POSIX entry point; the
+# Windows equivalent is run-health.ps1, which dispatches to the same helpers).
 # Outputs labeled sections for each data source.
-# Run from any directory; uses pwd as the project root.
+# Usage: collect-data.sh [audit-hint] [summary|deep] — run from the root of the
+# project being audited; uses pwd as the project root.
 #
 # Known failure modes (for interpreting (unavailable) output):
 #   trusted Python missing  -> conversation, MCP/hooks/allowedTools, and skill-security sections print "(unavailable)"

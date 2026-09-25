@@ -20,21 +20,7 @@ Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工�
 1. 判断任务类型：安装（add）、试用（use）、查找（find）、列出（list）、更新（update）、移除（remove）、创建模板（init）。
 2. 在下文对应章节定位命令与参数表，按需组合来源格式、范围（`-g`）、目标 agent（`-a`）。
 3. CI/CD 或脚本场景加 `-y` 跳过交互确认。
-4. 项目里已有 `skills` 目录导致 `npx` 命名冲突时，改用 `pnpx` 或 `vpx`。
-5. 执行后运行 `npx skills list` 验证技能落在预期位置（项目级还是全局）。
-
----
-
-## 何时使用此技能
-
-当用户出现以下情况时，请使用此技能：
-
-- 需要安装、更新、移除或查找技能
-- 想了解 Skills CLI 的某个命令用法
-- 想创建自定义 SKILL.md 技能文件
-- 遇到技能相关的错误或问题
-- 想知道支持哪些智能体
-- 想在 CI/CD 中自动化技能管理
+4. 执行后运行 `npx skills list` 验证技能落在预期位置（项目级还是全局）。
 
 ---
 
@@ -289,7 +275,7 @@ Agent 执行该 skill 时的指令
 
 **可选字段：**
 
-- `metadata.internal`：设为 `true` 时隐藏 skill（仅在 `INSTALL_INTERNAL_SKILLS=1` 时可见）
+- `metadata.internal`：设为 `true` 时隐藏 skill（仅在 `INSTALL_INTERNAL_SKILLS=1` 时可见）。此为 Skills CLI 私有扩展，非 Agent Skills Spec 标准字段。
 
 ```markdown
 ---
@@ -361,7 +347,6 @@ CLI 会在仓库中以下位置搜索技能：
 | "No skills found"   | 确保仓库包含有效的 `SKILL.md`（frontmatter 需有 `name` 和 `description`） |
 | 技能未在 agent 加载 | 检查安装路径是否正确、frontmatter 是否为有效 YAML                         |
 | 权限错误            | 确保对目标目录有写入权限                                                  |
-| `npx` 命令报错      | 如果项目中有 `skills` 目录导致命名冲突，改用 `pnpx` 或 `vpx`              |
 
 ---
 

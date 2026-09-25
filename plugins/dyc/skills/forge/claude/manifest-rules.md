@@ -1,6 +1,6 @@
 # Claude Code: .claude-plugin/ 约定
 
-Claude Code 插件的 manifest 和组件组织速查卡。基于 `vendor/anthropics/claude-plugins-official/plugins/plugin-dev/` 蒸馏。
+Claude Code 插件的 manifest 和组件组织速查卡。
 
 ## 清单文件
 
@@ -136,7 +136,7 @@ Claude Code 通过 `agents/` 目录自动发现子 Agent。打包时注意：
 
 > **原则**：Claude Code 大部分组件通过目录自动发现，manifest 字段较少。约束主要来自实际路由和展示需求，而非平台硬性限制。
 
-## Skill 编写规则（来自 addyosmani/agent-skills 实践）
+## Skill 编写规则
 
 此表与三个厂商目录的 manifest-rules 同步，改动需三处一起。
 

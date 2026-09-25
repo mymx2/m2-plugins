@@ -55,4 +55,4 @@ Resolving a sharp task clears the fog ahead of it; graduate whatever's now speci
 
 ## Rationalizations
 
-"I'll figure it out as I go" → that's how you end up with a tangled mess. "The tasks are obvious" → write them down anyway; explicit tasks surface hidden dependencies. "Planning is overhead" → planning is the task; implementation without a plan is just typing.
+"I'll decompose during implementation" → planning slices tasks within a spec; module boundaries and dependency direction decided mid-implementation are decided implicitly, with no review point.

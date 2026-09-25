@@ -15,7 +15,7 @@
 | `repository`  | string   |      | 源码仓库 URL                                                                  |
 | `license`     | string   |      | SPDX 标识符推荐                                                               |
 | `keywords`    | string[] |      | 搜索和发现标签                                                                |
-| `extensions`  | object   |      | 厂商特定数据，见 [extensions-pattern.md](extensions-pattern.md)               |
+| `extensions`  | object   |      | 厂商特定数据，见 extensions-pattern reference                                 |
 
 **闭包约束**：除上述字段外，`plugin.json` 不允许任何其他顶层字段。未知字段会被报告并忽略（不致命），但客户端不会对未知字段赋予语义。厂商特有数据必须放在 `extensions` 下。
 
@@ -28,7 +28,7 @@
 }
 ```
 
-推荐完整 manifest（从零创建时使用此模板，按需裁剪）：
+推荐完整 manifest（从零创建时使用此模板，按需裁剪；`extensions` 的厂商 JSON 示例见 extensions-pattern reference，此处不重复）：
 
 ```json
 {
@@ -41,11 +41,7 @@
   "repository": "https://github.com/org/repo",
   "license": "MIT",
   "keywords": ["keyword1", "keyword2"],
-  "extensions": {
-    ".claude-plugin": { "init": ".claude-plugin/init.ts" },
-    ".qoder-plugin": { "init": ".qoder-plugin/init.ts", "skills": "./skills/" },
-    ".codex-plugin": { "init": ".codex-plugin/init.ts" }
-  }
+  "extensions": {}
 }
 ```
 
@@ -70,7 +66,6 @@
 ```json
 { "command": "./bin/server" }      // ✅ 合法
 { "command": "../bin/server" }     // ❌ 逃出根目录
-{ "command": "data" }              // ❌ 非 ./ 开头的路径
 ```
 
 ## 组件发现
@@ -85,7 +80,7 @@
 - **缺失 ≠ 错误**：组件位置不存在时，客户端不报错，继续加载其他组件。
 - **类型错误 = 该组件无效**：如 `skills` 不是目录或 `mcp.json` 不是文件，跳过该组件类型。
 - **不递归搜索**：仅扫描 `skills/` 的直接子目录。
-- **不声明不存在的组件**：manifest 或 extensions 中声明的组件路径（如 `skills: "./skills/"`、`rules: "./rules/"`）对应目录或文件必须实际存在。声明了但不存在不会致命（客户端跳过），但属于意图不一致，校验器会报 warning。
+- **不声明不存在的组件**：规则正本见 extensions-pattern reference 的 Hard Rules；声明了但组件路径不存在不会致命（客户端跳过），但属于意图不一致，校验器会报 warning。
 
 ## Skills 组件
 
@@ -99,8 +94,8 @@ skills/
     │   └── rollback.sh
     ├── references/
     │   └── runbook.md
-    ├── examples/              # 可选 — 用法示例
-    └── schemas/               # 可选 — JSON Schema 定义
+    ├── examples/              # 可选
+    └── schemas/               # 可选
 ```
 
 不合规范的 skill 被跳过，不影响其他组件加载。
@@ -164,7 +159,7 @@ skills/
 - 非对象的 `extensions` 会被报告并忽略。
 - 客户端忽略自己不认识的命名空间，不校验其内容。
 
-详见 [extensions-pattern.md](extensions-pattern.md)。
+详见 extensions-pattern reference。
 
 ## 客户端扩展目录
 
@@ -191,54 +186,40 @@ my-plugin/
 my-plugin/
 ├── plugin.json                 # 必填 — 唯一事实源
 ├── mcp.json                    # 可选 — MCP 服务器配置
-├── README.md                   # 推荐 — 插件说明
-├── LICENSE                     # 推荐 — 许可证
-├── CHANGELOG.md                # 可选 — 变更日志
-│
-├── skills/                     # 可选 — 便携技能（仅一级子目录被发现）
-│   └── <skill-name>/
-│       ├── SKILL.md            #   必填 — 技能定义
-│       ├── references/         #   可选 — 参考文档
-│       ├── scripts/            #   可选 — 可运行脚本
-│       ├── examples/           #   可选 — 用法示例
-│       ├── schemas/            #   可选 — JSON Schema
-│       └── assets/             #   可选 — 静态资源
-│
-├── hooks/                      # 可选 — 客户端钩子（非便携）
-├── agents/                     # 可选 — 代理定义（非便携，厂商扩展）
-├── commands/                   # 可选 — 命令定义（非便携）
-├── rules/                      # 可选 — 规则文件（非便携）
-├── bin/                        # 可选 — 可执行文件
-├── canvases/                   # 可选 — Canvas 组件
-├── workflows/                  # 可选 — 工作流定义
-├── assets/                     # 可选 — 插件级静态资源
-├── scripts/                    # 可选 — 插件级脚本
-│
-└── .<vendor>-plugin/           # 衍生 — 厂商适配目录（init.ts 生成）
+├── README.md                   # 推荐
+├── LICENSE                     # 推荐
+├── CHANGELOG.md                # 可选
+├── skills/<skill-name>/        # 可选 — 便携技能
+│   ├── SKILL.md                #   必填
+│   ├── references/             #   可选
+│   ├── scripts/                #   可选
+│   ├── examples/               #   可选
+│   ├── schemas/                #   可选
+│   └── assets/                 #   可选
+├── hooks/                      # 可选 — 非便携
+├── agents/                     # 可选 — 非便携
+├── commands/                   # 可选 — 非便携
+├── rules/                      # 可选 — 非便携
+├── bin/                        # 可选
+├── canvases/                   # 可选
+├── workflows/                  # 可选
+├── assets/                     # 可选
+├── scripts/                    # 可选
+└── .<vendor>-plugin/           # 衍生 — 厂商适配目录
     ├── init.ts
     └── plugin.json
 ```
 
 ## 代理（agents）
 
-v1 便携契约只定义 skills 和 MCP servers；agents 与 commands、hooks、rules 一样属于厂商扩展。各 harness 通过带元信息（skills、mcps、tools）的专门工具加载和调度代理，技能内嵌 `agents/` 不会被加载为子代理。代理的声明与使用方式以各厂商文档为准。
+v1 便携契约只定义 skills 和 MCP servers；agents 属于厂商扩展，各 harness 通过带元信息的专门工具加载和调度代理，技能内嵌 `agents/` 不会被加载。代理的声明与使用方式以各厂商文档为准。
 
 ## Canvas 组件
 
-`canvases/` 是 Agent Plugins Spec 标准布局中的可选目录，用于交互式可视化界面。
+`canvases/` 是可选目录，用于交互式可视化界面。
 
-**何时使用 Canvas**：
-
-- 用户明确要求交互式 UI
-- 插件产出需要可视化检视的报告、图表、仪表盘、日志摘要、设计契约、工作流状态
-
-**何时不使用 Canvas**：
-
-- 不做装饰性落地页或通用营销 UI
-- 插件的核心价值不依赖可视化
-- 没有用户主动要求时不主动创建
-
-Canvas 是锦上添花的组件，不是默认输出。创建前确认用户确实需要可视化交互。
+**何时使用**：用户明确要求交互式 UI，或插件产出需要可视化检视的报告、图表、仪表盘。
+**何时不使用**：不做装饰性落地页或通用营销 UI；没有用户主动要求时不主动创建。
 
 ## 便携 vs 非便携组件
 

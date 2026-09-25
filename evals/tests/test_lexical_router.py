@@ -85,9 +85,9 @@ class TestZeroScoreTieBreak:
         assert scored[0][1] == sorted(DESCRIPTIONS)[-1]
         assert scored[0][0] == pytest.approx(0.0)
 
-    def test_descriptions_has_11_skills(self):
-        # load_descriptions 必须与插件目录的 11 个技能一一对应
-        assert len(DESCRIPTIONS) == 11
+    def test_descriptions_has_12_skills(self):
+        # load_descriptions 必须与插件目录的 12 个技能一一对应
+        assert len(DESCRIPTIONS) == 12
         assert set(DESCRIPTIONS) == {
             "think",
             "check",
@@ -100,6 +100,7 @@ class TestZeroScoreTieBreak:
             "forge",
             "chrome",
             "repowiki",
+            "pm",
         }
 
     def test_think_description_contains_triage_cue(self):

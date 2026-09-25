@@ -1,6 +1,6 @@
 # Native App Freeze Mode
 
-Loaded from `hunt` when a desktop or mobile native app reports beachball, not responding, tab-switch freeze, first-open lag, idle wake stall, overlay lockup, or a screenshot shows a frozen app.
+Evidence discipline for desktop or mobile native app freeze hunts.
 
 Evidence to collect before changing code:
 

@@ -4,13 +4,11 @@ Loaded from `check` Mode Picker for "is this worth a release", for plan-executio
 
 ## Plan Execution Mode
 
-Activate when the user's message starts with "Implement the following plan", "按计划实施", "按照计划", "整", "可以干", "直接改" followed by a plan body, or links to a `/think` output.
-
 In this mode, do not run a code review. Instead:
 
 1. State which plan is being executed (first heading or summary line).
 2. Check for obvious repo drift: run `git status --short --branch -uall` and skim any changed files that contradict the plan. If drift makes the plan unsafe, name the specific conflict and stop.
-3. After all items are done, run the project's verification command.
+3. After all items are done, run the project's verification command, following the fallback ladder in `SKILL.md` (Verification): project-named command first, auto-detected script second, explicit evidence limits when neither exists.
 4. Transition automatically into Ship / Release Follow-through below if the project context or current thread indicates review-then-ship.
 
 ## Default Continuation (review-then-ship)
@@ -19,7 +17,7 @@ When the project's `AGENTS.md` or the current thread explicitly asks to "commit 
 
 ## Release Worthiness Analysis
 
-Activate when the user asks "深入分析 X 是不是值得发新版本", "is this worth a new release", "值不值得发版", or similar.
+This is the canonical flow for the release-worthiness verdict and ship follow-through; `shipping.md` holds the broader launch-readiness checklists (staged rollout, error budgets, rollback) beyond this gate.
 
 Classify every commit since the last published tag (the tag is the baseline, not a local VERSION file), then output:
 
@@ -31,8 +29,6 @@ Classify every commit since the last published tag (the tag is the baseline, not
 If the verdict is "release", offer to transition into Ship mode.
 
 ## Ship / Release Follow-through
-
-Activate when the user asks to commit, tag, release, publish, push, reply on an issue/PR, or close an issue after a change is ready.
 
 Treat an explicitly authorized chain such as review, fix, verify, commit, push, and public follow-through as one delivery ledger. Do not return control between its internal stages while safe authorized work remains. A local commit is not completion when push was included, and a no-op push is not completion when intended local changes remain uncommitted. Do not create an empty commit when the intended scope is already clean; prove the clean/up-to-date state instead.
 

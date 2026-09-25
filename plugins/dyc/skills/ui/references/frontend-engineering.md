@@ -18,11 +18,11 @@ Load `design-reference.md` for the full ban tables (Common Traps, Absolute Bans,
 
 ## Accessibility (WCAG 2.1 AA)
 
-Full checklist: `accessibility-checklist.md`. Engineering-side minimums: every interactive element focusable and operable (`<button>`, not `<div onClick>`); focus managed on content change; `role="status"` for dynamic messages.
+The WCAG 2.1 AA checklist is single-sourced in the `accessibility-checklist` reference; apply it before handoff.
 
 ## Responsive & States
 
-Mobile-first, then expand; test at 320/768/1024/1440. Include skeleton loading (not spinners for content), empty states, error states, and optimistic updates for perceived speed.
+Mobile-first, then expand; test at 320/768/1024/1440. The loading/error/empty/skeleton contract is canonical in `ui-state-completeness.md`; perceived speed can still use optimistic updates.
 
 ## Red Flags
 

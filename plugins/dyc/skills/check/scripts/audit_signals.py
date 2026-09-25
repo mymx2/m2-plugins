@@ -8,7 +8,7 @@ Each block ends with `status: PASS|WARN|FAIL|N/A` so the LLM driving the
 Pure stdlib. Read-only. Exits 0 even on WARN/FAIL so the harness does
 not confuse "finding surfaced" with "script broken".
 
-Run as: python3 skills/check/scripts/audit_signals.py --root <path>
+Run as: python3 <skill-base-dir>/scripts/audit_signals.py --root <path>
 """
 
 from __future__ import annotations
@@ -47,8 +47,8 @@ EXCLUDED_DIRS = {
     ".gradle",
 }
 
-# Kept identical with skills/health/scripts/check_maintainability.py by
-# tests/python/test_auditor_alignment.py (thresholds stay per-product).
+# Kept identical with the health skill's check_maintainability script;
+# thresholds stay per-product.
 SOURCE_EXTS = {
     ".bash",
     ".c",
@@ -134,12 +134,11 @@ CLI_CORE_BUCKETS = (
 )
 
 
-# The file-walk helpers below are deliberately duplicated in
-# skills/health/scripts/check_maintainability.py. Both scripts ship
-# standalone (see packaging.allowlist) and run inside an arbitrary target
-# project, so they import only stdlib. Do not hoist them into a shared
-# scripts/ module: it is dev-only, not on the ship allowlist, and would
-# couple a standalone tool to the install layout.
+# The file-walk helpers below are deliberately duplicated in the health
+# skill's check_maintainability script. Both scripts ship standalone and
+# run inside an arbitrary target project, so they import only stdlib. Do
+# not hoist them into a shared module: it would couple a standalone tool
+# to the install layout.
 def is_excluded(path: Path, root: Path) -> bool:
     try:
         parts = path.relative_to(root).parts

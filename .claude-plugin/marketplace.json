@@ -11,12 +11,12 @@
     {
       "name": "dyc",
       "version": "1.0.6",
-      "description": "Eleven engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, and repowiki.",
+      "description": "Twelve engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, repowiki, and pm.",
       "homepage": "https://github.com/mymx2/m2-plugins",
       "source": "./plugins/dyc",
       "license": "MIT",
       "category": "development",
-      "keywords": ["mymx2", "dyc", "waza", "skills", "engineering"]
+      "keywords": ["mymx2", "dyc", "skills", "engineering"]
     }
   ]
 }
