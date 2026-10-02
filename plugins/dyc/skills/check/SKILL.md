@@ -118,12 +118,13 @@ Finding titles stand alone and lead with the consequence. Counts, absences, and 
 
 Beyond correctness, run the domain checklists when the diff touches the relevant surface:
 
-| Diff touches                                                                              | Load checklist                          |
-| ----------------------------------------------------------------------------------------- | --------------------------------------- |
-| User input, auth, data storage, external integrations, uploads, payments, PII, LLM output | `references/security-checklist.md`      |
-| Logic, bug fixes, behavior changes, or new features                                       | `references/test-checklist.md`          |
-| Load time, interaction, data fetching, queries, bundle                                    | `references/performance-checklist.md`   |
-| Production features, I/O, retries, queues, cross-service calls                            | `references/observability-checklist.md` |
+| Diff touches                                                                                 | Load checklist                                                                                                                                                                     |
+| -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User input, auth, data storage, external integrations, uploads, payments, PII, LLM output    | `references/security-checklist.md`                                                                                                                                                 |
+| Logic, bug fixes, behavior changes, or new features                                          | `references/test-checklist.md`                                                                                                                                                     |
+| Load time, interaction, data fetching, queries, bundle                                       | `references/performance-checklist.md`                                                                                                                                              |
+| Production features, I/O, retries, queues, cross-service calls                               | `references/observability-checklist.md`                                                                                                                                            |
+| Pages, components, styles, or DESIGN.md tokens (`.vue` `.tsx` `.css` `tailwind.config` etc.) | Route to `/ui` if available for a rendered-surface visual review; otherwise review rendered interaction states yourself (hover cursor, focus ring, tap targets, responsive states) |
 
 Name which checklists you ran in the sign-off and mark each green/blocked. If none apply, state `conformance: n/a`. A clean pass is a valid result.
 
@@ -207,7 +208,7 @@ user-visible delta: none / [entry, UI, copy, behavior added, removed, or changed
 review depth:     quick / standard / deep
 hard stops:       N found, N fixed, N deferred
 sibling sweep:    N same-shape sites checked, N fixed / none found / not applicable
-checklists:       [security, test] green/blocked or n/a
+checklists:       [security, test, ui] green/blocked or n/a
 new tests:        N
 public actions:   replied #N, closed #N, reactions done / none pending
 doc debt:         none / AGENTS.md needs X / rules need Y
