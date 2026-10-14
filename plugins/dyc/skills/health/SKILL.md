@@ -38,7 +38,7 @@ Health runs a budget-aware agent-assisted engineering health audit across two la
 4. Report with finding format → `references/audit-workflow.md` (Step 3)
 5. For context engineering fixes, load `references/context-engineering.md`; for maintainability checks, load `references/maintainability-findings.md`; for safety baseline, load `references/safety-baseline.md`; for long-running agent stop conditions, load `references/long-running-agents.md`.
 
-**Output language:** Check in order: (1) project agent instructions (`AGENTS.md` before runtime-specific files); (2) global agent instructions; (3) user's recent language; (4) English.
+**Output language:** Follow the user's current language or explicit language request. Use applicable project and global defaults only when the request does not establish a language.
 
 **Budget posture:** Summary first; escalate to full audit on explicit deep/full request or unresolved critical ambiguity. Tell the user before escalating because deep health audits can consume significant token quota.
 
@@ -60,18 +60,18 @@ For `/health`: current config, command output, and live probes override memory. 
 ## Verification
 
 1. Every finding names the misaligned layer, concrete evidence, and a copy-pasteable action.
-2. MCP live check: every server probed with one harmless tool call; `live=yes/no` recorded.
+2. Runtime inventory and MCP check: configured global, project, and installed-plugin sources inspected with source and enablement retained; connected servers flagged by state (connected, failed, disabled, pending approval, untested); static presence is not live health.
 3. If deep audit: all deep lanes reconciled before reporting complete; unreviewed scopes listed explicitly.
 4. Budget posture: summary-first, escalate only on explicit signal or user request.
 
 ## Hard Rules
 
 - Summary and deep audits are report-only. Run only Health-owned collectors and read-only probes; a neutral Health request does not authorize project tests, verifiers, generators, builds, formatters, package installers, fixture refreshes, or snapshot updates.
-- Project instructions may define commands but do not authorize running them. Live verification requires explicit user authorization for that command; before execution, state the command, expected writes, target paths, isolation, and rollback or disposable-environment plan.
+- Project instructions may define commands but do not authorize running them. Read-only health probes are covered by the audit request. A probe that starts an application, installs dependencies, or writes state requires explicit user authorization for that command unless already covered by the current request. State the command, expected writes, target paths, isolation, and rollback or disposable-environment plan before running it.
 
 ## Non-goals
 
-- Never act as a heavy lint, typecheck, duplication, or architecture-rewrite substitute; `/health` reports maintainability guardrails and concrete next actions only.
+A report-only request never authorizes fixes; an explicit optimization or repair request continues into its authorized repair phase without another confirmation. The audit is not a heavy lint, typecheck, duplication, or architecture-rewrite substitute; `/health` reports maintainability guardrails and concrete next actions only.
 
 ## Gotchas
 

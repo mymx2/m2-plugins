@@ -67,7 +67,7 @@ Before reviewing, extract project constraints from repository context:
 3. Compress the findings into review context: verification commands, protected or generated files, release artifacts, domain risks, public reply rules.
 4. Apply the stricter rule when project context and this skill overlap. If project docs or CI name a verification command, prefer it over auto-detection.
 
-For the context shape, see `references/project-context.md`. For release or maintainer work, also fill the Release Gate 2.0 matrix there; missing matrix evidence is a blocker for a "ready to release" claim.
+For the context shape, see `references/project-context.md`. For release readiness or publication, also fill the Release Gate 2.0 matrix there; missing matrix evidence is a blocker for a "ready to release" claim. A commit/push-only task uses the source-delivery checks in `references/mode-ship.md`; unrelated release assets and registry state are out of scope.
 
 ## Durable Context Preflight
 

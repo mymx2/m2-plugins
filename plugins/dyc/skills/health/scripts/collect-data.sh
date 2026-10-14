@@ -10,7 +10,6 @@
 #   settings.local.json absent -> hooks, MCP, allowedTools all show "(unavailable)"; normal for global-settings-only projects
 #   MEMORY.md path          -> built via sed on pwd; unusual chars produce wrong project key; verify manually if (none) seems wrong
 #   Conversation scope      -> summary scans 3 recent previous project files across Claude/Codex; deep streams all previous project files; every file modified in the live window is excluded
-#   MCP token estimate      -> assumes ~25 tools/server, ~200 tokens/tool; treat as directional, not precise
 set -euo pipefail
 
 P=$(pwd)
@@ -902,9 +901,9 @@ try:
         d = json.load(fh)
 except Exception:
     msg = '(unavailable: settings.local.json missing or malformed)'
-    print('=== hooks ===')
+    print('=== PROJECT-LOCAL hooks ===')
     print(msg)
-    print('=== MCP ===')
+    print('=== PROJECT-LOCAL MCP ===')
     print(msg)
     print('=== MCP FILESYSTEM ===')
     print(msg)
@@ -912,7 +911,7 @@ except Exception:
     print(msg)
     sys.exit(0)
 
-print('=== hooks ===')
+print('=== PROJECT-LOCAL hooks ===')
 hooks = d.get('hooks', {})
 if isinstance(hooks, dict):
     names = sorted(hooks.keys())
@@ -937,7 +936,7 @@ if isinstance(hooks, dict):
 else:
     print('hook_events: (unknown format)')
 
-print('=== MCP ===')
+print('=== PROJECT-LOCAL MCP ===')
 servers = d.get('mcpServers', d.get('enabledMcpjsonServers', {}))
 names = list(servers.keys()) if isinstance(servers, dict) else list(servers)
 count = len(names)
@@ -945,8 +944,7 @@ safe_names = [re.sub(r'[^A-Za-z0-9_.@+-]+', '_', str(name))[:80] for name in nam
 print(f'servers({count}):', ', '.join(safe_names))
 if count > 20:
     print('server_names_truncated:', count - 20)
-est = count * 25 * 200
-print(f'est_tokens: ~{est} (inventory estimate: 25 tools/server x 200 tokens/tool; actual loaded cost unknown)')
+print('coverage: project settings only; see RUNTIME CONFIGURATION for global sources')
 
 print('=== MCP FILESYSTEM ===')
 if isinstance(servers, list):
@@ -976,9 +974,9 @@ print('=== allowedTools count ===')
 print(len(d.get('permissions', {}).get('allow', [])))
 PYEOF
 else
-  echo "=== hooks ==="
+  echo "=== PROJECT-LOCAL hooks ==="
   echo "(unavailable)"
-  echo "=== MCP ==="
+  echo "=== PROJECT-LOCAL MCP ==="
   echo "(unavailable)"
   echo "=== MCP FILESYSTEM ==="
   echo "(unavailable)"
@@ -1035,7 +1033,17 @@ fi
 
 echo "[8/12] Conversation signals + extract..."
 CONVERSATION_AUDIT_SCRIPT="$(resolve_health_helper conversation_audit.py || true)"
-if [ -n "$CONVERSATION_AUDIT_SCRIPT" ] && [ -n "$PYTHON_BIN" ]; then
+if [ "$AUDIT_HINT" = "instructions" ]; then
+  # Out of scope, not unavailable: an instruction-and-config audit does not need
+  # session history, and calling a deliberate skip a coverage gap would train the
+  # reader to ignore real ones.
+  echo "=== CONVERSATION COVERAGE ==="
+  echo "(out of scope: instruction and config audit, session history not read)"
+  echo "=== CONVERSATION FILES ==="
+  echo "(out of scope)"
+  echo "=== CONVERSATION SIGNALS ==="
+  echo "(out of scope)"
+elif [ -n "$CONVERSATION_AUDIT_SCRIPT" ] && [ -n "$PYTHON_BIN" ]; then
   "$PYTHON_BIN" -I "$CONVERSATION_AUDIT_SCRIPT" "$CONVO_DIR" "$MODE" \
     --codex-root "$HOME/.codex/sessions" --project-root "$P"
 else

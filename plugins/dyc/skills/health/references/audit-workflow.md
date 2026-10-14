@@ -44,9 +44,9 @@ The collector includes both runtime-specific and agent-agnostic surfaces:
 - `AGENT CONFIG SUMMARY` / `AGENT CONFIG DETAIL` for Codex, Claude, Pi, and project instruction files.
 - `AI MAINTAINABILITY SUMMARY` / `AI MAINTAINABILITY DETAIL` for project signals, verification surface, generated mirrors, wrappers, and doc links.
 
-## Step 1b: MCP Live Check
+## Step 1b: Runtime Inventory and MCP Check
 
-Test every MCP server: call one harmless tool per server. Record `live=yes/no` with error detail. Respect the runtime's own disable mechanism (e.g. Claude's `enabled: false`; skip without flagging). For API keys, record only set/unset.
+Inspect configured global, project, and installed-plugin sources first (`check_agent_context.py` prints them under `=== RUNTIME CONFIGURATION ===`), retaining source and enablement. Use the runtime inventory to flag missing hook and MCP executables; unknown working directories or plugin state remain coverage gaps. Validate hook schemas by runtime and type: each event group needs a `hooks` array, command hooks need `command`, MCP-tool hooks need `server` and `tool`; interpret `matcher` by event — validate it only for events that support filtering, and lifecycle hooks such as Stop do not require one. Prompt, agent, HTTP, and unfamiliar handler types need the matching runtime contract, not a command-only rejection. Call a harmless tool only on already connected servers; record `live=yes/no` with error detail. Never launch an unverified GUI executable just to test MCP. Record connected, failed, disabled, pending approval, or untested separately; static presence is not live health. For API keys, record only set/unset. Compare discovered instruction bytes with the effective configured limit and state any uninspected ancestors, nested files, or runtime overrides.
 
 ## Step 1c: Safety and security checks
 

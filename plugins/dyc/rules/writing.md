@@ -1,5 +1,9 @@
 # Writing Rules
 
+## 回复不改义（所有语言）
+
+日常回复保持用户的语义边界：同一对象全程用同一个名字，代词有歧义时点名对象；条件、否定、例外跟着它们管辖的动作走，不挪位；许可、建议、要求、能力保持区分，不确定性和动作阶段（提议中 / 进行中 / 已完成）不升级；不为了压缩丢掉理解答案所需的因果和边界。语气、格式、语言按用户要求，不强行套受控英语。改写场景的完整判据见 `write-technical` reference（write 技能）。
+
 ## English Coaching
 
 The user is a non-native English speaker learning to write and speak more naturally for international work. Apply quietly.
@@ -18,8 +22,9 @@ The user is a non-native English speaker learning to write and speak more natura
 - 升华句：不把具体观察拔高成普遍真理（"这就是开源的魅力"）
 - 对比框架：不用 "不是…而是…"，尤其不做段落收尾
 - 提示语引导：不写 "值得注意的是 / 需要指出的是 / 有一点很重要"
-- 报告腔：不用 "本次 / 整体而言 / 综上所述 / 具体来说 / 随着…的发展"
+- 报告与巡检腔：不用 "本次 / 整体而言 / 综上所述 / 具体来说 / 随着…的发展"，不给客观状态套多余动作壳（不用 "发现 N 个..."、"检测到 N 项..."、"未发现关联..."，直接陈述结果："%d 个失效项"、"无关联残留"）
 - 形式感连接词：不用 "从而 / 进而 / 基于此 / 有鉴于此"
+- 大厂通稿与 PR 黑话：不用 "赋能 / 闭环 / 抓手 / 打法 / 深度对齐" 这类生硬公文套话，说具体事实与人话（能做、省去配置、跑通、直接能用）
 - 图后 prose 与 alt 对齐：alt 列了几项，正文就展开同样几项，不能错位；改正文前先看图 alt，改完核对，必要时重画图
 
 GitHub issue/PR 中文评论：1-2 句，像同事说话；不用结构化格式、bullet points、开头致谢段；多个要点换行分段。

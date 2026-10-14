@@ -7,7 +7,7 @@ A finding raised for the second time — by this review or by a prior review who
 After reviewing the diff, check whether it introduces invariants not yet captured in project docs:
 
 - New safety gate or path-guard rule → AGENTS.md
-- New UI constraint (layout rule, animation, overlay registration) → `.claude/rules/*.md`
+- New UI constraint (layout rule, animation, overlay registration) → the narrowest tracked project guidance reachable by the intended runtimes; use `.claude/rules/*.md` only when their entrypoints load it
 - New deploy/release step or artifact → AGENTS.md or `docs/`
 - New cross-file sync requirement (enum ↔ HTML anchors, Swift keys ↔ xcstrings) → AGENTS.md
 - One-off review reports or diagnostic snapshots should not become durable docs as-is; extract the stable rule into AGENTS/CLAUDE/rules/references and drop the stale report from the commit.
