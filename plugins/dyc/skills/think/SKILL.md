@@ -113,6 +113,6 @@ For approach design, pressure testing, multi-perspective design, validation, sim
 - **Not building**: explicit out-of-scope list
 - **Approach**: chosen option with rationale
 - **Key decisions**: 3-5 with reasoning
-- **Unknowns**: only items that are explicitly deferred with a stated reason and a clear owner. Not vague gaps. If an unknown blocks a decision, loop back before approval.
+- **Unknowns**: only items that are explicitly deferred with a stated reason, a clear owner, and the check that would resolve them. Not vague gaps. If an unknown blocks a decision, loop back before approval.
 
 If the user only approves the design, end with the plan. If implementation is requested, follow Implementation Handoff instead of asking them to repeat the request.

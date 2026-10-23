@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: unconfirmed-assumptions
+# 用例摘要，显示在用例列表与报告中。
+title: 未确认假设转为待确认问题与验证动作
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 think 在需求含未确认假设时，先摆出假设和验证动作，
+  不把假设当既定事实直接给出确定性方案。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    我们打算给所有 API 响应加 5 分钟本地缓存来降低数据库压力，
+    帮我出个落地方案，先别写代码。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - '缓存'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - '明确列出关键未确认假设（如哪些响应可缓存、可接受的陈旧窗口、写后读一致性）'
+    - '为每个关键假设给出验证动作或需要用户确认的问题'
+    - '给出单一推荐方向，并说明假设不成立时的回退或降级方案'
+    - '在用户批准前没有写实现代码'
+  pass_threshold: 0.75

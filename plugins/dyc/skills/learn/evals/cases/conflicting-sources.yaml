@@ -1,0 +1,46 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: conflicting-sources
+# 用例摘要，显示在用例列表与报告中。
+title: 冲突来源的结论标注置信度与信息缺口
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 learn 的证据纪律：两份来源对同一技术的效果给出相反结论时，
+  输出必须保留冲突、标注置信度、点明信息缺口，
+  不得把厂商数据当成普适事实。
+
+context:
+  # 用例运行前写入工作区的种子文件。
+  files:
+    'source-a.md': |
+      # 厂商 Benchmark：CacheBoost 首屏优化
+      启用 CacheBoost 后，首屏时间平均下降 40%。
+      测试环境：旗舰机型，实验室千兆网络，冷启动各测 20 次。
+    'source-b.md': |
+      # 独立测试：CacheBoost 在中低端安卓设备上的表现
+      同一版本 CacheBoost 在中低端安卓机上首屏时间上升约 10%。
+      原因：额外的缓存校验占用主线程，低端机闪存写入也更慢。
+      测试环境：3 台 2021 年前后的中端机，4G 网络，样本各 30 次。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    只基于当前目录的 source-a.md 和 source-b.md，给我一段可以发出去的结论：
+    CacheBoost 到底能不能改善首屏？不要上网查，也不要补充材料里没有的数据。
+    结论直接放在回复里，不用另存文件。
+
+# 零成本预检；不通过则跳过 judge。
+expect:
+  must_contain:
+    - 'CacheBoost'
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  # judge 端点由 OPENAI_BASE_URL/OPENAI_API_KEY 解析（本机可用 localhost:8964 代理）。
+  model: openai/kimi-k3-1
+  criteria:
+    - '明确指出两份来源结论冲突，并交代各自测试环境（旗舰机 vs 中低端机）'
+    - '结论带有适用条件或置信度标注，没有把 40% 当成普适事实'
+    - '点明信息缺口或下一步验证（如更多机型、真实网络、样本量）'
+    - '没有引入两份材料之外编造的数据或来源'
+  pass_threshold: 0.75

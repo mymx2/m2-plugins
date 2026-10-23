@@ -149,6 +149,15 @@ When it reads clean from start to finish, the draft is ready for the user to pub
 
 The artifact is the mode's exit from the table above. Report the saved path when files were written and complete the authorized handoff; publication requires an explicit request as stated in Hard Rules.
 
+Close the artifact with a conclusion block, one line per field:
+
+- Sources: the primary sources the conclusion rests on, with URL or path.
+- Confidence: high / medium / low per the confidence grading, and why.
+- Gaps: claims that remain unverified and the evidence that would settle them.
+- Next step: the check or source to collect before acting on the conclusion.
+
+An unlabeled low-confidence claim or an unnamed gap blocks publish readiness.
+
 Within the requested format and scope, choose a representation for the reader's question: prose for conclusions, diagrams for relationships and branches, interactive examples for changing conditions, and animation or video for processes whose timing or motion matters. Add a representation only when it helps the reader understand or test the explanation; a research request alone does not require building an app or producing a video.
 
 Across representations, preserve the same facts, conditions, failure branches, and uncertainty. Interactive results must follow a supported model or explicitly labeled assumptions, not decorative controls. Judge an explanation by whether its content lets the reader trace a relevant failure path, predict a condition change, or identify a load-bearing assumption; visual polish alone is not evidence of correctness.
