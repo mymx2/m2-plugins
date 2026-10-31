@@ -4,23 +4,23 @@ AI Agent 插件与技能的策划目录，遵循 Agent Plugins Spec v1.0.0，支
 
 ## Commands
 
-| Command                                               | Description                                                               |
-| ----------------------------------------------------- | ------------------------------------------------------------------------- |
-| `vp install`                                          | 安装依赖（必须用 vp，不用 npm/pnpm/yarn）                                 |
-| `vp run lint`                                         | Lint 全部：`vp lint`（TS）+ `ruff check scripts/ plugins/`（Python）      |
-| `vp run fmt`                                          | 格式化全部：`vp fmt`（TS）+ `ruff format scripts/ plugins/`（Python）     |
-| `vp run test`                                         | 一键门禁：vitest + evals 单测 + Jaccard + 词面路由不退化（见下）          |
-| `vp check`                                            | TypeScript 类型检查 + lint（CI 中 `vp check` 覆盖了 lint + type）         |
-| `vp run validate:schema`                              | 校验所有插件的 JSON Schema（ajv）                                         |
-| `vp run init`                                         | 版本填充：package.json → 插件/厂商 manifest + marketplace（末尾自动 fmt） |
-| `vp run validate:version`                             | 校验全链路版本与 package.json 一致（漂移时退出 1）                        |
-| `vpx tsx scripts/validate-schemas.ts --plugin <name>` | 校验指定插件的 JSON Schema                                                |
-| `python scripts/validate_repo.py .`                   | Agent Plugins Spec v1.0.0 仓库结构验证（全量）                            |
-| `python scripts/validate_repo.py . -p <name>`         | 验证指定插件结构                                                          |
-| `vp run up`                                           | 依赖更新检查（taze -r -w -i）                                             |
-| `python scripts/check-trigger-jaccard.py`             | 12 个技能 `when_to_use` 两两 Jaccard（≥0.5 退出 1）                       |
-| `python -m pytest evals/tests/ -q`                    | evals 设施单测（临时目录，不碰真实 `evals/runs/`）                        |
-| `python evals/lexical_router.py`                      | Tier 2 词面路由，重写 `evals/results/lexical-routing.json`                |
+| Command                                               | Description                                                                  |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `vp install`                                          | 安装依赖（必须用 vp，不用 npm/pnpm/yarn）                                    |
+| `vp run lint`                                         | Lint 全部：`vp lint`（TS）+ `ruff check scripts/ plugins/ evals/`（Python）  |
+| `vp run fmt`                                          | 格式化全部：`vp fmt`（TS）+ `ruff format scripts/ plugins/ evals/`（Python） |
+| `vp run test`                                         | 一键门禁：vitest + evals 单测 + Jaccard + 词面路由不退化（见下）             |
+| `vp check`                                            | TypeScript 类型检查 + lint（CI 中 `vp check` 覆盖了 lint + type）            |
+| `vp run validate:schema`                              | 校验所有插件的 JSON Schema（ajv）                                            |
+| `vp run init`                                         | 版本填充：package.json → 插件/厂商 manifest + marketplace（末尾自动 fmt）    |
+| `vp run validate:version`                             | 校验全链路版本与 package.json 一致（漂移时退出 1）                           |
+| `vpx tsx scripts/validate-schemas.ts --plugin <name>` | 校验指定插件的 JSON Schema                                                   |
+| `python scripts/validate_repo.py .`                   | Agent Plugins Spec v1.0.0 仓库结构验证（全量）                               |
+| `python scripts/validate_repo.py . -p <name>`         | 验证指定插件结构                                                             |
+| `vp run up`                                           | 依赖更新检查（taze -r -w -i）                                                |
+| `python scripts/check-trigger-jaccard.py`             | 12 个技能 `when_to_use` 两两 Jaccard（≥0.5 退出 1）                          |
+| `python -m pytest evals/tests/ -q`                    | evals 设施单测（临时目录，不碰真实 `evals/runs/`）                           |
+| `python evals/lexical_router.py`                      | Tier 2 词面路由，重写 `evals/results/lexical-routing.json`                   |
 
 注意：`vp lint` 是 Vite+ 内置（仅 TS），`vp run lint` 才是完整流程（TS + Python）。`vp fmt` 同理。
 
@@ -130,8 +130,8 @@ plugins/<name>/
 2. `setup-python` + `pip install ruff`
 3. `vp check`（TS lint + type check）
 4. `vp run validate:version`（全链路版本与 package.json 一致，漂移即红）
-5. `ruff check scripts/ plugins/ && ruff format --check scripts/ plugins/`（Python）
-6. `vp test`（全部测试，含 validate_repo.py + schema 校验）
+5. `ruff check scripts/ plugins/ evals/ && ruff format --check scripts/ plugins/ evals/`（Python）
+6. `vp run test`（vitest + evals 单测 + Jaccard + 词面路由对比；含 validate_repo.py + schema 校验）
 
 ## Environment
 
@@ -163,6 +163,7 @@ plugins/<name>/
 技能文档的可靠性靠以下规则维持；新增或修改 reference 时逐条过：
 
 - **加规则先过删除测试**：往本文件或任何 skill 加规则前，先问"删掉它 agent 会犯错吗"；不会就不写。流程礼节、可推知的默认值、风格偏好都不是规则，规则只写防错。
+- **蒸馏净增约束**：每次新增技能能力或 reference，必须同时给出等量的删减、合并或去重（同主题合并、重复规则删副本、失效指针清理）。确实无法删时，在交付说明里写明原因与下一次可回收的位置；只加不减不算一次完成。
 - **一级深度**：`SKILL.md` 可以指向 `references/`，reference 不再指向另一个 reference；跨文件提及一律按名（`xxx` reference），不写 `references/xxx.md` 路径。跨 skill 提及同样按名（如 check skill 的 xxx reference），跨 skill 路径在安装副本里是死链。
 - **同主题双副本必须登记**：两份文件覆盖同一主题时，要么逐条同步并在文件头注明与谁同步，要么有意分化并在文件头注明正本。副本不可互相引用（路径引用过不了 isolation 门，按名提及）。
 - **命令与阈值对照实现**：文档写命令必须实测可跑；写阈值必须对照 scripts 源码（校验器阈值以 `checks-content.ts` 为准）；引用外部 CLI 的行为以该 CLI 当前版本的 `--help` 或源码为准。行数、版本号、模型 ID 这类易腐精确值宁删不留。

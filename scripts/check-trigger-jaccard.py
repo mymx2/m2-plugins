@@ -46,6 +46,11 @@ def main() -> int:
         if d.is_dir() and md.exists():
             skills[d.name] = parse_when_to_use(md)
 
+    missing = [name for name, keywords in skills.items() if not keywords]
+    if missing:
+        print(f"FAIL: empty or missing when_to_use: {', '.join(missing)}")
+        return 1
+
     names = sorted(skills)
     worst = 0.0
     bad = []

@@ -1,0 +1,41 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: incident-replay
+# 用例摘要，显示在用例列表与报告中。
+title: 评审能力变更时用事故台账做回放评估
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 check 在"评审 prompt / skill / 模型刚改了，怎么知道还抓不抓得住
+  以前漏掉的 bug"这类请求下，给出事故台账回放方案：
+  用修复前版本、按层统计恢复率、用干净变更测误报，而不是直接说"再 review 一遍"。
+
+context:
+  files:
+    'docs/incidents.md': |
+      # Incidents
+
+      <!-- layers: write-time, unit, integration, review, e2e, release, field -->
+
+      ## Incidents
+
+      | ID | Reported | Symptom | Introduced | Fixed | Layer | Caught by |
+      |---|---|---|---|---|---|---|
+      | I-01 | 2026-01-02 | Empty input crashes the parser | unknown | 1a2b3c4d | unit | `test_parses_empty_input` |
+      | I-02 | 2026-02-11 | Export drops the last row | unknown | 5e6f7a8b | integration | `test_export_keeps_last_row` |
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    我们刚改了 check 的评审 prompt，想确认它是否还抓得住以前漏掉的 bug。
+    先别改代码，给我一套可执行的评估步骤。
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '明确使用事故台账/incident ledger，重放修复前版本（Fixed^）而不是只看当前代码'
+    - '要求按层统计 recovered/total，并与上一次运行结果对比'
+    - '要求用已知干净变更测量误报（noise），并同时报告恢复数与误报数'
+    - '明确恢复率下降时阻止采纳该评审变更，直到原因被解释'
+    - '没有声称已经执行了未运行的评估，也没有编造评估结果'
+  pass_threshold: 0.75

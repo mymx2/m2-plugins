@@ -1,4 +1,4 @@
-# 技能行为评测报告 — plugins/dyc/skills(11 个技能)
+# 技能行为评测报告 — plugins/dyc/skills(12 个技能)
 
 评测日期:2026-08-26。评测方式:三层独立、数据驱动。**未修改 `plugins/dyc/skills/` 下任何文件**;全部产物在 `evals/` 下。
 
@@ -12,27 +12,27 @@
 
 | 层                        | 对象                 | 方法                                                                                                 | 产物                                                     |
 | ------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| **Tier 0** 静态           | 11 个触发面          | `scripts/check-trigger-jaccard.py`,pairwise Jaccard 当量                                             | 0.000(阈值 0.5),**通过**                                 |
-| **Tier 2** 触发路由(核心) | 11 个 description    | 76 positive + 50 negative 中英双语 prompt;语义判定 + 词面 TF-IDF 路由(`evals/lexical_router.py`)对照 | `evals/results/tier2-routing.md`、`lexical-routing.json` |
+| **Tier 0** 静态           | 12 个触发面          | `scripts/check-trigger-jaccard.py`,pairwise Jaccard 当量                                             | 0.000(阈值 0.5),**通过**                                 |
+| **Tier 2** 触发路由(核心) | 12 个 description    | 84 positive + 56 negative 中英双语 prompt;语义判定 + 词面 TF-IDF 路由(`evals/lexical_router.py`)对照 | `evals/results/tier2-routing.md`、`lexical-routing.json` |
 | **Tier 3** 行为抽样       | hunt / check / write | 各 baseline + 压力变体(时间/权威/沉没成本),6 次子代理执行,按 `grader.md` 逐条 PASS/FAIL              | `evals/results/grading-*.json` × 6                       |
 | **Tier 1** 弱模型可读性   | think / check        | 逐句照做的弱模型视角,行号已核对                                                                      | `evals/results/tier1-readability.md`                     |
 
-用例集:`evals/cases/*.json` × 11。fixture:`evals/fixtures/{hunt,check,write}`(check 已 git 化:base commit + dirty 覆盖)。运行现场:`evals/runs/<skill>-<variant>`(含子代理自记 `actions.log`)。
+用例集:`evals/cases/*.json` × 12。pm 的 14 条用例只做触发覆盖,尚未纳入 §A 语义表。fixture:`evals/fixtures/{hunt,check,write}`(check 已 git 化:base commit + dirty 覆盖)。运行现场:`evals/runs/<skill>-<variant>`(含子代理自记 `actions.log`)。
 
 ---
 
 ## 一句话结论
 
-**11 个技能在语义路由下几乎全对(唯一 BLOCKER 是 think 的 triage 盲区),Tier 3 三个技能在压力下全部守住核心契约;主要改进面是 description 的中文锚点加固与 think/check 的环境假设清理。**
+**有语义 ground truth 的 11 个技能几乎全对(唯一 BLOCKER 是 think 的 triage 盲区),Tier 3 三个技能在压力下守住核心契约;pm 目前只有触发用例、没有语义判定,是明确的覆盖缺口。主要改进面是 description 的中文锚点加固与 think/check 的环境假设清理。**
 
 ---
 
 ## Tier 2 — 触发路由
 
-| 判定                      | positive top-1               | negative owner-outranks |
-| ------------------------- | ---------------------------- | ----------------------- |
-| 语义(读 description 判断) | **65/66 独立 prompt(98.5%)** | 41/41(100%)             |
-| 词面(TF-IDF 纯字面)       | 28/76(36.8%)                 | 37/50(74.0%)            |
+| 判定                      | positive top-1                                                          | negative owner-outranks |
+| ------------------------- | ----------------------------------------------------------------------- | ----------------------- |
+| 语义(读 description 判断) | **65/66 独立 prompt(98.5%)**（08-26 旧口径，新增 8 条 positive 未重评） | 41/41(100%)             |
+| 词面(TF-IDF 纯字面)       | 37/84(44.0%)                                                            | 45/56(80.4%)            |
 
 **语义路由是唯一生产路径,接近满分。** 词面路由命中低是**设计使然**——任务硬约束要求 prompt 不抄 description 用词,所以纯字面匹配自然接不住;词面表的价值是定位"缺关键词锚点"的技能。
 
@@ -125,7 +125,7 @@ agent 删掉"总的来说"段(该段"完成了既定目标"与 87% 未达标事�
 | think / learn 边界            | TB2/TB4 薄边 PASS;deliverable 是决策→think,是综述→learn 的分流成立 |
 | check / write 边界            | CB1/CB2/CB3 PASS;"先别改"→check、"润好"→write 的意图分流成立       |
 | hunt / check / write 核心契约 | Tier 3 压力变体全守住(症状补丁、链式命令、辞藻膨胀均被拒)          |
-| Tier 0 触发面隔离             | pairwise Jaccard 0.000,11 个技能触发面无字面重叠                   |
+| Tier 0 触发面隔离             | pairwise Jaccard 0.000,12 个技能触发面无字面重叠                   |
 
 ---
 

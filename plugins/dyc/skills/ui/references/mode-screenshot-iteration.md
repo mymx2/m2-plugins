@@ -2,7 +2,7 @@
 
 Loaded from `ui` when the user supplies a screenshot of a rendered surface and wants it improved against that evidence.
 
-Activate when the user sends a screenshot or image alongside a complaint ("这里很丑", "这个不对", "fix this", "looks wrong"). The existing product is the direction. Skip the five-question direction lock. If the asset is a generated image rather than a coded or rendered surface, follow the routing arbitration in `SKILL.md` and return to the `mode-generated-asset` reference.
+Activate when the user sends a screenshot or image alongside a complaint ("这里很丑", "这个不对", "fix this", "looks wrong"). The existing product is the direction. Skip the five-question direction lock. If the asset is a generated image rather than a coded or rendered surface, follow the routing arbitration in the ui skill's main instructions and return to the `mode-generated-asset` reference.
 
 **Flow:**
 
@@ -26,7 +26,7 @@ Activate when the user sends a screenshot or image alongside a complaint ("这�
 - The user's screenshot is the strongest design brief in the turn. Keep it visible in the reasoning until the fix is done.
 - The real running product is the oracle. Product pages, app screenshots, release pages, and current UI state override generic style instincts. Render comparison candidates on the product's actual background with adjacent components and state preserved; vary only the property being compared.
 - Do not flatten specific taste feedback into generic UI adjectives. "More premium" is not a diagnosis; "caption baseline drifts above the Chinese line" is.
-- If the screenshot exposes a deterministic runtime regression or a broken coded render, state, or timing path, route to `hunt` and preserve the visual evidence. Generated image assets stay with the `mode-generated-asset` reference per the routing arbitration in `SKILL.md`.
+- If the screenshot exposes a deterministic runtime regression or a broken coded render, state, or timing path, route to `hunt` and preserve the visual evidence. Generated image assets stay with the `mode-generated-asset` reference per the routing arbitration in the ui skill's main instructions.
 
 **Native screenshot handoff.** For native apps, once you have proven the app builds, runs, and can reach the target view, do not spend repeated cycles fighting focus, window ordering, or coordinate-click automation just to capture final visual proof. Make one bounded automation attempt. If it is flaky, name the exact screen and ask the user for the screenshot to iterate against. This is a visual QA boundary, not a substitute for build/run verification.
 

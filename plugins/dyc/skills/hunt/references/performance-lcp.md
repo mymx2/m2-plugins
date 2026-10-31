@@ -1,6 +1,6 @@
 # LCP and Page-Load Performance Debugging
 
-Trace-driven LCP and page-load performance debugging with a live browser (chrome-devtools-mcp tools or its CLI).
+Trace-driven LCP and page-load performance debugging with a live browser (chrome-devtools-mcp tools or its CLI). In CLI mode, page-scoped tools take the `pageId` as the first positional argument; the steps below omit it for MCP mode.
 
 LCP thresholds: good ≤2.5s, needs improvement 2.5–4.0s, poor >4.0s, measured at the 75th percentile of visits.
 

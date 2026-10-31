@@ -7,9 +7,10 @@
 ```text
 plugin.json（标准字段 + extensions）
   extensions:
-    .claude-plugin: { ... } ──→ .claude-plugin/init.ts ──→ .claude-plugin/plugin.json
-    .qoder-plugin:  { ... } ──→ .qoder-plugin/init.ts  ──→ .qoder-plugin/plugin.json
-    .codex-plugin:  { ... } ──→ .codex-plugin/init.ts  ──→ .codex-plugin/plugin.json
+    .claude-plugin:    { ... } ──→ .claude-plugin/init.ts    ──→ .claude-plugin/plugin.json
+    .qoder-plugin:     { ... } ──→ .qoder-plugin/init.ts     ──→ .qoder-plugin/plugin.json
+    .codex-plugin:     { ... } ──→ .codex-plugin/init.ts     ──→ .codex-plugin/plugin.json
+    .codebuddy-plugin: { ... } ──→ .codebuddy-plugin/init.ts ──→ .codebuddy-plugin/plugin.json
 ```
 
 每个 `.<vendor>-plugin/` 目录都是 **衍生物**，从根 `plugin.json` 生成，不手动维护。
@@ -33,7 +34,7 @@ plugin.json（标准字段 + extensions）
 
 ### 参考实现
 
-以下是 `.qoder-plugin/init.ts` 的精简示意（完整源码与走读见 qoder 厂商目录的 init-guide），是三个厂商 init 中最简洁的基础实现。Claude 和 Codex 的 init 在此基础上增加了厂商特有校验（见各厂商 init-guide.md）：
+以下是 `.qoder-plugin/init.ts` 的精简示意（完整源码与走读见 qoder 厂商目录的 init-guide），是四个厂商 init 中最简洁的基础实现。Claude、Codex 和 CodeBuddy 的 init 在此基础上增加了厂商特有校验（见各厂商 init-guide）：
 
 ```typescript
 #!/usr/bin/env tsx
@@ -131,6 +132,14 @@ Qoder 的扩展字段最丰富：显示名、中文描述、分类、标签，�
 
 Codex 以 Marketplace 分发为导向，`interface` 对象承载展示元数据。详见 `codex/manifest-rules.md` 和 `codex/init-guide.md`。
 
+### .codebuddy-plugin
+
+```json
+{ ".codebuddy-plugin": { "init": ".codebuddy-plugin/init.ts" } }
+```
+
+CodeBuddy 与 Claude Code 同构，组件默认按约定扫描，extensions 通常只声明 `init`；MCP 的 `type` 只支持 `stdio` / `sse` / `http`，`streamable-http` 由 init 转为 `http` 后内联进生成 manifest。详见 `codebuddy/manifest-rules.md` 和 `codebuddy/init-guide.md`。
+
 ## init.ts 生命周期演进
 
 init.ts 不只是合并器。当前阶段做合并 manifest；未来可在第五步扩展厂商特有校验、文件生成、工具链注册、旧格式迁移等。**关键约束**：无论如何扩展，init.ts 必须保持幂等。
@@ -149,7 +158,10 @@ my-plugin/
 ├── .qoder-plugin/           # init 生成
 │   ├── init.ts
 │   └── plugin.json
-└── .codex-plugin/           # init 生成
+├── .codex-plugin/           # init 生成
+│   ├── init.ts
+│   └── plugin.json
+└── .codebuddy-plugin/       # init 生成
     ├── init.ts
     └── plugin.json
 ```
@@ -165,7 +177,8 @@ my-plugin/
   "extensions": {
     ".claude-plugin": { "init": ".claude-plugin/init.ts" },
     ".qoder-plugin": { "displayName": "My Plugin", "init": ".qoder-plugin/init.ts" },
-    ".codex-plugin": { "init": ".codex-plugin/init.ts" }
+    ".codex-plugin": { "init": ".codex-plugin/init.ts" },
+    ".codebuddy-plugin": { "init": ".codebuddy-plugin/init.ts" }
   }
 }
 ```
@@ -179,7 +192,7 @@ my-plugin/
 - `extensions` 的 key 就是输出目录名（`.claude-plugin` → `.claude-plugin/`）。
 - **不声明不存在的厂商组件**：extensions 中声明的路径对应的目录或文件必须实际存在。
 
-厂商目录（`claude/`、`qoder/`、`codex/`）不受 validate-skill 引用完整性检查覆盖，重命名需全局 grep。
+厂商目录（`claude/`、`qoder/`、`codex/`、`codebuddy/`）不受 validate-skill 引用完整性检查覆盖，重命名需全局 grep。
 
 ## Hooks 可移植性
 
@@ -189,6 +202,7 @@ hooks 是 Agent Plugins Spec 中明确标记为**非便携**的组件。每个�
 | ----------- | ------------------ | ---------------- |
 | Claude Code | `hooks/hooks.json` | 目录自动发现     |
 | Qoder       | `hooks/hooks.json` | 目录自动发现     |
+| CodeBuddy   | `hooks/hooks.json` | 目录自动发现     |
 | Codex       | 无原生 hooks       | 通过 skills 实现 |
 
 **可移植性策略**：
@@ -197,20 +211,17 @@ hooks 是 Agent Plugins Spec 中明确标记为**非便携**的组件。每个�
 - 不打包依赖特定运行时或本地绝对路径的 hooks。
 - 如果某个厂商不支持 hooks（如 Codex），将等效逻辑作为 skill 或 command 提供。
 
-## preserveUpstreamMetadata：保留用户手动改动
+## 手改厂商产物的处理
 
-init.ts 每次从根 `plugin.json` 重新生成厂商目录，用户在 `.<vendor>-plugin/` 中的手动改动会被覆盖。
-
-1. **首选：改根 plugin.json 的 extensions**。所有改动应回流到 `extensions[NAMESPACE]`。
-2. **次选：override.json**。init.ts 第五步读取 `.<vendor>-plugin/override.json`（可选），合并进输出。override.json 本身不变化，幂等性不受影响。
+init.ts 每次从根 `plugin.json` 重新生成厂商目录，用户在 `.<vendor>-plugin/` 中的手动改动会被覆盖。修改的唯一入口是根 `plugin.json` 的 `extensions[NAMESPACE]`；不存在 override 文件机制，需要长期保留的字段必须写进 extensions。
 
 ## Gotchas
 
-| 常见错误                                | 规则                                                        |
-| --------------------------------------- | ----------------------------------------------------------- |
-| 手动修改 `.<vendor>-plugin/plugin.json` | 改根 `plugin.json` 的 extensions，再跑 init                 |
-| init 合并时忘了剔除 `$schema`           | base 中必须解构排除 `$schema` 和 `extensions`               |
-| 两个厂商用同一个 extensions key         | 每个厂商必须独立 namespace                                  |
-| init.ts 引入了第三方 npm 包             | init 脚本应零依赖，用 Node 原生 API                         |
-| 厂商产物目录提交到了 git 但没有 init.ts | init.ts 必须提交；产物目录可选提交                          |
-| init 后用户手动加的字段丢失了           | 改根 plugin.json 的 extensions，或用 override.json 机制保留 |
+| 常见错误                                | 规则                                          |
+| --------------------------------------- | --------------------------------------------- |
+| 手动修改 `.<vendor>-plugin/plugin.json` | 改根 `plugin.json` 的 extensions，再跑 init   |
+| init 合并时忘了剔除 `$schema`           | base 中必须解构排除 `$schema` 和 `extensions` |
+| 两个厂商用同一个 extensions key         | 每个厂商必须独立 namespace                    |
+| init.ts 引入了第三方 npm 包             | init 脚本应零依赖，用 Node 原生 API           |
+| 厂商产物目录提交到了 git 但没有 init.ts | init.ts 必须提交；产物目录可选提交            |
+| init 后用户手动加的字段丢失了           | 改根 plugin.json 的 extensions，再跑 init     |

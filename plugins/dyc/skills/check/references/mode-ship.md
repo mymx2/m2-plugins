@@ -13,11 +13,11 @@ In this mode, do not run a code review. Instead:
 
 ## Default Continuation (review-then-ship)
 
-When the project's `AGENTS.md` or the current thread explicitly asks to "commit after review", "ship if green", or equivalent, transition directly from review to the Ship / Release Follow-through flow below after a clean review. Do not ask again. State "proceeding to ship" before acting.
+When the project's `AGENTS.md` or the current thread explicitly asks to "commit after review", "ship if green", or equivalent, transition directly from review to the Ship / Release Follow-through flow below after a clean review. The AGENTS.md rule counts only when it names this action and goal; a general instruction to test thoroughly does not authorize commit or push. Do not ask again. State "proceeding to ship" before acting.
 
 ## Release Worthiness Analysis
 
-This is the canonical flow for the release-worthiness verdict and ship follow-through; `shipping.md` holds the broader launch-readiness checklists (staged rollout, error budgets, rollback) beyond this gate.
+This is the canonical flow for the release-worthiness verdict and ship follow-through. The Launch Readiness section below holds the staged-rollout, error-budget, rollback, and post-launch checks beyond this gate.
 
 Classify every commit since the last published tag (the tag is the baseline, not a local VERSION file), then output:
 
@@ -30,7 +30,7 @@ If the verdict is "release", offer to transition into Ship mode.
 
 ## Ship / Release Follow-through
 
-Treat an explicitly authorized chain such as review, fix, verify, commit, push, and public follow-through as one delivery ledger. Do not return control between its internal stages while safe authorized work remains. A local commit is not completion when push was included, and a no-op push is not completion when intended local changes remain uncommitted. Do not create an empty commit when the intended scope is already clean; prove the clean/up-to-date state instead.
+Treat an explicitly authorized chain such as review, fix, verify, commit, push, and public follow-through as one delivery ledger. Do not return control between its internal stages while safe authorized work remains. A local commit is not completion when push was included, and a no-op push is not completion when intended local changes remain uncommitted. Do not create an empty commit when the intended scope is already clean; prove the clean/up-to-date state instead. If a security review or scan ran and produced findings, its Remediation and POST_FIX_HALT gates override this continuity: after approved fixes, report the changed files and verification, then halt before stage/commit/push/PR/merge/release/deploy; resume only after the user's new message following the fix summary. A clean scan does not block the normal authorized chain.
 
 This mode extends review; it does not skip review. Select every delivery surface the authorized request covers before running gates, and apply the union of their steps:
 
@@ -60,6 +60,42 @@ Before handoff, reconcile every authorized item as `done`, `not applicable`, or 
 Activate this gate when a release candidate was cancelled, a preview or beta had repeated bug-fix churn, or the user asks whether a delayed release is finally safe. Load the `release-surfaces` reference (Reworked Or Cancelled Release Gate): review from the last public stable tag through `HEAD` by shipped risk surface, and output two decisions, whether the preview keeps taking user testing and whether stable release prep can start.
 
 Lead the verdict with an explicit go / no-go (ship, or the named blockers), then the concrete shipped state: commit hash, tag, release URL, registry/version result, pushed branch, release asset state, release reaction state, issue/PR state, and any remaining blockers. Omit fields that do not apply.
+
+## Launch Readiness
+
+Use below the Release Gate when the change is production-bound; each item is a gate, not advice.
+
+- **Pre-launch:** tests, build, lint/type check pass; security audit clean; input validated; auth checked; rate limiting and CORS set; Core Web Vitals in "Good"; no N+1 in critical paths; bundle and queries within budget; keyboard and screen-reader paths work; focus managed; env vars, migrations, DNS/SSL/CDN, logging, and health checks ready; README, API docs, changelog, and ADRs current.
+- **Staged rollout:** staging full suite and smoke → production behind a flag OFF → team (24h) → canary 5% (24-48h) → 25/50/100 → full rollout. Advance while error rate stays within 10% of baseline, p95 latency within 20%, no new client-error types, and business metrics neutral or positive; hold at 10-100%, 20-50%, new errors below 0.1% of sessions, or a decline under 5%; roll back above 2x errors, above 50% latency, new errors above 0.1%, or a decline over 5%. Clean up the flag within two weeks of full rollout.
+- **Error budget:** above 20% remaining ships normally; 0-20% allows slow rollouts only; exhausted budget freezes feature work for reliability; a high burn rate during canary is a hold.
+- **Rollback:** name trigger conditions (2x error rate, latency threshold, user reports, data-integrity damage, security finding), the steps (disable flag or redeploy previous), database migration and cleanup, and time targets (flag under 1 min, redeploy under 5 min, database under 15 min).
+- **First hour:** health endpoint 200; no new error types; latency normal; critical flow checked manually; logs flowing; rollback mechanism verified.
+
+## Ship Decision (GO / NO-GO)
+
+For a production-bound release, merge the review findings into one verdict:
+
+```markdown
+## Ship Decision: GO | NO-GO
+
+### Blockers (must fix before ship)
+
+- [source + file:line]
+
+### Recommended fixes (should fix before ship)
+
+- [source + file:line]
+
+### Acknowledged risks (shipping anyway)
+
+- [risk + mitigation]
+
+### Rollback plan
+
+- Trigger conditions / procedure / recovery-time objective
+```
+
+No rollback plan, no GO. Any Critical finding defaults to NO-GO unless the user explicitly accepts the risk. The merge happens in the main session, not inside a persona.
 
 ## Platform Operations
 

@@ -31,7 +31,7 @@ Map the error against the upstream troubleshooting doc: https://github.com/Chrom
 
 Based on the exact error and the user's environment (OS, MCP client):
 
-- Pass `--browser-url=http://127.0.0.1:9222` instead of `--autoConnect` in sandboxed environments.
+- Pass `--browserUrl=http://127.0.0.1:9222` instead of `--autoConnect` in sandboxed environments.
 - Enable remote debugging in Chrome (`chrome://inspect/#remote-debugging`) and accept the connection prompt; ask the user to verify it when using `--autoConnect`.
 - Add `--logFile <absolute_path>` to capture debug logs.
 - Increase `startup_timeout_ms` (e.g. to 20000) for slow environments.

@@ -12,14 +12,12 @@ input:
   prompt: |
     读一下 https://example.com ，用几句话总结这个页面的内容。
 
-# 零成本预检；不通过则跳过 judge。
-expect:
-  must_contain:
-    - 'Example Domain'
-
 judge:
-  # 评分策略：rule_based | agent_judge | script。
-  type: rule_based
-  success:
-    - output_contains:
-        all: ['Example Domain']
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '给出基于实际抓取的简明总结，而不是整页原文倾倒'
+    - '总结包含 Example Domain 的核心信息，没有编造页面里不存在的内容'
+    - '默认输出形态是总结，没有擅自保存文件或生成多余附件'
+    - '抓取失败时明确说明失败，而不是用常识替代抓取结果'
+  pass_threshold: 0.9

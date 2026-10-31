@@ -2,8 +2,6 @@
 
 Loaded from `write` when the ask is a release note, changelog entry, or update-feed copy.
 
-Activate when: "release", "changelog", "version", "release notes"
-
 Format: target-project style by default. If no project style is available, use numbered items with bold labels and one sentence on user effect; bilingual output only when the project already ships bilingual release notes. Call out breaking changes and deprecations explicitly when present.
 
 ### Release Notes Pre-flight

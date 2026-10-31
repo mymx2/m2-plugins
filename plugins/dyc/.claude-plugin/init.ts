@@ -31,16 +31,37 @@ import {
 const NAMESPACE = '.claude-plugin'
 
 /** Claude Code 已知钩子事件 */
+// Keep in sync with schemas/claude-code-plugin-manifest.schema.json.
 const VALID_HOOK_EVENTS = new Set([
-  'PreToolUse',
-  'PostToolUse',
-  'Stop',
-  'SubagentStop',
-  'SessionStart',
-  'SessionEnd',
-  'UserPromptSubmit',
-  'PreCompact',
+  'ConfigChange',
+  'CwdChanged',
+  'Elicitation',
+  'ElicitationResult',
+  'FileChanged',
+  'InstructionsLoaded',
   'Notification',
+  'PermissionDenied',
+  'PermissionRequest',
+  'PostCompact',
+  'PostToolBatch',
+  'PostToolUse',
+  'PostToolUseFailure',
+  'PreCompact',
+  'PreToolUse',
+  'SessionEnd',
+  'SessionStart',
+  'Setup',
+  'Stop',
+  'StopFailure',
+  'SubagentStart',
+  'SubagentStop',
+  'TaskCompleted',
+  'TaskCreated',
+  'TeammateIdle',
+  'UserPromptExpansion',
+  'UserPromptSubmit',
+  'WorktreeCreate',
+  'WorktreeRemove',
 ])
 
 // ─── 工具函数 ─────────────────────────────────────

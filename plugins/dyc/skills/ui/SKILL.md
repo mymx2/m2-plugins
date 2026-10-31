@@ -1,6 +1,6 @@
 ---
 name: ui
-description: 'Builds distinctive, production-grade UI: pages, components, visual polish against screenshots or first-impression complaints, typography, and DESIGN.md token contracts via the @google/design.md CLI. Use when users ask for UI work or complain a screen looks unclear, ugly, or inconsistent. Not for backend logic or regressions against a known-good previous version (route to hunt).'
+description: 'Builds distinctive, production-grade UI: pages, components, visual polish against screenshots or first-impression complaints, typography, and DESIGN.md/design-token contracts including Tailwind export via the @google/design.md CLI. Use when users ask for UI work, design tokens, or complain a screen looks unclear, ugly, or inconsistent. Not for backend logic or runtime/behavior regressions (route to hunt); intentional design-reference comparisons stay here.'
 when_to_use: '设计, 做页面, 做组件, 很丑, 很怪, 突兀, 不清晰, 字体, 字形, 排印, 排版, 样式, 前端, UI, 截图, 拖拽, 手势, 动效, 滑动, build page, create component, make it look good, style, design, screenshot with visual complaint, typography, font looks wrong, drag, gesture, swipe, DESIGN.md, design tokens, 设计系统文件, 设计 token 校验, designmd, tailwind token 导出'
 ---
 
@@ -28,27 +28,29 @@ UI builds distinctive, production-grade interfaces. Every visual decision is gro
 - Polishing existing UI against a first-impression visual complaint ("ugly", "inconsistent", "突兀"), with or without a screenshot.
 - Typography, font selection, and design-system token contracts.
 - Creating or managing DESIGN.md files via the `@google/design.md` CLI.
-- Screenshot arbitration: a screenshot whose complaint is "looks wrong / 看着不对" with no working baseline stays here; a screenshot offered as proof that the current build broke a previously-correct render routes to `hunt`. Chinese gut-feel complaints ("很傻", "很怪", "突兀", "不协调", "不和谐") about a visual are aesthetic rejections, not debugging symptoms, and follow the same rule. Generated image assets stay in `references/mode-generated-asset.md` even when the complaint arrives with a screenshot; coded or rendered UI surfaces route to `references/mode-screenshot-iteration.md`, not to `hunt`.
-- Route to `hunt` for application-logic debugging and known-good-reference regressions; route to `chrome` for browser-based evidence capture; route to `check` for code quality review.
+- Screenshot arbitration: a screenshot whose complaint is "looks wrong / 看着不对" with no working baseline stays here; a screenshot proving a runtime or behavior regression (previously correct rendering now broken) routes to `hunt`; an intentional design-reference comparison against an approved design baseline stays here and loads `references/visual-comparison.md`. Chinese gut-feel complaints ("很傻", "很怪", "突兀", "不协调", "不和谐") about a visual are aesthetic rejections, not debugging symptoms, and follow the same rule. Generated image assets stay in `references/mode-generated-asset.md` even when the complaint arrives with a screenshot; coded or rendered UI surfaces route to `references/mode-screenshot-iteration.md`, not to `hunt`. For UI copy cuts, load the UI copy rules in `references/design-reference.md` before proposing deletions, including in quick-fix and screenshot modes.
+- Route to `hunt` for application-logic debugging and runtime regressions; route to `chrome` for browser-based evidence capture; route to `check` for code quality review.
 
 ## Durable Context Preflight
 
-When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules (`rules/durable-context.md` when present). `/ui` specialization: current screenshots and rendered output override memory. Reuse durable visual preferences and mature interaction patterns, but still name the current visual problem from the screenshot or source before changing code.
+When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules when the project defines them. `/ui` specialization: current screenshots and rendered output override memory. Reuse durable visual preferences and mature interaction patterns, but still name the current visual problem from the screenshot or source before changing code.
 
 ## Reference Library
 
 Load the matching reference when the UI work enters that territory:
 
-| When building                                                                                       | Load                                                                           |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Component architecture, state, responsive, design-system adherence                                  | `references/frontend-engineering.md`                                           |
-| Forms, async actions, nav, lists, tables, overlays; empty/loading/error/permission/offline states   | `references/ui-state-completeness.md`                                          |
-| Comparing two captures — visual regression vs baseline, or UI vs design reference                   | `references/visual-comparison.md`                                              |
-| WCAG 2.1 AA accessibility checklist (keyboard, screen readers, contrast, forms)                     | `references/accessibility-checklist.md`                                        |
-| Live a11y audit on a rendered page (Lighthouse, focus flow, tap targets, contrast)                  | `references/a11y-debugging.md`                                                 |
-| Verifying the result in a real browser (screenshots, accessibility tree, clean console)             | `references/browser-devtools.md`                                               |
-| Gesture-driven surfaces (drag, swipe, sheet, carousel, slider, momentum, velocity handoff)          | `references/design-gesture-physics.md`                                         |
-| DESIGN.md token contract internals (format spec, full CLI reference; expand via `design-md-cli.md`) | `references/design-md-format-spec.md`, `references/design-md-cli-reference.md` |
+| When building                                                                                       | Load                                                                                                          |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Component architecture, state, responsive, design-system adherence                                  | `references/frontend-engineering.md`                                                                          |
+| Forms, async actions, nav, lists, tables, overlays; empty/loading/error/permission/offline states   | `references/ui-state-completeness.md`                                                                         |
+| Comparing two captures — visual regression vs baseline, or UI vs design reference                   | `references/visual-comparison.md`                                                                             |
+| WCAG 2.1 AA accessibility checklist (keyboard, screen readers, contrast, forms)                     | `references/accessibility-checklist.md`                                                                       |
+| Live a11y audit on a rendered page (Lighthouse, focus flow, tap targets, contrast)                  | `references/a11y-debugging.md`                                                                                |
+| Verifying the result in a real browser (screenshots, accessibility tree, clean console)             | `references/browser-devtools.md`                                                                              |
+| Gesture-driven surfaces (drag, swipe, sheet, carousel, slider, momentum, velocity handoff)          | `references/design-gesture-physics.md`                                                                        |
+| Charts, dashboards, or data visualization                                                           | `references/design-data-viz.md`                                                                               |
+| Native app motion, spring physics, or platform motion conventions                                   | `references/design-native-motion.md`                                                                          |
+| DESIGN.md token contract internals (format spec, full CLI reference; expand via `design-md-cli.md`) | `references/design-md-format-spec.md`, `references/design-md-cli-reference.md`, `references/design-md-cli.md` |
 
 ## Mode Picker
 

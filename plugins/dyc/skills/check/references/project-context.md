@@ -71,7 +71,7 @@ Use this template to compress repository context before running `/check`. The co
 
 ## Public Replies
 
-See `public-reply.md` for the full reply template (language match, `@user` + thanks, factual paragraphs, ship-state line, closure criteria). It is the single source; do not restate the rules here.
+See the `public-reply` reference for the full reply template (language match, `@user` + thanks, factual paragraphs, ship-state line, closure criteria). It is the single source; do not restate the rules here.
 
 ## Release Follow-through
 
@@ -116,3 +116,7 @@ Any diff that touches one of these sinks needs explicit validation and rollback 
 - Changing signing, notarization, appcast, update, license, payment, or release asset generation.
 
 Review the smallest entry point that reaches the sink, then the downstream call. If validation is missing or rollback is unclear, treat it as a hard stop.
+
+## Risk Tiers by Path
+
+The tier follows the paths a change touches, not its size or author. A one-line change to a workflow, updater, license check, installer, privilege helper, or deletion path gets the project's heaviest gate (its full or native test run, a security pass, and a human maintainer's review), and an agent's, bot's, or automated reviewer's approval never stands in for that human. Extract the project's tiers from its docs; when it keeps a table-driven script that prints the gates for the changed paths, run it and paste its lines. Such a script is advice, not a pass: the gates it names may run where this session cannot prove they ran. Commits and PRs in a tier also state how they were verified and how to revert them.

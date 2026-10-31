@@ -32,7 +32,7 @@ plugins/dyc/
 
 - **`init.ts` 做了什么**：最简合并器——读根 `plugin.json`，剔除 `extensions`/`$schema`/构建期字段 `init`，用 `extensions['.qoder-plugin']` 覆盖合并后写入本目录。Qoder 官方直接兼容 `streamable-http`，所以**不做 MCP 转换**，manifest 的 `mcpServers` 直接指向标准源 `./mcp.json`。
 - **保留的非官方字段**（本仓库有意为之，Qoder 忽略未知字段）：`displayName`、`descriptionZh`、`category`、`tags`、`rules`、`preserveUpstreamMetadata`。其中 `rules/` 目录是本仓库自有的规则文件，Qoder 没有 rules 路径覆盖机制，随插件目录一起分发即可。
-- **MCP 官方取值**：`type` 支持 `stdio`（默认）/`sse`/`http`/`streamable-http`/`ws`/`sdk`；远程用 `url` + `headers`。标准源 `mcp.json` 的 `streamable-http + headers: Bearer ${VAR}` 写法 Qoder 原生可收。
+- **MCP 官方取值**：`type` 支持 `stdio`（默认）/`sse`/`http`/`streamable-http`/`ws`/`sdk`；远程用 `url` + `headers`。便携 `mcp.json` 不写凭据 headers，Context7/GitHub 请在 Qoder 的 MCP 设置里完成鉴权。
 - **`install.ts`（本仓库自建的本地安装器，`vp run qoder:dyc`）**：把插件复制到 `~/.qoder` 与 `~/.qoder-cn`（哪个存在装哪个）的 custom 插件目录；旧版备份为 `.dyc.bak`、失败自动回滚、注册进 `installed_plugins_v2.json`（key 为 `dyc@local-custom`）。复制清单**刻意排除** `.claude-plugin/`、`.codebuddy-plugin/`、`.codex-plugin/` 与 `mcp.codex.json`（其他厂商的适配产物不进 Qoder 安装包）。
 
 ## 3. 本地开发 / 安装 / 校验

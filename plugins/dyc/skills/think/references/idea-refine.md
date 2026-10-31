@@ -1,6 +1,6 @@
 # Idea Refine: From Vague Idea to Actionable Concept
 
-Canonical home of the think skill's Pressure Test: `SKILL.md` only offers and gates it (user-assent required); the four checks and verdict format live here — do not maintain a second copy in `SKILL.md`.
+Canonical home of the think skill's Pressure Test. The four checks, verdict format, and user-assent gate live here; do not maintain a second copy in `SKILL.md`.
 
 Activate when an idea is still vague, when you need to stress-test assumptions before committing to a plan, or when you want to expand options before converging. Works best as an interactive dialogue.
 
@@ -61,7 +61,7 @@ Deliver a verdict, never a neutral summary: **holds** (proceed; name the top ris
 
 ## Check for Official Solutions First
 
-Before proposing custom implementations, check framework built-ins and official patterns against live docs — full process and source hierarchy in `references/source-driven.md`. Climb in order and stop at the first rung that holds: an existing helper or pattern in this codebase → the standard library → a native platform feature → an already-installed dependency → only then, new code. Never propose a new dependency for what a few lines or a platform feature already covers.
+Before proposing custom implementations, check framework built-ins and official patterns against live docs (the `source-driven` reference owns the source hierarchy), and name the platform or stdlib option first (the `platform-native` reference owns the per-layer tables). Never propose a new dependency for what a few lines or a platform feature already covers.
 
 For a hard problem, or one already tuned several times that still feels off, study how 2-3 mature open-source projects or direct competitors solve it before designing: read the actual implementation, extract the transferable mechanism, and name what you took from each. First-principles design next to a proven implementation discards the iterations someone else already paid for.
 
@@ -93,7 +93,7 @@ Get approval before proceeding.
 
 ## Pressure Test (optional, user-gated)
 
-Before finalizing a high-stakes direction, offer the pressure test (defined in `references/idea-refine.md`): "I can stress this direction before we lock it. Want it?" Run it only on assent. When Multi-Perspective Plan Design below applies, it covers the same ground and replaces this test; for a direction that is high-stakes but cheap to reverse, run the pressure test alone.
+Before finalizing a high-stakes direction, offer the pressure test described above: "I can stress this direction before we lock it. Want it?" Run it only on assent. When Multi-Perspective Plan Design below applies, it covers the same ground and replaces this test; for a direction that is high-stakes but cheap to reverse, run the pressure test alone.
 
 ## Multi-Perspective Plan Design (high-stakes only)
 

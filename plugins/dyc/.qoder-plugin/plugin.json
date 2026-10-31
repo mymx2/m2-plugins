@@ -1,7 +1,7 @@
 {
   "name": "dyc",
   "version": "1.2.1",
-  "description": "m2-plugins/plugins/dyc — eight core engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, and health, with additional skills for extended capabilities including pm for product deliverables.",
+  "description": "m2-plugins/plugins/dyc — twelve engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, repowiki, and pm.",
   "author": {
     "name": "dyc",
     "email": "mymx2@qq.com",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "keywords": ["mymx2", "dyc", "m2-plugins", "agent-plugins"],
   "displayName": "dyc",
-  "descriptionZh": "m2-plugins/plugins/dyc，八种斜杠命令技能的集合，包括/think、/ui、/check、/hunt、/write、/learn、/read 和/health，用于人工智能代理",
+  "descriptionZh": "m2-plugins/plugins/dyc，十二种斜杠命令技能的集合，包括 /think、/ui、/check、/hunt、/write、/learn、/read、/health、/forge、/chrome、/repowiki 和 /pm，用于人工智能代理",
   "category": "developer-tools",
   "tags": ["mymx2", "dyc"],
   "mcpServers": "./mcp.json",

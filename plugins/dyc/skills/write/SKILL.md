@@ -1,7 +1,7 @@
 ---
 name: write
-description: 'Rewrites and polishes prose in Chinese or English, removes AI-like wording, and authors technical documentation with the writing rulebook. Use when users ask to rewrite or polish prose, remove AI-like wording, draft release notes or social copy, localize copy, write documentation, or draft or revise coding standards. Not for code comments, commit messages, or rulebook audits (use check).'
-when_to_use: '帮我写, 改稿, 润色, 去AI味, 写一段, 技术说明改写, 指令消歧, clarify instructions, 本地化文案, 多语言文案, i18n copy, localization copy, 推特, twitter, X推文, tweet, social post, 连贯性, 段落连贯, draft, proofread, sound natural, polish, rewrite, write docs, 技术文档, 写作规范, 规约, 编码规范, 规范文件, coding standard, documentation style, 文档写作'
+description: 'Rewrites and polishes prose in Chinese or English, removes AI-like wording, compares before/after drafts, proofreads README and CONTRIBUTING files, rewrites a getting-started section, and authors technical documentation with the writing rulebook. Use when users ask to rewrite, proofread README or CONTRIBUTING, compare draft versions, draft release notes or social copy, localize copy, write documentation, or revise coding standards. Not for commit messages or rulebook audits (use check).'
+when_to_use: '帮我写, 改稿, 润色, 去AI味, 写一段, 技术说明改写, 指令消歧, clarify instructions, 本地化文案, 多语言文案, i18n copy, localization copy, 推特, twitter, X推文, tweet, social post, 连贯性, 段落连贯, 对比两版, 哪版更好, 两个版本, before/after, revision review, draft, proofread, sound natural, polish, rewrite, write docs, 技术文档, 写作规范, 规约, 编码规范, 规范文件, coding standard, documentation style, 文档写作'
 ---
 
 # Write: Cut the AI Taste
@@ -55,6 +55,7 @@ Default is a line-level rewrite of the supplied text. Take a mode only when its 
 | Maintainer reply on a public issue or PR                                                                                          | load `references/mode-public-reply.md`                                                                                                            |
 | Installation steps, operating instructions, error text, or tool descriptions to clarify; wording-only edits to agent instructions | load `references/write-technical.md` for those passages, alongside the language reference; prompt design and code behavior stay outside this mode |
 | Long draft needing structural work                                                                                                | load `references/mode-long-form.md`                                                                                                               |
+| Before/after versions of the same text (a diff, two drafts, another editor's polish pass) and "is the new one better?"            | load `references/mode-revision-review.md`                                                                                                         |
 | Mixed Chinese/English, EN/CN pair drift, "bilingual consistency", "Chinese copywriting"                                           | [Bilingual Review](#bilingual-review-mode)                                                                                                        |
 | Product, site, or app copy across locales; "本地化文案", "多语言文案", "i18n copy"                                                | [Product Localization Review](#product-localization-review-mode)                                                                                  |
 | Document, PDF, or white paper to review ("审稿", "check this document")                                                           | route to the `check` skill (it owns document audits)                                                                                              |
@@ -68,7 +69,7 @@ Default is a line-level rewrite of the supplied text. Take a mode only when its 
 
 ## Durable Context Preflight
 
-When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules (`rules/durable-context.md` when present): current state wins over memory, memory alone never authorizes state changes, and the redaction gate applies before any of it becomes a durable rule. For `/write`: the supplied text and current release state override memory.
+When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules when the project defines them: current state wins over memory, memory alone never authorizes state changes, and the redaction gate applies before any of it becomes a durable rule. For `/write`: the supplied text and current release state override memory.
 
 ## Common Rationalizations
 
@@ -85,7 +86,7 @@ When the user names memory, a prior decision, or a memory path, apply the projec
 
 1. Run the Punctuation Gate script on the output before returning.
 2. Sweep the whole text for any flagged smell class (not just the one instance the user noticed).
-3. Confirm the output is shorter than or equal to the first draft, not longer.
+3. Confirm no requested content was deleted or silently restructured; length is not a success metric.
 4. If factual claims were made, verify them against real source material (changelog, product page, screenshot).
 
 ## Hard Rules
@@ -107,7 +108,7 @@ GATE="<skill-base-dir>/scripts/check-punctuation.sh"
 bash "$GATE" --lang <zh|en|ja|auto> <file>   # or pipe text via stdin
 ```
 
-Replace `<skill-base-dir>` with the installed write skill's base directory (or the repo root's `skills/write` in a source checkout). The `.sh` is the entry wrapper; the rule engine lives in `scripts/check_punctuation.py`.
+Replace `<skill-base-dir>` with the installed write skill's base directory (or `plugins/dyc/skills/write` in this repository's source checkout). The `.sh` is the entry wrapper; the rule engine lives in `scripts/check_punctuation.py`.
 
 It enforces character-level punctuation by locale (half/full-width marks, CJK/Latin spacing, em/en dashes) and skips code, inline code, URLs, and markdown link targets, so it never fires on code; the script header documents the exact rule set. Fix every finding while preserving meaning; `--fix` rewrites only the zero-ambiguity zh cases to stdout. `--lang auto` classifies the whole input by fixed priority: any kana routes to ja, else any CJK to zh, else any Hangul to ko (reserved, skipped), else en, so a mostly-Chinese text that merely quotes a Korean glyph still routes to zh; pass an explicit `--lang` for mixed-locale or predominantly-English text. The checker owns character-level punctuation only; quote direction and other judgment calls stay with you and the reference files.
 

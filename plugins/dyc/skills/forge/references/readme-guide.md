@@ -50,9 +50,9 @@ npx skills add <source> -g
 ```markdown
 ## Prerequisites
 
-- Node.js >= 18
+- Node.js >= 22.20
 - `GITHUB_TOKEN` 环境变量（用于 GitHub API 访问）
-````
+```
 
 ### 5. Usage / 使用
 
@@ -93,7 +93,7 @@ npx skills add <source> -g
 - **README** 面向人类：安装、配置、理解插件。
 - **SKILL.md** 面向 Agent：何时触发、如何执行、安全约束。
 
-两者的 description 应一致（说的是同一件事），但表达方式不同。README 可以更详细，SKILL.md 要精炼到 40–500 字符（校验器门禁；厂商硬上限 1,024 不是起草目标）。
+两者的 description 应一致（说的是同一件事），但表达方式不同。README 可以更详细，SKILL.md 的 `description` 要精炼到 40–500 字符（校验器门禁；厂商硬上限 1,024 不是起草目标）。
 
 ## README 不应包含什么
 
@@ -133,3 +133,4 @@ npx skills add <source>
 
 <SPDX 标识符>
 ```
+````

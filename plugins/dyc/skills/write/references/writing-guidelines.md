@@ -25,7 +25,7 @@ This file is the single source for rule wording and rationale. The check skill's
 ## Planning
 
 - **Plan before you write.** Every page starts with a five-section plan: overview, goal, audiences, documentation plan, and open questions. The plan becomes the LLM prompt, the test spec, and the PR description. One artifact does multiple jobs.
-- **Pick a content type early.** Declare it in `meta.contentType`: `Tutorial`, `How-to`, `Reference`, `Conceptual`, `Troubleshooting`, or `Landing`. The type drives the shape; one page does one job.
+- **Pick a content type early.** When the project uses Vercel's docs conventions, declare it in `meta.contentType`: `Tutorial`, `How-to`, `Reference`, `Conceptual`, `Troubleshooting`, or `Landing`. The type drives the shape; one page does one job.
 - **Title around the user's question.** A page called "Vercel MCP Server" is the engineer's name for the thing. A page called "Make your SaaS work in ChatGPT" is the user's question. Same content, different title and search surface.
 - **Goals are testable.** Use a verb from [Bloom's taxonomy](https://en.wikipedia.org/wiki/Bloom%27s_taxonomy) (`configure`, `explain`, `debug`). You should be able to hand the goal to an LLM and ask whether the page enables it.
 - **Define every term on first use.** Link "edge function" to its conceptual page the first time it appears. The cost of the link is zero; the cost of a reader who bounces on unfamiliar jargon is the whole page.
@@ -35,7 +35,7 @@ This file is the single source for rule wording and rationale. The check skill's
 - **Active voice.** Mental test: append "by monkeys". If "the page will be updated by monkeys" parses, rewrite to "Vercel updates the page".
 - **Direct address.** Use `you` when the reader is acting. Never `the user` or `one can`.
 - **Imperative for steps.** "Click **Add Project**", not "You will need to click **Add Project**". The imperative is shorter, more honest, and consistent with how a CLI or API documents itself.
-- **Short sentences.** Target under 20 words.
+- **Short sentences.** Target under 20 words as a soft guide; a procedure step may run longer when cutting it would drop a required condition.
 - **Contractions encouraged.** `you'll`, `it's`. They reduce stiffness.
 - **Present tense** unless describing future behavior.
 - **Limit `we`.** Only for deliberate Vercel actions ("we recommend", "we deprecated"). Never as a stand-in for `you`.
@@ -52,7 +52,7 @@ This file is the single source for rule wording and rationale. The check skill's
 
 ## AI-generated tells
 
-Strip these patterns from drafts, yours or a model's:
+Strip these patterns from drafts, yours or a model's. The `write-en` reference's AI-tell catalog is canonical for general English prose; this list applies the same patterns to documentation pages. Keep the two in sync when either changes:
 
 - **Summary-style transitions.** Never open a paragraph by recapping the last one (`With this setup complete…`, `Now that we've explored…`); pivot straight to the next point (`In practice…`, `The catch is…`).
 - **Stop-start sentences.** Do not split one dependent idea into choppy fragments (`Previously this was manual. Now it's automatic. This saves time.` becomes one sentence); short sentences for emphasis are fine.
@@ -75,10 +75,12 @@ Strip these patterns from drafts, yours or a model's:
 - **Title case for nav labels.** "Configuring Environment Variables". The page H1 is a sentence; the nav is a label.
 - **`meta.title` becomes the H1; `meta.navLabel` becomes the sidebar entry.**
 - **Subheadings descriptive, not cute.** "Caveats when self-hosting on Cloudflare", not "Caveats". The reader should guess section content from the heading alone.
-- **Topics start with summaries.** Every page opens with a one-paragraph TL;DR. Every major section opens with a summary sentence. Readers who scrolled here from search should know whether to keep reading by the end of the first line.
+- **Topics start with summaries.** For documentation pages, every page opens with a one-paragraph TL;DR and every major section opens with a summary sentence. Readers who scrolled here from search should know whether to keep reading by the end of the first line.
 - **Acronyms spelled out on first use.** "Content Security Policy (CSP) blocks inline scripts". Subsequent uses can be just CSP.
 
 ## Lists
+
+For documentation pages:
 
 - **Three or more list-shaped items in a paragraph: convert to a list.** Otherwise prose.
 - **Bulleted for unordered; numbered for ordered.** Numbered for lifecycles, sequential steps.
@@ -90,7 +92,7 @@ Strip these patterns from drafts, yours or a model's:
 
 - **Language tag on every code block.** Syntax highlighting depends on it.
 - **TypeScript first.** Default for new code unless the surface is genuinely language-agnostic.
-- **`<Steps/>` for multi-step flows.** Wrap consecutive code blocks so the reader sees the structure visually.
+- **`<Steps/>` for multi-step flows in Vercel docs.** Wrap consecutive code blocks so the reader sees the structure visually; other projects use their own step component.
 - **Highlight load-bearing lines.** ` ```typescript {8-12,23-37} `.
 - **80 columns per line, 25 lines per snippet.** Split longer blocks with prose.
 - **Omit defaults.** Don't repeat variable definitions; use a shared variable.
@@ -100,8 +102,7 @@ Strip these patterns from drafts, yours or a model's:
 
 ## Models in examples
 
-- **Always use the latest model strings.** `anthropic/claude-opus-4-7`, not `anthropic/claude-sonnet-4` or older.
-- **Image generation default.** `google/gemini-3.1-flash-image-preview`.
+- **Use the project's current model names.** Read them from the project manifest, docs, or live configuration; never hard-code a stale model string or copy one from another project.
 
 ## Placeholders, units, & numbers
 

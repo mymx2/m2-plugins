@@ -1,6 +1,6 @@
 # AI 味检测：模式识别与实战规则
 
-> **适用范围**：本文管 AI 味检测模式总表与实战规则。核心立场与执行流程在 `write-zh.md`；标题/列表/图片/结构级重复等结构规则在 `write-zh-structure.md`；专家腔、腔调与默认禁用词在 `write-zh-voice.md`；高频替换表在 `write-zh.md`（「高频替换：报告腔和不喜欢的表达」节）。
+> **适用范围**：本文管 AI 味检测模式总表与实战规则。核心立场与执行流程在 `write-zh.md`；标题、图片节奏与结构级重复规则在 `write-zh-structure.md`；列表策略在 `write-zh.md`（「列表去 list 化的渐进策略」节）与 `write-zh-voice.md`（bullet 去 list 化）；专家腔、腔调与默认禁用词在 `write-zh-voice.md`；高频替换表在 `write-zh.md`（「高频替换：报告腔和不喜欢的表达」节）。
 
 ### AI 味检测：这几个模式帮你认味
 
@@ -183,5 +183,5 @@ context、state、cache、claim 这类词有现成中文对译：上下文、状
 **案例引入需要半句”为什么选它”**
 直接 zoom in 到具体案例时，如果切换感突然，先加半句说明它代表哪条路线或设计选择，再展开细节。
 
-> NO: “Kimi K2.5 的 PARL 是这里最值得拆开的工程案例。它只训练 orchestrator...”（直接进细节）
-> OK: “Kimi K2.5 的 PARL 代表了一条新路线：只训 orchestrator、把 credit assignment 收到编排层。奖励信号分三类...”（先说代表什么）
+> NO: “这个案例分析是这里最值得拆开的工程案例。它只训练 orchestrator...”（直接进细节）
+> OK: “这个案例分析代表了一条新路线：只训 orchestrator、把 credit assignment 收到编排层。奖励信号分三类...”（先说代表什么）

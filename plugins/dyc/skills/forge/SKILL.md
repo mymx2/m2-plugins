@@ -1,10 +1,10 @@
 ---
 name: forge
-description: '插件与技能的全生命周期管理：基于 Agent Plugins Spec 创建标准插件、通过 extensions + init 模式适配多厂商（Claude Code / Qoder / Codex），以及发现、安装、编写、校验技能。Use when creating a plugin, scaffolding a multi-vendor plugin, writing plugin.json, generating init.ts, finding/installing skills, or authoring/validating SKILL.md. Not for runtime debugging of deployed skills (route to hunt) or reviewing plugin code quality (route to check).'
-when_to_use: 'plugin, 插件, create plugin, 创建插件, plugin.json, init.ts, extensions, manifest, 多厂商, multi-vendor, scaffold, 脚手架, 厂商适配, claude-plugin, qoder-plugin, codex-plugin, find skills, 找技能, skills.sh, skills cli, npx skills, 安装技能, create skill, write SKILL.md, author skill, 新建技能, 编写技能, skill template, validate skill, 校验技能'
+description: '插件与技能的全生命周期管理：基于 Agent Plugins Spec 创建标准插件、通过 extensions + init 模式适配多厂商（Claude Code / Qoder / Codex / CodeBuddy），以及发现、安装、编写、校验技能。Use when creating a plugin, scaffolding a multi-vendor plugin, writing plugin.json, generating init.ts, finding/installing skills, or authoring/validating SKILL.md. Not for runtime debugging of deployed skills (route to hunt) or reviewing plugin code quality (route to check).'
+when_to_use: 'plugin, 插件, create plugin, 创建插件, plugin.json, init.ts, extensions, manifest, 多厂商, multi-vendor, scaffold, 脚手架, 厂商适配, claude-plugin, qoder-plugin, codex-plugin, codebuddy-plugin, find skills, 找技能, skills.sh, skills cli, npx skills, 安装技能, create skill, write SKILL.md, author skill, 新建技能, 编写技能, skill template, validate skill, 校验技能'
 license: MIT
 metadata:
-  origin: https://github.com/mymx2/m2-plugins/skills/forge
+  origin: https://github.com/mymx2/m2-plugins/tree/main/plugins/dyc/skills/forge
   author: mymx2 <https://github.com/mymx2>
 ---
 
@@ -26,7 +26,7 @@ Forge 是插件与技能的全生命周期路由层：判断任务属于哪个�
 ## When to Use
 
 - 从零创建标准插件（plugin.json + extensions + init.ts）。
-- 为已有插件添加或修改厂商适配（Claude Code / Qoder / Codex）。
+- 为已有插件添加或修改厂商适配（Claude Code / Qoder / Codex / CodeBuddy）。
 - 搜索、推荐、安装、更新、移除技能。
 - 编写新 SKILL.md 或修复校验门禁报错。
 - Route to `hunt` for runtime debugging of deployed skills; route to `check` for reviewing plugin code quality.
@@ -40,16 +40,16 @@ Forge 是插件与技能的全生命周期路由层：判断任务属于哪个�
 
 ## Mode Picker
 
-| Ask                                           | Load                                                                                                          |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| 创建插件、plugin.json、标准骨架               | `references/plugin-spec.md`                                                                                   |
-| 多厂商适配、extensions、init.ts               | `references/extensions-pattern.md` → 按其指引再读 `<vendor>/init-guide.md`（`claude/`、`qoder/`、`codex/`）   |
-| 找技能、推荐技能、"有没有 X 的技能"           | `references/find-plugins.md`                                                                                  |
-| Skills CLI 命令用法、安装/更新/移除/CI 自动化 | `references/cli-guide.md`                                                                                     |
-| 新建或编写 SKILL.md、技能结构规范             | `references/skill-authoring.md`                                                                               |
-| 审计、精简、改写既有 SKILL.md / AGENTS.md     | `references/next-gen-context.md`（新一代模型上下文规则 + 删除测试清单）                                       |
-| 编写 README、插件说明文档                     | `references/readme-guide.md`                                                                                  |
-| 校验技能合规、修复门禁报错                    | 运行 `scripts/validate-skill.ts <skill-dir>`（规则说明见 `references/skill-authoring.md` 的 Evidence Ladder） |
+| Ask                                           | Load                                                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| 创建插件、plugin.json、标准骨架               | `references/plugin-spec.md`                                                                                               |
+| 多厂商适配、extensions、init.ts               | `references/extensions-pattern.md` → 按其指引再读对应厂商目录的 init-guide（`claude/`、`qoder/`、`codex/`、`codebuddy/`） |
+| 找技能、推荐技能、"有没有 X 的技能"           | `references/find-plugins.md`                                                                                              |
+| Skills CLI 命令用法、安装/更新/移除/CI 自动化 | `references/cli-guide.md`                                                                                                 |
+| 新建或编写 SKILL.md、技能结构规范             | `references/skill-authoring.md`                                                                                           |
+| 审计、精简、改写既有 SKILL.md / AGENTS.md     | `references/next-gen-context.md`（新一代模型上下文规则 + 删除测试清单）                                                   |
+| 编写 README、插件说明文档                     | `references/readme-guide.md`                                                                                              |
+| 校验技能合规、修复门禁报错                    | 运行 `scripts/validate-skill.ts <skill-dir>`（规则说明见 `references/skill-authoring.md` 的 Evidence Ladder）             |
 
 ## Common Rationalizations
 
@@ -67,7 +67,8 @@ Forge 是插件与技能的全生命周期路由层：判断任务属于哪个�
 1. 插件创建/修改后：`scripts/validate-plugin.ts <plugin-root>` 退出码 0。
 2. 厂商适配后：运行对应 `.<vendor>-plugin/init.ts`，确认生成的 `.<vendor>-plugin/plugin.json` 存在且内容正确。
 3. 技能编写/修改后：`scripts/validate-skill.ts <skill-dir>` 全部门禁绿。
-4. 安装/更新/移除后：`npx skills list` 状态与预期一致。
+4. 安装/更新/移除后：项目级用 `npx skills list`、全局用 `npx skills list -g`，状态与预期一致。
+5. 本仓库内新增插件还要注册四个 marketplace，跑 `vp run init` 同步版本，并通过仓库根的 `validate_repo.py` 与 `vp run validate:schema`。
 
 ## Output Summary
 

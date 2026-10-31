@@ -49,11 +49,12 @@ Pick the mode that matches the user's intent, then read it in full before acting
 | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | "implement this plan", `/think` output handed off                                              | load `references/mode-ship.md` (Plan Execution Mode)                      |
 | Diff or PR ready, "review", "看看代码", "合并前"                                               | Default review (start at Get the Diff in `references/review-patterns.md`) |
-| "能删什么", "过度工程", "over-engineering review", "what can we delete"                        | load `references/deletion-review.md`                                      |
+| "能删什么", "过度工程", "over-engineering review", "what can we delete"                        | load `references/simplification-and-deletion.md`                          |
 | "look at issues", "review PRs", "triage", "批量处理"                                           | load `references/mode-triage.md`                                          |
 | "is this worth a release", "值不值得发版"                                                      | load `references/mode-ship.md` (Release Worthiness Analysis)              |
 | "commit", "push", "publish", "release", "close issue", "发布表情"                              | load `references/mode-ship.md` (Ship / Release Follow-through)            |
 | "audit", "项目体检", "项目评分", "给项目打分", "深入分析项目代码", "scorecard", "linus review" | load `references/mode-audit.md`                                           |
+| A review prompt, skill, persona, or model changed; "is review still catching bugs"             | load `references/incident-ledger.md` (Replay eval)                        |
 | Document, PDF, prose review                                                                    | load `references/writing-review.md`                                       |
 
 Before any mode, run [Project Context Extraction](#project-context-extraction) and (if memory is in scope) [Durable Context Preflight](#durable-context-preflight).
@@ -114,6 +115,12 @@ Finding titles stand alone and lead with the consequence. Counts, absences, and 
 
 **HIGH and CRITICAL require three pieces of evidence:** the exact file:line where the bug lives; the specific trigger; and why existing guards (validation, type system, upstream catch, framework default) do not already prevent it. Cannot supply all three? Downgrade to MEDIUM, or drop.
 
+**Severity vocabulary.** HIGH and CRITICAL are the evidence-gated levels. Map `Critical:` to CRITICAL, an unprefixed required finding to HIGH, and `Nit:` / `Optional:` / `FYI` to advisory. Audit labels CRIT / STRUCT / INCR map to CRITICAL / HIGH / MEDIUM until the audit template says otherwise. A tier disagreement keeps the more severe label and names the missing evidence.
+
+**Report shape.** Group findings by bug class, highest severity first, each class listing every same-class site with its file:line, then give the total; with none, write `no issues found` against the stated surface. Issues the diff did not introduce go in a separate `pre-existing` list and do not count toward the verdict.
+
+**Rounds converge.** One task gets at most three review/fix rounds. From round two, review only the new diff plus the re-checks Autofix Routing requires, and never re-report a finding already reported. A third round that still finds new problems stops the patch loop: return to the review-patterns reference (Question the Approach, Not Just the Diff). A class that comes back in a second round or a second review is fixed at its source (lint, source gate, type, routed rule), not site by site.
+
 ## Conformance Review
 
 Beyond correctness, run the domain checklists when the diff touches the relevant surface:
@@ -121,7 +128,7 @@ Beyond correctness, run the domain checklists when the diff touches the relevant
 | Diff touches                                                                                 | Load checklist                                                                                                                                                                     |
 | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | User input, auth, data storage, external integrations, uploads, payments, PII, LLM output    | `references/security-checklist.md`                                                                                                                                                 |
-| Logic, bug fixes, behavior changes, or new features                                          | `references/test-checklist.md`                                                                                                                                                     |
+| Logic, bug fixes, behavior changes, or new features                                          | `references/testing.md`                                                                                                                                                            |
 | Load time, interaction, data fetching, queries, bundle                                       | `references/performance-checklist.md`                                                                                                                                              |
 | Production features, I/O, retries, queues, cross-service calls                               | `references/observability-checklist.md`                                                                                                                                            |
 | Pages, components, styles, or DESIGN.md tokens (`.vue` `.tsx` `.css` `tailwind.config` etc.) | Route to `/ui` if available for a rendered-surface visual review; otherwise review rendered interaction states yourself (hover cursor, focus ring, tap targets, responsive states) |
@@ -135,22 +142,22 @@ Load the matching reference when the review enters that territory:
 | When reviewing                                                                                              | Load                                                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Findings need sharpening, severity labels, change sizing, dependency discipline, stale or drifting comments | `references/review-quality.md`                                                                                                          |
-| Code works but is over-complicated or hard to read                                                          | `references/simplification.md`                                                                                                          |
+| Code works but is over-complicated, hard to read, or has removable complexity                               | `references/simplification-and-deletion.md`                                                                                             |
 | An in-flight single decision needs adversarial, fresh-context checking (not the whole-diff deep pass)       | `references/doubt-review.md`                                                                                                            |
 | Commits, branching, or release/versioning decisions                                                         | `references/git-workflow.md`                                                                                                            |
 | Drafting a maintainer reply on a public issue or PR (triage or ship follow-through)                         | `references/public-reply.md`                                                                                                            |
 | CLI entrypoint, installer, completion, config/env, or mutating command (cleanup/update/uninstall/migration) | `references/release-surfaces.md` (CLI Command Surface); after changing CLI-facing text, re-run the command and read the real output     |
 | Skill, plugin, marketplace entry, package allowlist/manifest, generated mirror, or published archive        | `references/release-surfaces.md` (Packaged Install Surface); manifest JSON or source tests never substitute for installed-runtime proof |
 | Build/deploy pipeline changes or automated checks                                                           | `references/ci-cd.md`                                                                                                                   |
-| Release-worthiness or launch readiness beyond the basic gate                                                | `references/shipping.md`                                                                                                                |
+| Release-worthiness or launch readiness beyond the basic gate                                                | `references/mode-ship.md` (Launch Readiness)                                                                                            |
 | A multi-file or multi-slice change (scope/feature-flag/rollback discipline)                                 | `references/incremental-guardrails.md`                                                                                                  |
 | Removing an API/feature, migrating consumers, or a schema change                                            | `references/migration.md`                                                                                                               |
 | The standing project-wide bar every change clears before done                                               | `references/definition-of-done.md`                                                                                                      |
-| Concrete JS/TS testing syntax (Jest, RTL, Supertest, Playwright)                                            | `references/testing-patterns.md`                                                                                                        |
+| Concrete JS/TS testing syntax within the testing reference (Jest, RTL, Supertest, Playwright)               | `references/testing.md` (JS/TS Syntax Appendix)                                                                                         |
 
 ## Knowledge Sync
 
-When a finding recurs, or the diff introduces an invariant not yet in project docs, load `references/knowledge-sync.md` and promote it to a durable rule. Sign-off reports `doc debt: none` when no new invariant exists.
+When a finding recurs, or the diff introduces an invariant not yet in project docs, load `references/knowledge-sync.md` and propose the durable rule; write it only when the current request authorizes edits, otherwise report it as doc debt. Sign-off reports `doc debt: none` when no new invariant exists.
 
 ## Specialist Review (Standard and Deep only)
 
@@ -185,7 +192,7 @@ When project docs or CI name a verification command, run that command. Otherwise
 
 A failed check needs diagnosis; no detected command is a discovery gap, not proof of failure. Inspect project docs, manifests, and CI for an appropriate check. Block a fix or readiness claim only when required evidence is missing or failing.
 
-For bug fixes: a regression test that fails on the old code must exist before the fix is done.
+For bug fixes: when a correct test seam exists, a regression test that fails on the old code must exist before the fix is done; when no seam exists, record a no-seam architecture finding with the missing seam instead of treating the fix as fully guarded. When the defect reached users or a published build and the project keeps an incident ledger, the same change adds its row; load `references/incident-ledger.md`. When a review prompt, skill, persona, or model changes, use that ledger's replay eval to compare recovered rows and noise against the previous run.
 
 In a dirty or multi-agent checkout, a passing local run is not proof: unrelated WIP can supply missing symbols or mask a break. Verify in isolation — `git worktree add --detach <known-good-commit>`, `git apply` only your diff, then build/test there.
 
@@ -193,12 +200,12 @@ In a dirty or multi-agent checkout, a passing local run is not proof: unrelated 
 
 | What happened                                                | Rule                                                                                                                 |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| Public reply went to the wrong thread, or read like a report | Follow `references/public-reply.md` — the single source for public reply rules                                       |
+| Public reply went to the wrong thread, or read like a report | Follow the `public-reply` reference — the single source for public reply rules                                       |
 | Deployed without provider runtime or env checks              | Follow the project's public deployment docs and compare provider config with local required env and runtime settings |
 
 ## Sign-off
 
-Open the final message with one plain-prose sentence stating where the work stands now (e.g. "已提交并推送为 abc1234"), with the hash, tag, or blocker; then the status block below. A verdict buried under verification tables reads as unfinished; the tables support the verdict, they do not replace it.
+Open the final message with one plain-prose sentence stating where the work stands now (e.g. "已提交并推送为 abc1234"), with the hash, tag, or blocker; then the status block below. A verdict buried under verification tables reads as unfinished; the tables support the verdict, they do not replace it. Audit Mode and Writing Review use their stricter output templates; apply this status block only when the mode does not define one.
 
 ```
 status:           [committed and pushed as <hash> / staged, not committed / released vX.Y.Z / blocked on <what>]
@@ -206,6 +213,7 @@ files changed:    N (+X -Y)
 scope:            on target / drift: [what]
 user-visible delta: none / [entry, UI, copy, behavior added, removed, or changed]
 review depth:     quick / standard / deep
+risk tier:        [tier]: [gates], human review done / pending (only when a tier applies)
 hard stops:       N found, N fixed, N deferred
 sibling sweep:    N same-shape sites checked, N fixed / none found / not applicable
 checklists:       [security, test, ui] green/blocked or n/a
@@ -215,7 +223,7 @@ doc debt:         none / AGENTS.md needs X / rules need Y
 verification:     [command] -> pass / fail
 ```
 
-`public actions` lists every outward-facing step the task implied (issue replies, closures, release reactions) with its done or pending state.
+`public actions` lists every outward-facing step the task implied (issue replies, closures, release reactions) with its done or pending state. `risk tier` is present only when a path tier applies; name its gates and whether the human maintainer reviewed.
 
 **Derive every count from the findings, never estimate.** If the stated count and the listed findings disagree, the findings win and the count gets recomputed.
 

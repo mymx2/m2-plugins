@@ -17,7 +17,7 @@
 | `keywords`    | string[] |      | 搜索和发现标签                                                                |
 | `extensions`  | object   |      | 厂商特定数据，见 extensions-pattern reference                                 |
 
-**闭包约束**：除上述字段外，`plugin.json` 不允许任何其他顶层字段。未知字段会被报告并忽略（不致命），但客户端不会对未知字段赋予语义。厂商特有数据必须放在 `extensions` 下。
+**闭包约束**：除上述字段外，`plugin.json` 不允许任何其他顶层字段。未知字段在本仓库是硬失败：`validate-plugin.ts` 的门 4 与 `validate:schema`（`additionalProperties: false`）都会拒绝；客户端也不会对未知字段赋予语义。厂商特有数据必须放在 `extensions` 下。
 
 最小有效 manifest：
 
@@ -134,7 +134,7 @@ skills/
 - `command` 必须是单个可执行 token（裸名称或 `./` 路径），不是 shell 命令。
 - 远程 URL 必须绝对、无用户信息、无 fragment；非 loopback 必须 HTTPS。
 - `mcp.json` 的 `$schema` 版本必须与 `plugin.json` 一致，否则 MCP 配置无效（其他组件不受影响）。
-- **禁止空 scaffold**：如果插件不需要 MCP，不要创建空的 `mcp.json` 或 `{ "mcpServers": {} }`。空对象没有实际意义，校验器会报 warning。需要时再创建，且至少包含一个 server 定义。
+- **禁止空 scaffold**：如果插件不需要 MCP，不要创建空的 `mcp.json` 或 `{ "mcpServers": {} }`。空对象没有实际意义，本仓库校验器会直接拒绝（fail）。需要时再创建，且至少包含一个 server 定义。
 
 ## 环境变量与占位符
 
@@ -238,4 +238,4 @@ v1 便携契约只定义 skills 和 MCP servers；agents 属于厂商扩展，�
 ## 来源
 
 - 规范全文：[Agent Plugins Spec 1.0.0](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md)
-- Schema 文件：`schemas/1.0.0/plugin.schema.json`、`schemas/1.0.0/mcp.schema.json`
+- 本仓库 Schema 文件：`schemas/plugin.schema.json`、`schemas/mcp.schema.json`

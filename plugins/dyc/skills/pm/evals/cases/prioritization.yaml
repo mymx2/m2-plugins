@@ -1,0 +1,20 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: prioritization
+title: 三个需求给出有依据的优先级排序
+description: |
+  验证 pm 用明确框架和假设排序，而不是凭直觉给一个顺序。
+
+input:
+  prompt: |
+    现在有三个需求：导出 CSV、SSO 登录、移动端离线编辑。
+    帮我排个优先级，并说明依据和风险。
+
+judge:
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '使用明确的排序框架（如 RICE / ICE / 价值-成本）并写出假设'
+    - '给出可解释的分数或排序依据，而不是只给结论'
+    - '说明依赖、风险或不确定性，以及排序会如何随关键假设变化'
+    - '没有编造用户调研、收入或使用数据'
+  pass_threshold: 0.9

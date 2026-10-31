@@ -28,7 +28,7 @@ A configured capability is not an exercised behavior. Presence is inventory; onl
 
 Run the collection script in summary mode first. Do not interpret yet. Run the Health launcher in collect mode (Windows: `run-health.ps1`; POSIX: `collect-data.sh`) under `<skill-base-dir>/scripts/` — full invocation flags and ExecutionPolicy notes live with the scripts.
 
-Every `.sh`, `.ps1`, and `.py` under `scripts/` is executed by the agent; none is read as reference material. Beyond the entry points named here, the launcher dispatches the `check_*.py` and `check-*.sh` helpers in the same directory per action for data collection; deep mode additionally runs `scan_skill_security.py`.
+The collector entry point and the helpers it dispatches are executed by the agent; do not treat them as reference material. `collect-data.sh` dispatches `conversation_audit.py`, `check_agent_context.py`, and `check_maintainability.py` (which calls `check_doc_refs.py`); deep mode additionally runs `scan_skill_security.py`. `check_verifier_output.py` runs only under the explicit `verifier-output` action, and `block-pipe-to-shell.py` is a distributable hook template that runs only when the user asks to install that protection.
 
 Sections may show `(unavailable)` when tools are missing:
 
@@ -54,7 +54,7 @@ These run after collection and before the Step 2 analysis. The first two apply t
 
 ### Security Baseline Checks
 
-Run these on every audit. They are the floor, not the ceiling. Load `references/safety-baseline.md` and work its three checks: deny-list floor, permission-layer vs instruction-layer gating, and environment override surface.
+Run these on every audit. They are the floor, not the ceiling. Load the `safety-baseline` reference and work its three checks: deny-list floor, permission-layer vs instruction-layer gating, and environment override surface.
 
 For pipe-to-shell blocking, `scripts/block-pipe-to-shell.py` is a distributable PreToolUse hook template that refuses remote-download-to-shell pipelines; it is not part of the collection flow — reference it only when the user asks to actually install the protection.
 
@@ -68,7 +68,7 @@ Treat agent memory and third-party skills as supply-chain artifacts. They run wi
 
 ### Long-Running Agent Stop Conditions
 
-For projects that use `/loop`, autonomous agents, or any long-running agent flow, load `references/long-running-agents.md` and audit the four hard stop signals it lists. Projects without such a flow skip this check.
+For projects that use `/loop`, autonomous agents, or any long-running agent flow, load the `long-running-agents` reference and audit the four hard stop signals it lists. Projects without such a flow skip this check.
 
 ## Step 2: Analyze
 
@@ -114,11 +114,11 @@ Example:
 
 Agent instructions in the wrong layer, missing hooks, oversized descriptions, verifier gaps.
 
-**Agent-runtime instruction drift (Claude, Codex, Pi, etc.).** Use `AGENT CONFIG SUMMARY` first. The routing and layering rules for agent context live in `references/context-engineering.md`; apply them here. The one health-specific case: report a Structural finding when Codex `config.toml` lacks trust for the current project (verify against installed codex version; trust model has changed across releases). Do not print raw config values. Secrets, tokens, keys, and passwords must appear only as `[REDACTED]`.
+**Agent-runtime instruction drift (Claude, Codex, Pi, etc.).** Use `AGENT CONFIG SUMMARY` first. The routing and layering rules for agent context live in the `context-engineering` reference; apply them here. The one health-specific case: report a Structural finding when Codex `config.toml` lacks trust for the current project (verify against installed codex version; trust model has changed across releases). Do not print raw config values. Secrets, tokens, keys, and passwords must appear only as `[REDACTED]`.
 
 Quick check from the project root: invoke the launcher as `agent-context . summary` (Windows: `run-health.ps1`; POSIX: `check-agent-context.sh` under `<skill-base-dir>/scripts/`).
 
-**AI-maintainability findings.** For the maintainability lane (verification surface, conversation-derived guidance, concentrated fix chains, risk-backed hotspot ownership, non-obvious constraint reachability, verifier wrapper, broken doc and Markdown references, stale verifier cache output), load `references/maintainability-findings.md` and work its checks with `AI MAINTAINABILITY SUMMARY` / `DETAIL`.
+**AI-maintainability findings.** For the maintainability lane (verification surface, conversation-derived guidance, concentrated fix chains, risk-backed hotspot ownership, non-obvious constraint reachability, verifier wrapper, broken doc and Markdown references, stale verifier cache output), load the `maintainability-findings` reference and work its checks with `AI MAINTAINABILITY SUMMARY` / `DETAIL`.
 
 ### [-] Incremental -- nice to have
 

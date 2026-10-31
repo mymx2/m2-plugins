@@ -92,7 +92,7 @@ Claude Code 通过 `agents/` 目录自动发现子 Agent。打包时注意：
 }
 ```
 
-可用事件：`PreToolUse`、`PostToolUse`、`Stop`、`SubagentStop`、`SessionStart`、`SessionEnd`、`UserPromptSubmit`、`PreCompact`、`Notification`。
+可用事件以仓库内 `schemas/claude-code-plugin-manifest.schema.json` 为准，覆盖 `PreToolUse`、`PostToolUse`、`PostToolUseFailure`、`Stop`、`StopFailure`、`SubagentStart`、`SubagentStop`、`SessionStart`、`SessionEnd`、`UserPromptSubmit`、`PreCompact`、`PostCompact`、`PermissionRequest`、`PermissionDenied`、`WorktreeCreate`、`WorktreeRemove` 等。
 
 ### .mcp.json 示例
 
@@ -138,7 +138,7 @@ Claude Code 通过 `agents/` 目录自动发现子 Agent。打包时注意：
 
 ## Skill 编写规则
 
-此表与三个厂商目录的 manifest-rules 同步，改动需三处一起。
+此表与其他厂商目录的 manifest-rules 同步，改动需各厂商目录一起。
 
 | 规则                         | 类型 | 说明                                                                        |
 | ---------------------------- | ---- | --------------------------------------------------------------------------- |

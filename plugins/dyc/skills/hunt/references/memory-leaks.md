@@ -2,7 +2,7 @@
 
 适用范围：browser 与 Node.js 的 JavaScript 堆内存问题；原生应用（Swift/Rust/C++ 等）内存问题本文件不适用。
 
-Heap snapshot workflow for JavaScript and Node.js leaks using the chrome-devtools-mcp heap tools; if the heap tools are absent, ask the user to enable memory debugging in the chrome skill (server setup mechanics live there).
+Heap snapshot workflow for JavaScript and Node.js leaks using the chrome-devtools-mcp heap tools; if the heap tools are absent, ask the user to enable memory debugging in the chrome skill (server setup mechanics live there). In CLI mode, page-scoped tools take the `pageId` as the first positional argument; the steps below omit it for MCP mode.
 
 ## Core Principles
 

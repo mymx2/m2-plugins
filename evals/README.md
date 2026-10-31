@@ -13,7 +13,7 @@
 | 层                      | 测什么                                                     | 脚本 / 入口                                           | 产物                                                | 通过线                                                                 |
 | ----------------------- | ---------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------- |
 | **Tier 0** 静态触发面   | 12 个 `when_to_use` 两两字面重叠                           | `python scripts/check-trigger-jaccard.py`             | 终端打印                                            | worst pairwise Jaccard **< 0.5**                                       |
-| **Tier 2** 触发路由     | 126 条 prompt(76 positive + 50 negative)语义 / 词面 top-1  | `python evals/lexical_router.py`                      | `results/lexical-routing.json`                      | 语义判定以 `results/tier2-routing.md` 为 ground truth;词面仅作加固参考 |
+| **Tier 2** 触发路由     | 140 条 prompt(84 positive + 56 negative)语义 / 词面 top-1  | `python evals/lexical_router.py`                      | `results/lexical-routing.json`                      | 语义判定以 `results/tier2-routing.md` 为 ground truth;词面仅作加固参考 |
 | **Tier 3** 行为抽样     | hunt / check / write 各 baseline + 压力变体,6 次子代理执行 | `python evals/run_tier3.py` + `python evals/grade.py` | `runs/<skill>-<variant>/`、`results/grading-*.json` | 每条期望 PASS/FAIL,压力变体核心契约必须全守住                          |
 | **Tier 1** 弱模型可读性 | think / check 逐句照做视角                                 | 人工审查                                              | `results/tier1-readability.md`                      | BLOCKER=0                                                              |
 
@@ -42,13 +42,13 @@ python scripts/check-trigger-jaccard.py
 python evals/lexical_router.py
 ```
 
-重写 `results/lexical-routing.json`(126 条,含 top-3 得分)。description 由 `load_descriptions()`
+重写 `results/lexical-routing.json`(140 条,含 top-3 得分)。description 由 `load_descriptions()`
 从 12 个 SKILL.md 的 frontmatter **现读**,无内嵌副本——改 description 即生效,不存在"改了就忘
 同步"的窗口。早期版本曾手抄副本,结果 forge 的全角冒号被抄成半角,正是这次重构消灭的漂移。
 
 读法:
 
-- `positive top-1 hit: X/76` 是纯字面 TF-IDF 的下限指标,**不是生产指标**。生产路由是语义路由
+- `positive top-1 hit: X/84` 是纯字面 TF-IDF 的下限指标,**不是生产指标**。生产路由是语义路由
   (LLM 读 description 判断),语义判定结果在 `results/tier2-routing.md` §A。
 - 词面表的用途是定位"缺关键词锚点"的技能:得分恒 0 的中文 prompt 会在并列时按字母序退化,
   观察哪些技能被零分并列顶上去,可发现 description 覆盖面过宽的"默认汇"。
@@ -122,27 +122,18 @@ python -m pytest evals/tests/ -q
 "已存在 run 目录默认跳过不静默覆盖"(上一轮 actions.log 事故的根因)与 check fixture 的
 `.git` 随行 + dirty 状态形态。
 
-CI 门禁(`.github/workflows/plugin-gate.yml`)已加两步:
+CI 门禁(`.github/workflows/plugin-gate.yml`)用单步 `vp run test`,它内部串起:
 
-- `evals 设施单测`:跑上面这条 pytest;
+- `evals 设施单测`:`python -m pytest evals/tests/ -q`;
 - `evals 词面路由不退化`:重跑 `lexical_router.py`,用 `compare_routing.py` 与入库的
-  `results/lexical-routing.baseline.json` 对比,命中数下降即红;顺带跑 Tier 0 的
-  `check-trigger-jaccard.py`。
+  `results/lexical-routing.baseline.json` 逐条对比,任何总数下降或逐条丢失即红;
+- Tier 0 的 `check-trigger-jaccard.py`。
 
-**生效前提**:`evals/` 必须入库(当前是 untracked),且 `results/lexical-routing.baseline.json`
-要随之提交——`compare_routing.py` 是"当前结果 vs 入库基线"的 diff,基线文件不在仓库里
-这一步就没有对比对象。改 description 后若词面路由**合理**变化(命中数上升或不降),重跑
-`lexical_router.py` 后把新的 `lexical-routing.json` 复制为 `lexical-routing.baseline.json`
-一并提交即可。
-
-## CI 入口建议(只写文档,不接真实 CI)
-
-适合**门禁**(每次 PR 自动跑,失败即拦):
-
-- **Tier 0 Jaccard**:纯静态、秒级、确定性。`when_to_use` 撞车是回归高发区,必须门禁。
-- **Tier 2 词面路由**:确定性脚本,可门禁"相对基线不退化"——把 `results/lexical-routing.json`
-  入库,PR 重跑后 diff,positive top-1 命中数不得下降、think triage prompt 不得退回 check。
-  语义判定本身依赖 LLM,不能进确定性门禁,但可以用词面层当金丝雀。
+**生效前提**:`evals/` 已入库,且 `results/lexical-routing.baseline.json` 要随基线更新一起提交。
+`compare_routing.py` 是"当前结果 vs 入库基线"的 diff,基线文件不在仓库里这一步就没有对比对象。
+改 description 后先跑 `lexical_router.py`,用**改动前**的基线对比,确认没有逐条丢失;合理变化
+(命中数上升且无丢失)再把新的 `lexical-routing.json` 复制为 baseline 一并提交。基线更新与
+结果更新不能是唯一一次对比,否则 CI 只是在拿当前和当前自比。
 
 适合**抽样人工**(定时或发版前,不拦 PR):
 

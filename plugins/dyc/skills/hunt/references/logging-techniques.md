@@ -18,4 +18,4 @@ export PS4='+ [$0:$LINENO] '
 set -x
 ```
 
-Run the failing pipeline as `BASH_ENV=/path/to/xtrace-env.sh make test` (or the runner's equivalent). Every bash the runner spawns appends `file:line`-stamped traces to one persistent file, surviving the runner's temp-dir cleanup, so the exact dying line is on record even when the failure needs the full pipeline to reproduce. Guard the injection with a sentinel variable if nested shells would re-source it, and delete the env file when done.
+Run the failing pipeline as `BASH_ENV=/path/to/xtrace-env.sh make SHELL=/bin/bash test` (or the runner's equivalent). GNU make defaults to `/bin/sh`, which ignores `BASH_ENV`, so set `SHELL=/bin/bash` or inject through the runner's bash. Every bash the runner spawns appends `file:line`-stamped traces to one persistent file, surviving the runner's temp-dir cleanup, so the exact dying line is on record even when the failure needs the full pipeline to reproduce. Guard the injection with a sentinel variable if nested shells would re-source it, and delete the env file when done.

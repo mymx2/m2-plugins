@@ -16,7 +16,7 @@ Browser mechanics (server config, profile, CLI) belong to the chrome skill; this
 
 For network issues: capture → check URL/method/headers/payload/status/timing → diagnose (4xx client, 5xx server, CORS origin, timeout payload, missing request) → fix & verify.
 
-Page-load performance issues route to `performance-lcp.md`; this section covers only interactive-phase performance (long tasks, re-render) trace discipline: record a baseline trace of the current behavior first, record another after the fix, then keep/revert per the decision table in the check skill's performance checklist — neutral means revert.
+Page-load performance issues route to the `performance-lcp` reference; this section covers only interactive-phase performance (long tasks, re-render) trace discipline: record a baseline trace of the current behavior first, record another after the fix, then keep/revert per the decision table in the check skill's performance checklist — neutral means revert.
 
 ## Console 输出与症状的相关性
 

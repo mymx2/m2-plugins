@@ -16,14 +16,13 @@ input:
     3. 文档里的快速开始链接 404
     4. 建议把打包工具从 webpack 换成 vite
 
-# 零成本预检；不通过则跳过 judge。
-expect:
-  must_contain:
-    - '暗黑'
-
 judge:
-  # 评分策略：rule_based | agent_judge | script。
-  type: rule_based
-  success:
-    - output_contains:
-        all: ['登录', '暗黑', '404']
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '四条反馈都被逐条归类并给出可执行的处置建议，没有泛泛回应'
+    - '安卓登录失败被识别为核心 bug，优先修复'
+    - '暗黑模式被识别为功能诉求，404 被识别为文档缺陷，二者处置不同'
+    - 'webpack→vite 被识别为技术选型/范围较大的建议，没有被当成小修或直接忽略'
+    - '明确说明哪些值得做、哪些不做或需要更多信息，而不是只复述反馈'
+  pass_threshold: 0.9

@@ -19,7 +19,7 @@
 /// <reference types="node" />
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { basename, join, resolve } from 'node:path'
-import { findSameNameDirs, targetHomes } from './install'
+import { findSameNameDirs, targetHomes, validatePluginName } from './install'
 
 function uninstallFromHome(qoderHome: string, name: string): void {
   const pluginsDir = join(qoderHome, 'plugins')
@@ -64,6 +64,10 @@ export function uninstall(pluginRoot: string): void {
   const name: string = manifest.name
   if (!name) {
     console.error('根 plugin.json 缺少 name')
+    process.exit(1)
+  }
+  if (!validatePluginName(name)) {
+    console.error(`根 plugin.json 的 name 不符合 Agent Plugins 名称约束: ${name}`)
     process.exit(1)
   }
 

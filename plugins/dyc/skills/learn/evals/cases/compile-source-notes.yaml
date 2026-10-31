@@ -29,14 +29,12 @@ input:
     保留有价值的细节，矛盾的地方要明确指出来。
     文章全文直接放在回复里，不用另存文件。
 
-# 零成本预检；不通过则跳过 judge。
-expect:
-  must_contain:
-    - '边缘计算'
-
 judge:
-  # 评分策略：rule_based | agent_judge | script。
-  type: rule_based
-  success:
-    - output_contains:
-        all: ['边缘计算', '冷启动']
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '产出是一篇连贯的入门文章，而不是两份笔记的逐条罗列'
+    - '保留两份笔记中的关键细节（延迟、冷启动、调度/成本等），没有丢掉一方'
+    - '明确点出笔记间的矛盾（带宽成本收益 vs 回源成本上升），并保留双方立场'
+    - '没有引入两份笔记之外编造的数据或来源'
+  pass_threshold: 0.9

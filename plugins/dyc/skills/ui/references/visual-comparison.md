@@ -1,5 +1,7 @@
 # Visual Comparison: Judgment — Modes, Thresholds, Meaningful Failures, Baselines
 
+This reference covers design-conformance and intentional before/after comparison against an approved design baseline. When the screenshot proves a used-to-work regression (previously correct rendering now broken), route the diagnosis to hunt; the runtime root cause is not a design judgment.
+
 Canonical home for visual-diff judgment in this skills tree. Load when two captures exist and someone must decide what the diff means: visual regression against an approved baseline, or conformance against a design reference (Figma export, prototype image, handoff screenshot). The browser-side capture mechanics (viewport pinning, animation killing, time freezing, masking implementation) live in the chrome skill's `visual-comparison` reference; this file is the normative source for interpretation and decisions.
 
 ## Two Modes, Two Strictness Levels

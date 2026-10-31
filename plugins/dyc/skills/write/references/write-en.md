@@ -164,7 +164,7 @@ Examples, not exhaustive -- any construction that performs insight rather than d
 **Meta figure and diagram explanations:**
 
 > NO: "This diagram lists the sensor stack of a humanoid robot. With it in view, the previous problems become easier to place."
-> NO: "I made this diagram with ChatGPT Image2. Seeing the representations side by side makes the differences easier to grasp."
+> NO: "I made this diagram with an image model. Seeing the representations side by side makes the differences easier to grasp."
 > NO: "This timeline shows the evolution... That is one of the reasons I find this field more interesting..."
 > OK: The image or timeline itself. Let the surrounding judgment or personal project anchor carry the weight. Keep creation-process details only if they are themselves part of the story.
 

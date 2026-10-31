@@ -1,6 +1,6 @@
 # Evaluation Mode
 
-Activate when the user wants to judge whether something should exist, be kept, exposed, or removed. Typical triggers: "判断一下", "有没有必要", "值不值得", "should we keep this", "is this worth it", "我不想做", "商业前景", "有没有必要继续".
+Activate when the user wants to judge whether something should exist, be kept, exposed, or removed. Typical triggers: "判断一下" (without a concrete error or bug symptom; those route to hunt), "有没有必要", "值不值得", "should we keep this", "is this worth it", "我不想做", "商业前景", "有没有必要继续".
 
 State the evaluation target and what kind of judgment is needed (value, risk, or tradeoff). Take a current-state snapshot: what it does, who uses it, what depends on it; grep and read before opining.
 

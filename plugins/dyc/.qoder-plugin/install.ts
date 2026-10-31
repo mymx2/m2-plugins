@@ -48,6 +48,19 @@ const INCLUDE = [
   'skills',
 ]
 
+/** Agent Plugins 名称约束：长度、字符集、首尾字母数字、禁止连续 '--'/'..'。install/uninstall 共用 */
+export function validatePluginName(name: string): boolean {
+  return (
+    name.length > 0 &&
+    name.length <= 64 &&
+    /^[a-z0-9.-]+$/.test(name) &&
+    /^[a-z0-9]/.test(name) &&
+    /[a-z0-9]$/.test(name) &&
+    !name.includes('--') &&
+    !name.includes('..')
+  )
+}
+
 /** 目标 Qoder 主目录：哪个存在装哪个（支持仅装国际版或仅装 CN 的机器）。uninstall.ts 复用 */
 export function targetHomes(): string[] {
   const home = homedir()
@@ -145,6 +158,10 @@ export function install(pluginRoot: string): void {
   const version: string = manifest.version
   if (!name || !version) {
     console.error('根 plugin.json 缺少 name 或 version')
+    process.exit(1)
+  }
+  if (!validatePluginName(name)) {
+    console.error(`根 plugin.json 的 name 不符合 Agent Plugins 名称约束: ${name}`)
     process.exit(1)
   }
 

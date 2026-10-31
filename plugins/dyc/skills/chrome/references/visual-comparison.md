@@ -7,7 +7,7 @@ Load when a task captures screenshots that will be compared: visual regression a
 Two captures are comparable only when everything non-visual is pinned. Before shooting either side:
 
 1. Match viewport dimensions to the baseline or design frame; set `deviceScaleFactor` deliberately (`emulate --viewport "1920x1080x2"` or `resize_page`).
-2. Kill animation: the `emulate` tool does **not** cover `prefers-reduced-motion` (its schema is network, CPU, geolocation, user agent, color scheme, viewport, extra HTTP headers only). Inject CSS via `evaluate_script` instead:
+2. Kill animation: `emulate --prefersReducedMotion reduce` (the same tool also accepts `--forcedColors` and `--prefersContrast`). For honest-by-construction capture, additionally inject CSS via `evaluate_script` to zero `animation`/`transition` and hide the caret:
 
    ```js
    ;() => {
@@ -20,8 +20,8 @@ Two captures are comparable only when everything non-visual is pinned. Before sh
 
    This also hides the text caret. The SKILL.md script-safety rule applies; prefer a fresh isolated profile when the target page carries authenticated state.
 
-3. Freeze time and randomness: inject a fixed `Date` via `evaluate_script` before page scripts that render timestamps run, and use deterministic seed data where the app supports it. The same injection safety rule applies.
-4. Wait for stability, not a fixed sleep: `wait_for` a known-content selector, and let network go idle before capture.
+3. Freeze time and randomness: pass a fixed `Date` through `navigate_page --initScript` so it runs before page scripts render timestamps; use deterministic seed data where the app supports it. The same injection safety rule applies.
+4. Wait for stability, not a fixed sleep: poll `take_snapshot` until the expected content appears (this toolset has no `wait_for` command), and let network go idle before capture.
 5. Keep browser, OS, and installed fonts constant across the two captures; if a production font is missing locally, document the fallback instead of treating its rendering delta as a regression.
 6. Compare at identical pixel dimensions.
 

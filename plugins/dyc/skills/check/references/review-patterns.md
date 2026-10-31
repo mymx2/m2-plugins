@@ -88,26 +88,28 @@ Derive the review baseline from the user's words and current repository state. D
 
 - **All local or uncommitted changes**: inventory staged, unstaged, and untracked files, plus local commits ahead of the configured upstream. Even when the current branch is the base branch, the scope is still inferable from staged/unstaged/untracked state.
 - **PR or branch review**: use the merge base through the reviewed head, then add any dirty files in that checkout as a separate surface.
-- **Since the last release**: use the latest published stable tag through `HEAD`, not the local version field, then add dirty files.
+- **Since the last release**: resolve the latest stable from the delivery channel the product actually uses (feed, registry, store, or release host), map it to a source ref, and review through `HEAD`, then add dirty files. A stale release-host listing is not the baseline when another channel ships the product; a missing artifact-to-ref mapping stays an explicit gap.
 - **Recent N days or an explicit ref**: resolve that time/ref boundary through `HEAD`, then add dirty files.
 - **Known-good or previous working version**: compare that ref through `HEAD`; route to `/hunt` Bisect Mode only when the regression point itself is unknown.
 - **Whole-project audit**: use Audit Mode rather than pretending one diff is the repository.
 
-Freeze the resolved base, `HEAD`, worktree inventory, generated/distribution surfaces, and delegated scopes before review. Ask one narrow question only when two plausible baselines would materially change the verdict. If review fixes are applied or repository state moves, the old verdict expires: re-read `HEAD`, status, and the full resolved diff before signing off.
+Freeze the resolved base, `HEAD`, worktree inventory, generated/distribution surfaces, and delegated scopes before review. For a large inventory, reconcile the union of reviewed paths against that frozen set, including root files and cross-domain consumers; assignment alone is not coverage. Repeated locale or generated files may share a semantic check only when it accounts for every member, otherwise name the sampled and unread remainder separately. Ask one narrow question only when two plausible baselines would materially change the verdict. If review fixes are applied or repository state moves, the old verdict expires: re-read `HEAD`, status, and the full resolved diff before signing off.
 
 ## Scope Classification
 
-Measure the diff and classify depth. These thresholds are default intuition, not law — a project may override them in `references/project-context.md`; explicit depth language in the request always overrides size.
+Measure the diff and classify depth. These thresholds are default intuition, not law — a project may override them in the `project-context` reference; explicit depth language in the request always overrides size.
 
-| Depth        | Criteria (default intuition)                              | Coverage                                        |
-| ------------ | --------------------------------------------------------- | ----------------------------------------------- |
-| **Quick**    | Small diff (order of <100 lines, a handful of files)      | Base review only                                |
-| **Standard** | Medium (order of 100-500 lines, or several files)         | Base + conditional domain checklists            |
-| **Deep**     | Large, or touches auth/payments/data mutation at any size | Base + all domain checklists + adversarial pass |
+| Depth        | Criteria (default intuition)                              | Coverage                                         |
+| ------------ | --------------------------------------------------------- | ------------------------------------------------ |
+| **Quick**    | Small diff (order of <100 lines, a handful of files)      | Base review + checklists for the touched surface |
+| **Standard** | Medium (order of 100-500 lines, or several files)         | Base + conditional domain checklists             |
+| **Deep**     | Large, or touches auth/payments/data mutation at any size | Base + all domain checklists + adversarial pass  |
 
 State the depth before proceeding. Explicit depth language overrides the size thresholds. "All", "全部", "deep", "深入", or "仔细" means whole-scope coverage of the resolved inventory, even when the textual diff is small; it does not permit skipping untracked files, generated mirrors (files auto-produced by a build step that mirror source, e.g. `dist/`, `build/`, `generated/`), required artifacts, or pending reviewers.
 
 Static content diffs can stay quick even when they touch several generated files: version strings, dates, release-copy mirrors, sitemap dates, or one-for-one localization copy changes usually need line-by-line readback plus grep consistency, not the full checklist fleet. Escalate only when the diff changes logic, generation rules, public distribution behavior, or user-facing semantics beyond the literal text replacement.
+
+**Depth and risk tier are separate.** Depth reflects diff size or an explicit deep request; a path tier adds the project's heaviest gates and human review regardless of depth. A small diff touching CI workflows, release or signing, the updater, auth, billing or license, installers, privilege, or deletion paths receives tier-level coverage without being relabeled Deep. An agent's, bot's, or automated reviewer's approval never replaces that human review. The method is the Risk Tiers by Path section of the `project-context` reference.
 
 ## Scope Drift Detection
 
@@ -115,7 +117,7 @@ Before reading code, check scope drift: do the diff and the stated goal match? L
 
 When the completeness check is delegated, forward the original requirement verbatim (issue/PR description, commit message, task brief) — paraphrased handoffs lose constraints, and the drift verdict must be grounded in the source text, not a retelling.
 
-**Promise-by-promise verification (when an upstream spec exists).** Run the Spec Axis promise-by-promise three-state table per `references/review-quality.md` (Spec Axis) before the generic findings list.
+**Promise-by-promise verification (when an upstream spec exists).** Run the Spec Axis promise-by-promise three-state table per the `review-quality` reference (Spec Axis) before the generic findings list.
 
 Also check surgical traceability: every changed file and every new public surface must trace back to the user's stated goal. If a file, dependency, config knob, abstraction, generated artifact, workflow permission, or release behavior cannot be explained in one sentence from the request, label it drift until proven necessary.
 
@@ -144,4 +146,4 @@ Beyond whether the diff does what was asked, check what else it touches. Sweep t
 
 When the diff fixes one instance of a class-of-bug (a missing validation, a wrong selector, an off-by-one, a missing lock), the same shape often lives elsewhere. Extract the pattern signature, `grep -rn` it across the repo (exclude generated dirs), and confirm sibling instances were also handled. List any unswept sibling: flag it as a hard stop when it carries the same risk, advisory when lower-risk.
 
-When the diff contains a recurring or hard-to-observe bug, output-string branching, guessed waits, consolidation or dead-code deletion, history-sensitive restoration, broad destructive matchers, duplicated derivations, test-only seams, never-shipped migrations, unknown identifiers, error-handling changes, or new type definitions, load the matching section of `references/review-patterns.md`. Do not load that catalog for unrelated diffs.
+When the diff contains a recurring or hard-to-observe bug, output-string branching, guessed waits, consolidation or dead-code deletion, history-sensitive restoration, broad destructive matchers, duplicated derivations, test-only seams, never-shipped migrations, unknown identifiers, error-handling changes, or new type definitions, work the matching section above. Do not load that catalog for unrelated diffs.

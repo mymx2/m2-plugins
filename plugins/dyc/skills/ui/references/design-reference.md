@@ -29,6 +29,7 @@ Any of these can appear if they serve the design intentionally. They cannot appe
 
 ## UI Copy
 
+- **Meaning lost in a copy cut:** judge what the remaining text implies, not just whether words repeat a heading. Keep guarantees, scope, and limits when removing them changes that implication; clearer wording can be the right edit without shortening. Run existing copy checks across affected locales, reconcile corresponding surfaces on other platforms with their accepted wording, and compare the whole surface before and after: uneven descriptions or a card left holding only an icon need a layout decision, not another isolated text deletion.
 - Controls name the exact outcome: "Save changes", not "Submit". An action keeps the same name through the whole flow.
 - An empty screen names the first step without apologizing.
 - Name things by what people control, not how the system is built.
@@ -38,10 +39,6 @@ Any of these can appear if they serve the design intentionally. They cannot appe
 When an icon, image, or component is unavailable: use a placeholder. Never draw illustrative imagery using inline SVG. SVG is for icons and geometric shapes; for photography or product shots, use a placeholder and ask the user to supply real assets.
 
 ## Production Quality Baseline
-
-### Accessibility
-
-The WCAG 2.1 AA checklist is single-sourced in the `accessibility-checklist` reference; apply it before handoff.
 
 ### Animation
 
@@ -184,7 +181,7 @@ When source code and a screenshot are both available for a reference UI: read th
 
 ## Design Direction Scaffold (prose)
 
-For a multi-page or production UI, emit a short `DESIGN.md`-style summary before writing the first component: visual theme, color palette and roles, typography rules, component stylings (with states), layout principles, depth/elevation, project-specific do's and don'ts, responsive behavior, and agent prompt guide. For a single component or quick prototype, skip this.
+For a multi-page or production UI, emit a short design-direction brief before writing the first component: visual theme, color palette and roles, typography rules, component stylings (with states), layout principles, depth/elevation, project-specific do's and don'ts, responsive behavior, and agent prompt guide. This is prose guidance, not the lintable `DESIGN.md` token contract; when the project needs the file, use the `design-md-cli` and `design-md-format-spec` references instead. For a single component or quick prototype, skip this.
 
 ## Pre-Handoff Checklist: Strategic Omissions
 

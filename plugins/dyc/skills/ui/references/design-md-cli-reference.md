@@ -1,6 +1,6 @@
 # @google/design.md CLI Reference
 
-All commands accept a file path or `-` for stdin. Output defaults to JSON.
+`lint`, `diff`, and `export` accept a file path or `-` for stdin; `spec` takes no file. Output defaults to JSON.
 
 ## Installation
 

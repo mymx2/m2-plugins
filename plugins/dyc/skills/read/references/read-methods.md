@@ -10,13 +10,27 @@ Scripts ship inside the read skill: `<skill-base-dir>/scripts`. Set `READ_SCRIPT
 bash "$READ_SCRIPT_DIR/fetch.sh" "{url}"
 ```
 
-The script owns extraction order and content checks: request the source site and extract locally first. On failure, inspect its structured stderr. The script retries each tier once (total 2 attempts) with a 2s backoff; do not add extra retries around it. Only when the user has opted into third-party extraction for a public URL, run:
+The script owns extraction order and content checks: request the source site and extract locally first. On failure, inspect its structured stderr. The curl-based third-party tiers retry once (total 2 attempts) with a 2s backoff; the local extractor and DeepSeek call are single attempts. Do not add extra retries around it. Only when the user has opted into third-party extraction for a public URL, run:
 
 ```bash
 bash "$READ_SCRIPT_DIR/fetch.sh" --use-proxy "{url}"
 ```
 
 Do not send authenticated, internal, or otherwise sensitive URLs to third-party extraction services or reader plugins. An installed plugin is an optional reader under the same privacy boundary, not automatic permission to disclose a URL. If a reader returns JSON, extract its Markdown-bearing field before answering or saving.
+
+## DeepSeek Search and Fetch
+
+Needs `DEEPSEEK_API_KEY` from the DeepSeek platform, exported in the shell profile. Without it the script exits 2 and sends nothing.
+
+```bash
+python3 "$READ_SCRIPT_DIR/deepseek.py" search "{query}" --count 10
+python3 "$READ_SCRIPT_DIR/deepseek.py" fetch "{url}"
+```
+
+- `search` prints numbered results with URL, site, date, `authority` and `rerank_score` indices, plus a short summary. Both indices are relative to the returned set; compare them within one response rather than treating a fixed cutoff as absolute. Summaries are DeepSeek's index-time snapshot, so read the page before quoting a fact from it.
+- The query is 1-128 characters and supports operators such as `site:`, `lang:` and `after:`. `--content` adds page bodies; `--json` returns the raw response.
+- Each successful request is billed; failed, empty and timed-out requests are not. Plan the query set before running a batch.
+- `fetch.sh --use-proxy` tries this tier after the local extractor and before defuddle when the key is set. The same privacy rule applies: only public URLs, and only after the user opts into third-party extraction.
 
 ## GitHub URLs
 

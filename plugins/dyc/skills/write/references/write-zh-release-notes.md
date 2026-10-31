@@ -1,6 +1,6 @@
 # 中文对外发文专项：推文与发版前检查
 
-本文是中文对外发文（推文、社交公告、release 对外检查）的正本。Release notes 的格式规则（结构、pre-flight、git log 提取、双语结构）正本在 `mode-release-notes.md`，按 Mode Picker 加载即可，本文不重复。
+本文汇集中文对外发文（推文、社交公告）的专项规则，并保留 release 发布的额外信号检查。Release notes 的格式、条目与双语结构规则正本在 `mode-release-notes`，按 Mode Picker 加载即可，本文不重复。
 
 ## 推文 / 社交发文五规则（正本）
 
@@ -22,5 +22,4 @@
 
 - 不出现"不再更新"、"final release"、"停止维护"等终止信号（除非是真实情况）
 - release title 简洁：版本号 + 最核心的改动或主题，不超过 10 个词
-- 中英版本条目数一一对应
-- 条目数取覆盖本次构件所需的最小值，不拆分同一结果、不拿内部实现凑数，每条一句话
+- 条目数与中英对应规则见 `mode-release-notes`，不在这里重复

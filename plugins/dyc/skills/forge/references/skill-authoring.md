@@ -28,7 +28,7 @@ Activate when the user requests a new skill and no `SKILL.md` exists yet.
 4. **Structure the body.** Recommended sections in house-style order: Overview → Outcome Contract → When to Use → Process (numbered steps) → Common Rationalizations → Red Flags → Verification → Hard Rules → Gotchas → Output. The structural gate enforces only three things: `## Outcome Contract` present, at least one section with numbered steps, no orphaned headings. The rest are conventions, not validator-enforced; there is no exemption mechanism, so do not invent one.
 5. **Isolation check.** Grep the draft for `skills/*/SKILL.md`. Replace any file-path references with skill-name-only references.
 6. **Portability check.** Grep for personal paths, bare repo-relative invocations, AI attribution strings, private context markers, and root-level placement. Fix all violations before delivering.
-7. **Supporting file gate.** Only create `scripts/` or `references/` if the main file exceeds ~300 lines or requires runnable helpers. Never create empty directories.
+7. **Supporting file gate.** Only create `scripts/` or `references/` when the main file needs runnable helpers or on-demand routing; a line count alone is not a reason. Keep `SKILL.md` readable in one pass (roughly under 500 lines) and never create empty directories.
 
 **Output format:**
 
@@ -56,7 +56,7 @@ Activate when adding modes, phases, or supporting files to a working skill.
 
 1. Confirm the addition does not create trigger overlap with existing modes.
 2. Ensure new modes have disjoint activation conditions.
-3. If adding supporting files, verify the main `SKILL.md` stays under 500 lines after linking.
+3. If adding supporting files, verify the main `SKILL.md` stays readable in one pass and each new file is routed from it; there is no fixed line threshold.
 4. Update the Mode Picker table if applicable.
 
 ## Skill Split 策略

@@ -60,8 +60,9 @@ describe('JSON Schema 校验 (ajv)', () => {
     const report = result.reports.find(
       r => r.scope === '(project)' && r.file.includes('marketplace.json'),
     )
-    if (report && !report.valid) {
-      expect.fail(`marketplace.json 校验失败:\n${report.errors}`)
+    expect(report, 'missing .claude-plugin/marketplace.json validation report').toBeDefined()
+    if (!report!.valid) {
+      expect.fail(`marketplace.json 校验失败:\n${report!.errors}`)
     }
   })
 })

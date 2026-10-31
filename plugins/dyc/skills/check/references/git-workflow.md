@@ -8,7 +8,7 @@ Load when reviewing commits, branches, or release/versioning decisions. Git is y
 - **Atomic commits.** Each commit does one logical thing. A commit that "adds feature, fixes sidebar, updates deps, refactors utils" is a failure.
 - **Descriptive messages.** Explain the _why_, not the _what_. Format: `<type>: <short description>` + body explaining why. Types: `feat`/`fix`/`refactor`/`test`/`docs`/`chore`.
 - **Keep concerns separate.** Don't mix formatting with behavior, or refactors with features — separate commits, ideally separate PRs.
-- **Size your changes.** Keep commits/PRs small; the sizing thresholds live in `review-quality.md` (Change Sizing).
+- **Size your changes.** Keep commits/PRs small; the sizing thresholds live in the `review-quality` reference (Change Sizing).
 
 ## Trunk-Based Development (Recommended)
 

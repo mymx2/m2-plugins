@@ -26,7 +26,7 @@ uid=1_0 RootWebArea "Example Domain" url="https://example.com/"
   uid=1_1 heading "Example Domain" level="1"
 ```
 
-Command form: `chrome-devtools <tool> <pageId> [arguments] [flags]`. `pageId` is a **required positional argument** on every page-scoped tool — get IDs from `list_pages`. Required arguments are positional; optional arguments use flags. The CLI rejects flag-style required arguments:
+Command form: `chrome-devtools <tool> <pageId> [arguments] [flags]`. `pageId` is a **required positional argument** on page-scoped tools such as `click`, `fill`, and `take_snapshot` — get IDs from `list_pages`. Required arguments are positional; optional arguments use flags. The CLI rejects flag-style required arguments:
 
 ```
 INCORRECT: chrome-devtools click --pageId 1 --uid "1_2"
@@ -97,7 +97,7 @@ chrome-devtools resize_page 1 1920 1080
 chrome-devtools performance_start_trace 1 --reload true --autoStop false
 chrome-devtools performance_start_trace 1 --reload true --autoStop true --filePath "t.json.gz"
 chrome-devtools performance_stop_trace 1 --filePath "t.json.gz"
-chrome-devtools performance_analyze_insight 1 "1" "LCPBreakdown"
+chrome-devtools performance_analyze_insight 1 "NAVIGATION_0" "LCPBreakdown"  # id from "Available insight sets"
 ```
 
 ## Memory
@@ -106,7 +106,7 @@ chrome-devtools performance_analyze_insight 1 "1" "LCPBreakdown"
 chrome-devtools take_heapsnapshot 1 "./snap.heapsnapshot"
 ```
 
-Heap analysis commands (`get_heapsnapshot_summary`, `get_heapsnapshot_details`, `get_heapsnapshot_class_nodes`, `get_heapsnapshot_dominators`, `get_heapsnapshot_duplicate_strings`, `get_heapsnapshot_edges`, `get_heapsnapshot_object_details`, `get_heapsnapshot_retainers`, `get_heapsnapshot_retaining_paths`, `close_heapsnapshot`) are documented in `--help`. Memory debugging requires `--memoryDebugging=true`.
+Heap analysis commands (`get_heapsnapshot_summary`, `get_heapsnapshot_details`, `get_heapsnapshot_class_nodes`, `get_heapsnapshot_dominators`, `get_heapsnapshot_duplicate_strings`, `get_heapsnapshot_edges`, `get_heapsnapshot_object_details`, `get_heapsnapshot_retainers`, `get_heapsnapshot_retaining_paths`, `compare_heapsnapshots`, `close_heapsnapshot`) are documented in `--help`. Memory debugging requires `--memoryDebugging=true`.
 
 ## Network
 
@@ -135,7 +135,7 @@ chrome-devtools lighthouse_audit 1 --mode "navigation"
 chrome-devtools lighthouse_audit 1 --mode "snapshot" --device "mobile" --outputDirPath ./out
 ```
 
-Note: `evaluate_script` takes the function as its positional argument; the page is targeted with `--pageId` (omit it when evaluating in a service worker via `--serviceWorkerId`).
+Note: `evaluate_script` is not page-scoped: it takes the function as its positional argument and targets the page with an optional `--pageId` (omit it when evaluating in a service worker via `--serviceWorkerId`).
 
 ## Extensions
 
@@ -159,7 +159,7 @@ chrome-devtools uninstall_pwa "https://example.com/"
 ## Experimental Features (disabled by default)
 
 - `click_at` — `--experimentalVision=true`
-- `screencast_start`/`screencast_stop` — `--experimentalScreencast=true` (needs ffmpeg)
+- `screencast_start`/`screencast_stop` are built in since 1.12; `--experimentalScreencast=true` only keeps the older ffmpeg-backed implementation.
 - `list_webmcp_tools`/`execute_webmcp_tool` — `--categoryExperimentalWebmcp=true`
 - `list_3p_developer_tools`/`execute_3p_developer_tool` — `--categoryExperimentalThirdParty=true`
 
@@ -173,4 +173,4 @@ chrome-devtools status
 chrome-devtools stop
 ```
 
-_Command surface verified against chrome-devtools-mcp 1.10.1 `--help` output ([ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp), Apache 2.0)._
+_Command surface verified against chrome-devtools-mcp 1.12.0 `--help` output ([ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp), Apache 2.0)._

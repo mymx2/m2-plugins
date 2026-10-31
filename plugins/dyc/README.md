@@ -25,16 +25,19 @@ codex plugin marketplace add mymx2/m2-plugins
 codex plugin add dyc@m2-plugins
 
 # Qoder
-vp run qoder:dyc
+qodercli plugins install dyc@m2-plugins
 
 # CodeBuddy
 /plugin marketplace add mymx2/m2-plugins
 /plugin install dyc@m2-plugins
 ```
 
+For a local checkout, install dependencies with `vp install` and run `vp run qoder:dyc`.
+
 ## Prerequisites
 
 - Node.js ≥ 18
+- `vp` only for local development
 - MCP servers auto-configured via `mcp.json` (playwright, chrome-devtools, deepwiki, context7, github, mdn, shadcn-vue, ai-elements-vue, tdesign-mcp-server)
 
 ## Included Skills
@@ -76,7 +79,7 @@ vp run qoder:dyc
 
 ### Environment Variables
 
-Two MCP servers require API keys. Set them before starting your agent:
+Codex reads `CONTEXT7_API_KEY` and `GITHUB_PERSONAL_ACCESS_TOKEN` through `bearer_token_env_var` in `mcp.codex.json`. Other clients should authenticate these servers in their own MCP settings; the portable `mcp.json` intentionally carries no credential headers because the Agent Plugins Spec forbids placeholder expansion in headers. Set the variables for Codex before starting it:
 
 ```bash
 # Bash / Zsh (Linux / macOS)

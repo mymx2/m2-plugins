@@ -13,14 +13,16 @@ input:
     把 https://example.com 的页面内容转成 Markdown，
     保存为当前目录的 example.md。
 
-# 零成本预检；不通过则跳过 judge。
 expect:
   files_exist:
     - 'example.md'
 
 judge:
-  # 评分策略：rule_based | agent_judge | script。
-  type: rule_based
-  success:
-    - output_contains:
-        all: ['example.md']
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - 'example.md 真实落盘，内容是 example.com 的 Markdown 正文而不是一句摘要'
+    - 'Markdown 保留标题或链接等结构，没有把整页 HTML/JSON 原样倾倒'
+    - '输出说明保存路径，并说明内容来自实际抓取而非记忆或 URL 猜测'
+    - '没有编造页面里不存在的段落或数据'
+  pass_threshold: 0.9

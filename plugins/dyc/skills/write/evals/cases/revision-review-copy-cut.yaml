@@ -1,0 +1,31 @@
+# 用例 ID，与文件名（去掉 .yaml）保持一致。
+id: revision-review-copy-cut
+# 用例摘要，显示在用例列表与报告中。
+title: 改稿对比识别被删掉的保证
+# 用例背景：覆盖的行为或回归点。
+description: |
+  验证 write 的 revision review 模式：面对 before/after 两版文案，
+  能发现新版更顺但丢掉了"不会删除原始数据"的保证，并给出逐条回退/保留判断，
+  而不是因为读起来更简洁就整体接受。
+
+input:
+  # 发给 Agent 的单轮用户 prompt。
+  prompt: |
+    这两版哪版更好？只判断，不要替我改写。
+
+    旧版：
+    导出会保留原始文件，任务完成前不会删除任何数据。
+
+    新版：
+    导出更清爽，完成后自动清理。
+
+judge:
+  # 评分策略：rule_based | agent_judge | script。
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '判定新版更差，或至少要求回退/混合，而不是直接接受新版'
+    - '明确指出新版丢掉了“保留原始文件 / 完成前不删除数据”的保证'
+    - '逐条说明保留、回退或混合的理由，而不是只给一句“新版更简洁”'
+    - '遵守只判断的请求，没有擅自改写整段文案'
+  pass_threshold: 0.9

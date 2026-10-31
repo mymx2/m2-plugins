@@ -15,17 +15,16 @@ input:
     token 覆盖颜色、字号、间距三类。
     内容从简：每个命令 3-5 行说明，不用贴完整 schema。
 
-# 零成本预检；不通过则跳过 judge。
 expect:
   files_exist:
     - 'DESIGN.md'
-  file_contains:
-    - path: 'DESIGN.md'
-      content: 'lint'
 
 judge:
-  # 评分策略：rule_based | agent_judge | script。
-  type: rule_based
-  success:
-    - output_contains:
-        all: ['DESIGN.md']
+  type: agent_judge
+  model: openai/kimi-k3-1
+  criteria:
+    - '当前目录生成 DESIGN.md，且文中包含 lint、diff、export 三个命令的用法说明'
+    - 'token 分类覆盖颜色、字号、间距三类，而不是只写一句泛化描述'
+    - '命令说明具体可执行，没有粘贴完整 schema 或编造不存在的 CLI 参数'
+    - '输出说明文件已生成，并对内容做了简短核对，没有声称运行了未执行的命令'
+  pass_threshold: 0.9

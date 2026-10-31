@@ -47,14 +47,14 @@ A task is done only when **its** acceptance criteria are met **and** the standin
 
 - [ ] Security implications reviewed for any untrusted input, auth, or data handling (see the `security-checklist` reference)
 - [ ] Observability in place for new critical paths (see the `observability-checklist` reference)
-- [ ] Rollback path exists for anything risky (see the `shipping` reference)
+- [ ] Rollback path exists for anything risky (see the `mode-ship` reference, Launch Readiness)
 - [ ] The human has reviewed and approved before merge or deploy
 
 ## How to Apply
 
 - **Per task:** confirm Correctness and Quality before checking the task off.
 - **Per feature:** confirm Integration and Documentation.
-- **Per release:** the full checklist is the floor; the `shipping` reference adds deploy-specific gates.
+- **Per release:** the full checklist is the floor; the `mode-ship` reference adds deploy-specific gates.
 
 Tailor the list once, then reuse it unchanged. A Definition of Done renegotiated every sprint is not a Definition of Done.
 

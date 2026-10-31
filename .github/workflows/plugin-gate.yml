@@ -48,14 +48,5 @@ jobs:
       - name: 🔍 Lint · fmt (Python)
         run: ruff check scripts/ plugins/ evals/ && ruff format --check scripts/ plugins/ evals/
 
-      - name: 🛡 Tests + repo validation
-        run: vp test
-
-      - name: 🧪 evals 设施单测
-        run: python -m pytest evals/tests/ -q
-
-      - name: 🧭 evals 词面路由不退化
-        run: |
-          python evals/lexical_router.py
-          python evals/compare_routing.py evals/results/lexical-routing.baseline.json evals/results/lexical-routing.json
-          python scripts/check-trigger-jaccard.py
+      - name: 🛡 Tests + repo validation + evals gates
+        run: vp run test

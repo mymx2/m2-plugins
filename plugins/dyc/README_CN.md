@@ -76,7 +76,7 @@ vp run qoder:dyc
 
 ### 环境变量
 
-两个 MCP 服务器需要 API Key，请在启动 Agent 前设置：
+Codex 通过 `mcp.codex.json` 的 `bearer_token_env_var` 读取 `CONTEXT7_API_KEY` 和 `GITHUB_PERSONAL_ACCESS_TOKEN`。其他客户端请在各自的 MCP 设置中完成鉴权；便携 `mcp.json` 不携带凭据头，因为 Agent Plugins Spec 禁止在 headers 中展开占位符。使用 Codex 时请在启动前设置：
 
 ```bash
 # Bash / Zsh（Linux / macOS）

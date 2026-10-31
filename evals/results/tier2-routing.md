@@ -1,20 +1,20 @@
 # Tier 2 — 触发路由判定(语义 × 词面 × 意图 owner)
 
-评测对象:`plugins/dyc/skills/` 下 11 个技能的 description(路由器的唯一输入)。
-用例:`evals/cases/*.json`,共 76 positive + 50 negative = 126 条触发 prompt,中英双语。
+评测对象:`plugins/dyc/skills/` 下 12 个技能的 description(路由器的唯一输入)。
+用例:`evals/cases/*.json`,共 84 positive + 56 negative = 140 条触发 prompt,中英双语。pm 的 14 条用例只做触发覆盖,尚未纳入 §A 语义表。
 
 三种判定并排:
 
 - **语义判定(§A)**:人工按"只看 description 时哪个技能最该接住"判 rank-1 / rank-2。这是 ground truth 的代理。
-- **词面判定(lexical)**:`evals/lexical_router.py`,TF-IDF 余弦(latin 词 + CJK 二元组),对每个 prompt 跨 11 个 description 排名。模拟纯字面触发器(无语义理解的下限)。
+- **词面判定(lexical)**:`evals/lexical_router.py`,TF-IDF 余弦(latin 词 + CJK 二元组),对每个 prompt 跨 12 个 description 排名。模拟纯字面触发器(无语义理解的下限)。
 - **意图 owner**:positive 的 owner = 被测技能自身;negative 的 owner = case 文件里标注的正确归属技能。
 
 ## 1. 总览
 
-| 判定方式      | positive top-1 命中                                                                                | negative owner-outranks  |
-| ------------- | -------------------------------------------------------------------------------------------------- | ------------------------ |
-| 语义(§A)      | **65/66** 独立 positive(98.5%)(注:76 条里 10 条与 check 负例共享 prompt,去重后 66 条独立 positive) | 41/41 独立 negative PASS |
-| 词面(lexical) | **28/76 (36.8%)**                                                                                  | **37/50 (74.0%)**        |
+| 判定方式      | positive top-1 命中                                                      | negative owner-outranks  |
+| ------------- | ------------------------------------------------------------------------ | ------------------------ |
+| 语义(§A)      | **65/66** 独立 positive(98.5%)(08-26 旧口径;新增 8 条 positive 尚未重评) | 41/41 独立 negative PASS |
+| 词面(lexical) | **37/84 (44.0%)**                                                        | **45/56 (80.4%)**        |
 
 **读法**:语义路由(模型读了 description 后的判断)几乎全对,说明 description 的语义覆盖面是好的;词面路由命中低,说明**触发依赖语义理解而非关键词重叠**——prompt 故意不从 description 抄词(任务硬约束),所以字面 TF-IDF 自然接不住。词面表的用途是定位"description 里缺关键词锚点"的技能,这些技能在弱模型/纯关键词触发器下会掉单。
 
@@ -104,4 +104,4 @@
 | 3   | 9 个纯英文 description 的技能(think/check/hunt/ui/read/learn/health/chrome/repowiki)在 cue 列表补 1-2 个中文场景词,复制 forge 的双语模式 | 改 description | INCR(加固)  | §4 中文 prompt 词面全 0 退化          |
 | 4   | 三对边界(ui/hunt、think/learn、check/write)的 route-to 提示已生效,不动                                                                   | 不动           | —           | §3 薄边全部 PASS                      |
 
-词面路由明细数据:`evals/results/lexical-routing.json`(126 条,含 top-3 得分)。
+词面路由明细数据:`evals/results/lexical-routing.json`(140 条,含 top-3 得分)。

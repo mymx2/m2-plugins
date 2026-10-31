@@ -58,9 +58,9 @@ npx skills find [query]
 
 **不要仅凭搜索结果就推荐技能。** 务必核实以下几点：
 
-1. **安装量** — 优先选择安装量 1K+ 的技能。对安装量不足 100 的保持谨慎。
+1. **安装量** — 按当前排行榜核实真实安装量；优先选择排行靠前的技能，对安装量极低的保持谨慎。
 2. **来源信誉** — 官方来源（如 `vercel-labs`、`anthropics`、`microsoft`）比未知作者更可靠。
-3. **GitHub Star 数** — 检查源仓库。来自 Star 数不足 100 的仓库的技能应持怀疑态度。
+3. **GitHub Star 数** — 检查源仓库的当前 Star 数；Star 极低的仓库应持怀疑态度。
 
 ### 第五步：向用户展示选项
 
@@ -118,7 +118,7 @@ npx skills add <owner/repo@skill> -g -y
 
 1. 说明未找到现有技能
 2. 提供利用你的通用能力直接协助完成该任务
-3. 建议用户可通过 `npx skills init` 自行创建技能（`npx` 命名冲突问题见 `cli-guide.md` 开头说明）
+3. 建议用户可通过 `npx skills init` 自行创建技能（`npx` 命名冲突问题见 `cli-guide` reference 开头说明）
 
 示例：
 

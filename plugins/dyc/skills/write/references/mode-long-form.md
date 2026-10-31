@@ -2,7 +2,7 @@
 
 Loaded from `write` when the input is a long draft that needs structural work before line edits.
 
-Activate when: a long article needs structural review. Multiple headings or images alone do not authorize restructuring.
+Multiple headings or images alone do not authorize restructuring.
 
 Read the whole article to distinguish useful explanation from repeated conclusions, table re-reads and generic endings. Preserve the strongest version of a supported point. Do not assume a long article is padded or set a target fraction to delete.
 

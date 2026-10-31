@@ -1,6 +1,6 @@
 ---
 name: hunt
-description: 'Finds the actual root cause of a failing test, error, crash, regression, or defect before applying fixes, proven against a known-good reference (prior version, build, or "good" screenshot). Use when users report errors, crashes, broken behavior, failing tests, or a used-to-work state that now fails, or ask why something throws or fails. Not for code review (route to check) or a first-impression visual complaint with no working baseline (route to ui).'
+description: 'Finds the actual root cause of a failing test, error, crash, regression, or a page rendered blank or wrong, when a request throws, before applying fixes, proven against a known-good reference (prior version, release artifact, or "good" screenshot). Use when users report errors, crashes, broken behavior, blank rendering, failing tests, or a used-to-work state that now fails. Not for code review (route to check) or a first-impression visual complaint with no working baseline (route to ui).'
 when_to_use: '排查, 报错, 崩溃, 不工作, 跑不通, 以前是好的, 回归, 截图回归, 和之前版本不一样, 判断错误原因, 反复修不好, debug, regression, used to work, broke after update, not working, fix error, stack trace'
 ---
 
@@ -24,7 +24,7 @@ Hunt enforces root-cause identification before any fix is applied: state a falsi
 
 > "I believe the root cause is [X] because [evidence]."
 
-Name a specific file, function, line, or condition. "A state management issue" is not testable; "stale cache in `useUser` at `src/hooks/user.ts:42` because the dependency array is missing `userId`" is. Probes are chosen to kill or confirm the hypothesis, never open-ended exploration.
+Name a specific file, function, line, or condition. "A state management issue" is not testable; "stale cache in `useUser` at `src/hooks/user.ts:42` because the dependency array is missing `userId`" is. Probes are chosen to kill or confirm the hypothesis, never open-ended exploration. A red-capable repro loop (failing test, diagnostic script, captured trace) is evidence gathering, not a fix; build it before hypothesizing. Do not write production changes until the root-cause sentence stands.
 
 ## When to Use
 
@@ -38,21 +38,23 @@ Hypothesis quality gate: the hypothesis must explain every observable symptom, n
 
 ## Durable Context Preflight
 
-When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules (`rules/durable-context.md` when present): current state wins over memory, memory is never authorization, the redaction gate applies. Durable context is hypothesis fuel only — it never replaces a fresh root-cause sentence or a reproducible symptom list.
+When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules when the project defines them: current state wins over memory, memory is never authorization, the redaction gate applies. Durable context is hypothesis fuel only — it never replaces a fresh root-cause sentence or a reproducible symptom list.
 
 ## Reference Library
 
 Load the matching reference when the hunt enters that territory:
 
-| When hunting                                                                            | Load                             |
-| --------------------------------------------------------------------------------------- | -------------------------------- |
-| A hard or non-reproducible failure; need reproduce→localize→reduce→fix→guard discipline | `references/debugging.md`        |
-| A bug that runs in a browser (layout, console, network)                                 | `references/browser-devtools.md` |
-| Native app freeze, beachball, not-responding, first-open lag, overlay lockup            | `references/native-freeze.md`    |
-| Slow page load, poor Core Web Vitals, LCP symptoms with a live browser available        | `references/performance-lcp.md`  |
-| High memory usage, OOM, or heap snapshot comparison (browser/Node.js)                   | `references/memory-leaks.md`     |
-| Print/PDF rendering bugs (broken output, page breaks, font not rendering)               | `references/rendering-debug.md`  |
-| IME, Unicode, character rendering, or text encoding bugs                                | `references/ime-unicode.md`      |
+| When hunting                                                                            | Load                               |
+| --------------------------------------------------------------------------------------- | ---------------------------------- |
+| A hard or non-reproducible failure; need reproduce→localize→reduce→fix→guard discipline | `references/debugging.md`          |
+| A bug that runs in a browser (layout, console, network)                                 | `references/browser-devtools.md`   |
+| Native app freeze, beachball, not-responding, first-open lag, overlay lockup            | `references/native-freeze.md`      |
+| Slow page load, poor Core Web Vitals, LCP symptoms with a live browser available        | `references/performance-lcp.md`    |
+| High memory usage, OOM, or heap snapshot comparison (browser/Node.js)                   | `references/memory-leaks.md`       |
+| Print/PDF rendering bugs (broken output, page breaks, font not rendering)               | `references/rendering-debug.md`    |
+| IME, Unicode, character rendering, or text encoding bugs                                | `references/ime-unicode.md`        |
+| A recurring failure class, or a second fix for the same bug                             | `references/failure-patterns.md`   |
+| Temporary instrumentation needed to test a hypothesis                                   | `references/logging-techniques.md` |
 
 ## Hard Rules
 
@@ -60,7 +62,7 @@ Load the matching reference when the hunt enters that territory:
 - **After three failed hypotheses, stop.** Use the Handoff format below to surface what was checked, what was ruled out, and what is unknown. Ask how to proceed.
 - **External tool failure: diagnose before switching.** When an MCP tool or API fails, determine why first (server running? API key valid? Config correct?) before trying an alternative.
 - **System/tooling symptoms need a lower-layer baseline.** Before blaming the visible app, generated file, or top-level feature, measure the raw lower layer first: OS capture versus post-processing, runtime service versus UI, compiler versus test assertion, network/API versus client handling. Retire hypotheses the baseline disproves.
-- **Visual/rendering bugs: static analysis first.** Trace paint layers, stacking contexts, and layer order in DevTools before adding console.log or visual debug overlays. Logs cannot capture what the compositor does.
+- **Visual/rendering bugs in a browser: static analysis first.** Trace paint layers, stacking contexts, and layer order in DevTools before adding console.log or visual debug overlays. Logs cannot capture what the compositor does. PDF and print-output rendering bugs follow the rendering-debug reference instead.
 - **Behavioral / lifecycle / async bugs: instrument as part of forming the hypothesis, not after a failed fix.** The moment the hypothesis involves "this callback fires before/after that one" or "this state should be X when Y runs", add the log before writing any fix. Two guesses without runtime evidence is the hard-stop signal.
 - **Numeric tuning past round three is a structural bug — stop tuning and look for the missing constraint.**
 - **Performance complaints need numbers.** Measure the baseline first (wall-clock time, profile sample, memory footprint), fix, then re-measure and report before/after numbers. "Feels faster" is not evidence.
@@ -124,7 +126,14 @@ Every log is a yes/no question: "if this prints X before Y, hypothesis A survive
 - Claiming "fixed" from a compile or test pass alone for a UI, rendering, or generated-artifact bug
 - Declaring done without the Scope Blast sweep when the bug matches a class-of-bug pattern
 - Quoting versions, function names, or file locations from memory instead of re-running the command
-- Asking a third "could you check..." question instead of shipping a read-only probe the reporter can run
+- Asking a second "could you check..." question instead of shipping a read-only probe the reporter can run
+
+## Verification
+
+1. Root cause names the mechanism with runtime evidence, not only the symptom.
+2. A red-green regression guard exists, or a no-seam finding with the missing seam is recorded.
+3. The fix stays on the failed branch; the sibling sweep result is reported.
+4. Test or verification output comes from this turn, not memory.
 
 ## Gotchas
 
@@ -149,12 +158,12 @@ Fix:               [what changed, file:line]
 Sibling sweep:     [N same-shape sites checked, N fixed / none found / not run, why]
 Confirmed:         [evidence or test that proves the fix]
 Tests:             [pass/fail count, regression test location]
-Regression guard:  [test file:line] or [none, reason]
+Regression guard:  [test file:line] or [none, no correct test seam: why]
 ```
 
 Status: **resolved**, **resolved with caveats** (state them), or **blocked** (state what is unknown).
 
-**Regression guard rule**: for any bug that recurred or was previously "fixed", the fix is not done until a regression test lives in the project's test suite and a red-green run is recorded. Guard details: `references/debugging.md`.
+**Regression guard rule**: for any bug fix, add a regression test when a correct seam exists and record the red-green run; a bug that recurred or was previously "fixed" always needs one. If no correct seam exists, record it as an architecture finding with the reason and the missing seam, rather than treating the absence as done. Guard details: `references/debugging.md`.
 
 ### Handoff Format (after 3 failed hypotheses)
 

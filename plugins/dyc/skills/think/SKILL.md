@@ -1,7 +1,7 @@
 ---
 name: think
 description: 'Turns rough ideas into approved, decision-complete plans with validated structure before coding. Use when users ask for a design direction, a worth-doing judgment on a feature, restructuring tangled modules, or triaging a bundle of mixed requests/feedback into accept/reject buckets. Not for bug fixes or small edits.'
-when_to_use: '出方案, 要不要做, 可行性, architecture, design direction, feasibility, worth it, plan before build, should we keep this'
+when_to_use: '出方案, 要不要做, 可行性, architecture, design direction, feasibility, worth it, plan before build, should we keep this, 需求归类, 分诊, 哪些该做, 一揽子需求, triage requests'
 ---
 
 # Think: Design and Validate Before You Build
@@ -40,7 +40,7 @@ Think turns rough ideas into approved, decision-complete plans before any code i
 
 ## Durable Context Preflight
 
-When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules (`rules/durable-context.md` when present): current repo state and live docs override memory; memory alone never authorizes state changes. Lock durable decisions and preferences before asking questions.
+When the user names memory, a prior decision, or a memory path, apply the project's durable-context rules when the project defines them: current repo state and live docs override memory; memory alone never authorizes state changes. Lock durable decisions and preferences before asking questions.
 
 项目指令文件中的硬规则与计划冲突时，显式摆出冲突并停下问，不静默覆盖。
 
@@ -90,7 +90,7 @@ For approach design, pressure testing, multi-perspective design, validation, sim
 ## Verification
 
 1. Every step is concrete and executable by another engineer without re-deciding.
-2. Validate Before Handing Off checklist: >8 files acknowledged, >3 components diagrammed, test paths listed, rollback checked.
+2. Validate Before Handing Off checklist: >5 files acknowledged, >3 components diagrammed, test paths listed, rollback checked.
 3. Attack angles (when applicable): dependency failure, scale explosion, rollback cost all addressed.
 
 ## Hard Rules

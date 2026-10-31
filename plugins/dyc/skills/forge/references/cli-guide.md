@@ -1,17 +1,18 @@
 <!-- Derived from vercel-labs/skills README (MIT): https://github.com/vercel-labs/skills -->
+<!-- Synced against skills CLI v1.7.4 (`npx -y skills --version`); commands verified against `npx skills <command> --help`. Re-check the version when updating this file. -->
 
 # Skills CLI 完整指南
 
 答案基本都在下文的命令表里——先定位任务类型再查表，不要凭记忆拼接参数。
 
-Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工具，支持 **OpenCode**、**Claude Code**、**Codex**、**Cursor**、**Qoder** 等 60+ 智能体。
+Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工具，支持 **OpenCode**、**Claude Code**、**Codex**、**Cursor**、**Qoder** 等主流智能体。
 
 > 如果项目中存在名为 `skills` 的目录（发生命名冲突），`npx` 可能会报错，此时请使用 `pnpx`。
 
 ## Outcome Contract
 
 - **Outcome**: 用户得到一条可直接运行的 Skills CLI 命令（或一组），并知道执行后的验证方式。
-- **Done when**: 命令的参数组合来自下文参考表，非交互/CI 场景带 `-y`；执行后用 `npx skills list` 验证结果。
+- **Done when**: 命令的参数组合来自下文参考表，非交互/CI 场景带 `-y`；执行后项目级用 `npx skills list`、全局用 `npx skills list -g` 验证结果。
 - **Evidence**: 命令执行的实际输出；`skills list` 中目标技能的状态。
 - **Authorization**: 查表和解释可以直接做；安装、更新、移除会改动用户环境，经用户确认后执行。
 
@@ -20,7 +21,7 @@ Skills CLI（`npx skills`）是开放智能体技能生态系统的命令行工�
 1. 判断任务类型：安装（add）、试用（use）、查找（find）、列出（list）、更新（update）、移除（remove）、创建模板（init）。
 2. 在下文对应章节定位命令与参数表，按需组合来源格式、范围（`-g`）、目标 agent（`-a`）。
 3. CI/CD 或脚本场景加 `-y` 跳过交互确认。
-4. 执行后运行 `npx skills list` 验证技能落在预期位置（项目级还是全局）。
+4. 执行后运行 `npx skills list`（项目级）或 `npx skills list -g`（全局）验证技能落在预期位置。
 
 ---
 
@@ -138,7 +139,7 @@ npx skills use vercel-labs/agent-skills --skill web-design-guidelines --agent cl
 ## 列出已安装技能（`skills list`）
 
 ```bash
-# 列出全部（项目 + 全局）
+# 列出项目级技能（默认 scope）
 npx skills list
 
 # 仅全局
@@ -208,8 +209,8 @@ npx skills remove frontend-design web-design-guidelines
 # 删除全局
 npx skills remove --global web-design-guidelines
 
-# 从指定 agents 删除
-npx skills remove --agent claude-code cursor my-skill
+# 从指定 agents 删除（skill 名放在前面，避免被 -a 误读为 agent）
+npx skills remove my-skill -a claude-code -a cursor
 
 # 删除全部（无确认）
 npx skills remove --all
@@ -246,45 +247,7 @@ npx skills init my-skill
 
 ### SKILL.md 文件格式
 
-技能是一个目录，包含 `SKILL.md` 文件，带有 YAML 头部：
-
-```markdown
----
-name: my-skill
-description: 这个 skill 做什么、何时使用
----
-
-# My Skill
-
-Agent 执行该 skill 时的指令
-
-## 使用场景
-
-说明何时触发
-
-## 步骤
-
-1. 第一步
-2. 第二步
-```
-
-**必填字段：**
-
-- `name`：唯一标识（小写 + 连字符）
-- `description`：简要说明
-
-**可选字段：**
-
-- `metadata.internal`：设为 `true` 时隐藏 skill（仅在 `INSTALL_INTERNAL_SKILLS=1` 时可见）。此为 Skills CLI 私有扩展，非 Agent Skills Spec 标准字段。
-
-```markdown
----
-name: my-internal-skill
-description: 内部使用 skill
-metadata:
-  internal: true
----
-```
+技能由 `SKILL.md` 的 YAML frontmatter（`name` + `description`）定义；本仓库还要求 `when_to_use`、触发与排除提示，并把 `description` 控制在 40-500 字符。完整的编写规则、目录建议与校验门禁见 `skill-authoring` reference，本节不重复。
 
 ### 技能发现路径
 
@@ -302,7 +265,7 @@ CLI 会在仓库中以下位置搜索技能：
 | 智能体                   | `--agent` 值                 | 项目路径            | 全局路径                                 |
 | ------------------------ | ---------------------------- | ------------------- | ---------------------------------------- |
 | Claude Code              | `claude-code`                | `.claude/skills/`   | `~/.claude/skills/`                      |
-| Codex                    | `codex`                      | `.agents/skills/`   | `~/.codex/skills/`                       |
+| Codex                    | `codex`                      | `.agents/skills/`   | `~/.agents/skills/`                      |
 | Cursor                   | `cursor`                     | `.agents/skills/`   | `~/.cursor/skills/`                      |
 | Qoder                    | `qoder`                      | `.qoder/skills/`    | `~/.qoder/skills/`                       |
 | Qoder CN                 | `qoder-cn`                   | `.qoder/skills/`    | `~/.qoder-cn/skills/`                    |
@@ -313,7 +276,7 @@ CLI 会在仓库中以下位置搜索技能：
 | Trae / Trae CN           | `trae`, `trae-cn`            | `.trae/skills/`     | `~/.trae/skills/` / `~/.trae-cn/skills/` |
 | Kiro CLI                 | `kiro-cli`                   | `.kiro/skills/`     | `~/.kiro/skills/`                        |
 
-完整列表包含 60+ 智能体，详见 https://github.com/vercel-labs/skills
+完整列表见 https://github.com/vercel-labs/skills 的 agent 表。
 
 ---
 

@@ -2,7 +2,7 @@
 
 Loaded from `check` when a review finding recurs, or when the diff introduces invariants not yet captured in project docs. Promote the invariant to a durable rule; do not report it a third time.
 
-A finding raised for the second time — by this review or by a prior review whose finding recurs — is promoted from finding to durable rule as part of the current run: write the invariant into the project's public docs or rules instead of reporting it a third time. Recurrence is the promotion trigger; a first-time finding stays a finding.
+A finding raised for the second time — by this review or by a prior review whose finding recurs — is promoted from finding to durable rule as part of the current run: propose the invariant for the project's public docs or rules instead of reporting it a third time, and write it only when the current request authorizes edits. Recurrence is the promotion trigger; a first-time finding stays a finding.
 
 After reviewing the diff, check whether it introduces invariants not yet captured in project docs:
 
@@ -20,4 +20,4 @@ Treat review reports, scorecards, and diagnostic snapshots as evidence, not as s
 2. Keep project-specific commands, paths, protected areas, release rituals, and safety constraints in that project's public context. Do not promote them into the shared skill set.
 3. Promote only transferable review behavior into the shared skill set: e.g. "check untracked files before readiness", "inspect generated package contents", or "turn one-off reports into invariants."
 
-If found, either apply the doc update as `safe_auto` (when the invariant is clear from the diff) or flag it in the sign-off as `doc debt`. When no new invariants exist, sign-off says `doc debt: none`.
+If found, apply the doc update as `safe_auto` only when the current request authorizes writes and the invariant is clear from the diff; otherwise flag it in the sign-off as `doc debt`. When no new invariants exist, sign-off says `doc debt: none`.

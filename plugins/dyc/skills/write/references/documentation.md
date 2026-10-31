@@ -20,7 +20,7 @@ One-paragraph description, then: Quick Start, Commands (table), Architecture (li
 
 ## Changelog
 
-Curated, grouped `Added/Changed/Fixed/Deprecated/Removed/Security`, newest on top, phrased around user impact — not `git log`. Write the entry with the change, while the impact is fresh.
+Curated, grouped `Added/Changed/Fixed/Deprecated/Removed/Security`, newest on top, phrased around user impact — not `git log`. Write the entry with the change, while the impact is fresh. This grouping is for the repository changelog; published release-note copy groups by user-perceivable feature per the `mode-release-notes` reference.
 
 ## Documentation for Agents
 

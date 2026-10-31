@@ -1,6 +1,6 @@
 ---
 name: learn
-description: 'Runs a six-phase research workflow that turns unfamiliar domains, source bundles, or collected material into publish-ready output. Use when users ask for multi-source research: deep-dives, compiling sources, synthesizing unfamiliar material, or turning a source bundle into a coherent reference. Not for quick lookups or single-URL fetches (route to read).'
+description: 'Runs a six-phase research workflow that turns unfamiliar domains, real docs, source bundles, or collected material into a publish-ready comparison or reference. Use when users ask for multi-source research: deep-dives, comparing tradeoffs, compiling sources, synthesizing unfamiliar material, or turning a source bundle into a coherent reference. Not for quick lookups or single-URL fetches (route to read).'
 when_to_use: '深入研究, 学习一下, 整理成文章, 一站式参考, 一篇就够, 技术选型调研, 对比调研, research, deep dive, help me understand, compile sources, unfamiliar domain'
 ---
 
@@ -25,7 +25,7 @@ Learn runs a six-phase research workflow: collect primary sources, digest them i
 - Multi-source research that produces a new structured output (article, reference, notes set).
 - Turning unfamiliar domains or collected materials into publish-ready content.
 - Building a canonical reference that covers a topic so thoroughly readers need nothing else.
-- Route to `read` for single-URL fetches; route to `think` for planning without research; route to `write` for prose polishing without research; route to `pm` for product deliverables (PRD, backlog ranking) and product/market competitive analysis with fixed PM frameworks.
+- Route to `read` for single-URL fetches; route to `think` for planning without research; route to `write` for prose polishing without research; route to `pm` for product deliverables (PRD, backlog ranking) and product/market competitive analysis (positioning, pricing, differentiation) with fixed PM frameworks — this skill covers technical entity comparison (libraries, tools, vendors, approaches).
 
 ## Pre-check
 
@@ -49,13 +49,13 @@ If unsure, suggest Quick Reference.
 
 ## Reference Library
 
-`references/research-techniques.md` has one section per row below; load the file when any row applies (each row lists the observable task shape and the section it activates). The anti-patterns gate always applies at Phase 6 regardless of whether the file was loaded earlier — the gate checklist is inlined there.
+`references/research-techniques.md` has one section per row below; load the file when any row applies (each row lists the observable task shape and the section it activates). The anti-patterns gate always applies at Phase 6; its checklist lives in the research-techniques reference (Research Anti-Patterns), so load that section before the gate even when no other row matched.
 
 | Task shape (user-observable)                                                    | File + section                                                    |
 | ------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | Question still fuzzy, landscape unknown, need angles to explore                 | `references/research-techniques.md` — Divergence Tools            |
 | Sources conflict or vary in reliability, material piling up                     | `references/research-techniques.md` — Convergence Tools           |
-| Comparing external entities: libraries, tools, vendors, approaches, competitors | `references/research-techniques.md` — Comparing External Entities |
+| Comparing external technical entities: libraries, tools, vendors, or approaches | `references/research-techniques.md` — Comparing External Entities |
 | Phase 6 gate (always applies, checklist inlined in Phase 6)                     | `references/research-techniques.md` — Research Anti-Patterns      |
 
 ## Canonical Article Mode
@@ -78,7 +78,7 @@ Collect papers, official blogs, builder posts, and canonical repos.
 
 Three ordered steps per source:
 
-1. **Discover** -- use an installed search plugin (e.g., PipeLLM) to map the landscape, then deep-search the 2-3 most promising sub-topics. No plugin: use the environment's native web search. Output is a URL list; do not fetch content here.
+1. **Discover** -- use an installed search plugin or MCP to map the landscape, then deep-search the 2-3 most promising sub-topics. No such tool: use the environment's native web search. Output is a URL list; do not fetch content here.
 2. **Fetch** -- every URL goes through `/read` when available; fall back per Pre-check when it is not.
 3. **File** -- ask `read` to save fetched content to disk and return the saved path; if `read` does not support a caller-specified directory, use its default location and move the files afterwards. Move or index saved files into sub-topic directories after fetch returns. Move, don't refetch.
 
@@ -104,7 +104,7 @@ Edits only: cut redundancy without changing meaning or voice, flag broken argume
 
 ## Phase 6: Self-review and Publish Readiness
 
-The user reads the entire article linearly before publishing. Mark everything that feels off, fix it, read again. Two passes minimum.
+The agent runs two self-review passes before handoff: first map every section to its Phase 1 sources and mark unsupported claims; then read the whole article linearly for gaps, contradictions, and confidence mismatches, fixing each before re-reading. The user's final linear read is the handoff condition, not a substitute for the agent's passes.
 
 Before that handoff, gate the draft on the five research anti-patterns (check and signal per item live in `references/research-techniques.md` — Research Anti-Patterns; the gate applies to every research task, loaded or not). A conclusion that fails a check gets rewritten or explicitly hedged with its confidence label, not published as stated. Record the gate output in this shape, one line per check:
 
@@ -137,7 +137,7 @@ When it reads clean from start to finish, the draft is ready for the user to pub
 
 1. Outline review: every section maps to at least one Phase 1 source.
 2. Contradiction check: all factual disagreements between sources are noted with both positions and evidence.
-3. Phase 6 self-review: user reads the entire article linearly, two passes minimum, marking everything that feels off.
+3. Phase 6 self-review: the agent completes both passes (source mapping, then linear read), and the user's linear read remains the publish handoff condition.
 4. Publish readiness: no AI-pattern artifacts remain after Phase 5 refinement.
 
 ## Hard Rules

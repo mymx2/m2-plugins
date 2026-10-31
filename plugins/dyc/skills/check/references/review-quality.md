@@ -48,11 +48,7 @@ For each of these structural problems, surface it and propose the simpler design
 
 ## Dead Code Hygiene
 
-After any refactoring or implementation change, check for orphaned code:
-
-1. Identify code that is now unreachable or unused.
-2. List it explicitly (name, file, why it's dead — e.g. "replaced by X", "no remaining references").
-3. **Ask before deleting**: "Should I remove these now-unused elements: [list]?" Don't leave dead code lying around, but don't silently delete things you're not sure about. When in doubt, ask.
+When a change orphans code, use the deletion procedure in the simplification-and-deletion reference: identify it, list each item with why it is dead, and ask before deleting anything uncertain.
 
 ## Comment Rot
 

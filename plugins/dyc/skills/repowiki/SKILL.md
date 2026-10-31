@@ -4,7 +4,7 @@ description: 'Generates a DeepWiki-style repository wiki from repository structu
 when_to_use: 'repowiki, deepwiki, 仓库报告, 项目文档, repo wiki, codebase analysis'
 license: MIT
 metadata:
-  origin: https://github.com/mymx2/m2-plugins/skills/repowiki
+  origin: https://github.com/mymx2/m2-plugins/tree/main/plugins/dyc/skills/repowiki
   author: mymx2 <https://github.com/mymx2>
   version: 2026.05.11
   source: https://github.com/zzzhizhia/repowiki <MIT>
@@ -68,7 +68,7 @@ RepoWiki generates a DeepWiki-style repository analysis report from repository s
 
 ### 步骤 5：组装报告
 
-按 references/report-format.md 的分层结构（项目概述 → 设计理念 → 模块分析 → 核心系统 → 基础设施）组装，写入 `REPOWIKI.md`。报告的篇幅、表格数量、源文件引用格式等硬性要求也在该文件中。
+按 references/report-format.md 的分层结构（项目概述 → 设计理念 → 模块分析 → 核心系统 → 基础设施）组装，写入 `REPOWIKI.md`。报告的篇幅、表格数量、源文件引用格式等要求也在该文件中。
 
 ## Hard Rules
 
@@ -86,7 +86,7 @@ RepoWiki generates a DeepWiki-style repository analysis report from repository s
 - 报告里出现未实际读取的文件、模块或依赖
 - 核心系统章节缺少"问题 → 传统方案失效 → 本项目方案"叙事或决策对比表
 - Mermaid 标签含未转义的 `()[]{}`，图无法渲染
-- 源文件引用缺少 `file#L行号` 锚点，读者无法跳转核对
+- 引用具体代码段却缺少 `file#Lx-Ly` 锚点，读者无法跳转核对
 - 报告语言与用户对话语言不一致
 - 写入或改动 `REPOWIKI.md` 以外的任何仓库文件
 

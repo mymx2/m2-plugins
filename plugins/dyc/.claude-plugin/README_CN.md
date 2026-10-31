@@ -31,7 +31,7 @@ plugins/dyc/
 ## 2. 本插件的适配要点
 
 - **`init.ts` 做了什么**：读根 `plugin.json` → 剔除 `extensions`/`$schema` → 用 `extensions['.claude-plugin']` 覆盖合并 → 剔除构建期字段 `init`（非官方字段，避免 validate 告警）→ 写入本目录 `plugin.json`。随后跑 4 项校验：commands frontmatter、hooks 事件名白名单、skills 深度 lint、`${CLAUDE_PLUGIN_ROOT}` 硬编码路径检查。
-- **MCP 怎么配**：Claude 官方支持 `.mcp.json` 独立文件**或** manifest 内联 `mcpServers` 对象。本插件选内联，避免落盘 `.mcp.json`（根目录已有标准源 `mcp.json`，再放 `.mcp.json` 会被 Claude 默认加载造成重复）。`init.ts` 把标准源的 `streamable-http` 转为 `http`（Claude 占位符解析表只认 stdio/http/sse/ws 四类）后内联；`headers` 里的 `Bearer ${VAR}` 写法原样保留。
+- **MCP 怎么配**：Claude 官方支持 `.mcp.json` 独立文件**或** manifest 内联 `mcpServers` 对象。本插件选内联，避免落盘 `.mcp.json`（根目录已有标准源 `mcp.json`，再放 `.mcp.json` 会被 Claude 默认加载造成重复）。`init.ts` 把标准源的 `streamable-http` 转为 `http`（Claude 占位符解析表只认 stdio/http/sse/ws 四类）后内联。便携 `mcp.json` 不写凭据 headers（Agent Plugins Spec 禁止在 headers 中展开占位符）；Context7/GitHub 请在 Claude 的 MCP 设置里完成鉴权。
 - **组件覆盖字段**：本插件没用 `skills` 字段——默认 `skills/` 目录就会被扫描，无需声明。
 
 ## 3. 本地开发 / 安装 / 校验

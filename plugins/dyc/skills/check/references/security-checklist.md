@@ -17,7 +17,7 @@ Load and work this checklist when reviewing code that touches user input, authen
 
 ## Security Handoff Gate (review → push / PR / release)
 
-Distilled protocol for when a security review or scan runs inside a task that continues to a committed-code handoff (push, PR/MR, merge, release, deploy). Two separate user decisions — never merge them:
+Distilled protocol for when a security review or scan runs inside a task that continues to a committed-code handoff (push, PR/MR, merge, release, deploy). These gates override any continuous delivery ledger for the handoff step. Two separate user decisions — never merge them:
 
 1. **Scan gate (before handoff).** If security review has not run yet and the next action is a handoff, offer it once: run the security review now, or skip and continue. A skip applies to the current commit set only; a newly created commit re-arms the gate. Do not persist skip state.
 2. **Remediation gate (after findings).** Findings first, decision second. Present every finding with severity, CWE/category (when available), file:line, vulnerable snippet, remediation suggestion, and data-flow summary (when available) — then ask exactly: fix now, or continue without fixing. An earlier scan approval, handoff request, or prior "continue" never counts as fix approval.

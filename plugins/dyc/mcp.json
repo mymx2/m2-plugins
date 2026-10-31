@@ -17,17 +17,11 @@
     },
     "context7": {
       "type": "streamable-http",
-      "url": "https://mcp.context7.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
-      }
+      "url": "https://mcp.context7.com/mcp"
     },
     "github": {
       "type": "streamable-http",
-      "url": "https://api.githubcopilot.com/mcp/",
-      "headers": {
-        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      }
+      "url": "https://api.githubcopilot.com/mcp/"
     },
     "mdn": {
       "type": "streamable-http",

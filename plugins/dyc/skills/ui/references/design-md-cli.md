@@ -38,7 +38,7 @@ DESIGN.md 把设计系统写成 agent 可读的契约：YAML token 给出精确�
 
 ## Validate
 
-1. 运行 `npx @google/design.md lint DESIGN.md`（Windows 上用 `designmd` 别名，见 Gotchas）。
+1. 运行 `npx @google/design.md lint DESIGN.md`（Windows/PowerShell 上用 `designmd` 别名，机制见 CLI reference 的 Windows 段）。
 2. error 级 findings 必须修完再交付；warning 级逐条判断，不修的在交付说明里列出。
 3. 完整命令与选项表见 `design-md-cli-reference` reference。
 
@@ -69,12 +69,10 @@ DESIGN.md 把设计系统写成 agent 可读的契约：YAML token 给出精确�
 
 ## Gotchas
 
-| What happened                                                      | Rule                                                                    |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
-| Windows/PowerShell 上 `npx @google/design.md` 无输出或打开了编辑器 | `.md` 后缀撞上 Windows 文件关联，用 `npx -p @google/design.md designmd` |
-| 安装报 `ENOVERSIONS`                                               | 几乎总是 registry 配置问题，`npm config get registry` 应指向公共源      |
-| `colours:` 被标 `unknown-key`                                      | linter 会识别已知 schema 键的拼写变体，按提示改正                       |
-| 组件写了 textColor 但没过 contrast-ratio                           | 该规则按 WCAG AA 4.5:1 判定，换色值而不是降标准                         |
+| What happened                                                      | Rule                                                                          |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Windows/PowerShell 上 `npx @google/design.md` 无输出或打开了编辑器 | `.md` 后缀撞上 Windows 文件关联；用 `designmd` 别名，完整机制见 CLI reference |
+| 组件写了 textColor 但没过 contrast-ratio                           | 该规则按 WCAG AA 4.5:1 判定，换色值而不是降标准                               |
 
 ## Output
 

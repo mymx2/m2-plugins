@@ -1,6 +1,6 @@
 ---
 name: chrome
-description: 'Drives a real Chrome browser through the chrome-devtools-mcp MCP server or its CLI for page automation, network and console analysis, emulation, and extension testing. Use when a task needs operating a live browser: navigating, snapshotting the accessibility tree, interacting by element uid, capturing screenshots, traces, or heap snapshots, or fixing the MCP server setup itself. Not for diagnosing application logic root causes (use hunt) or judging visual quality (use ui).'
+description: 'Drives a real Chrome browser through the chrome-devtools-mcp MCP server for page automation, network and console analysis, emulation, and extension testing. Use when a task needs operating a live browser: navigating, snapshotting the accessibility tree, interacting by element uid, capture a screenshot or full-page capture, console errors, traces, or heap snapshots, or fixing the MCP server setup. Not for diagnosing application logic root causes (use hunt) or judging visual quality (use ui).'
 when_to_use: 'chrome devtools, 浏览器自动化, 操作浏览器, 网页截图, browser automation, take snapshot, click element by uid, headless chrome, chrome mcp, devtools protocol, 浏览器点击, 表单填写自动化, mcp server 连不上'
 ---
 
@@ -39,7 +39,7 @@ Chrome drives a real browser through the chrome-devtools-mcp MCP server or its C
 
 ## Core Concepts
 
-**Browser lifecycle**: the browser starts automatically on the first tool call, configured via CLI args in the MCP server configuration (`npx chrome-devtools-mcp@latest --help`). With the CLI (`chrome-devtools start`), the default profile is isolated: a temporary user-data-dir that is cleaned up when the browser closes. A persistent profile exists only when `--userDataDir` is passed explicitly; the MCP server mode does not set `isolated` by default, so check the configured args instead of assuming. Extra tool categories need flags: `--categoryExtensions` for extension tooling, `--memoryDebugging` for heap inspection tools.
+**Browser lifecycle**: the browser starts automatically on the first tool call, configured via CLI args in the MCP server configuration (`npx chrome-devtools-mcp@latest --help`). With the CLI (`chrome-devtools start`), the default profile is isolated: a temporary user-data-dir that is cleaned up when the browser closes. `--userDataDir`, `--autoConnect`, `--browserUrl`, or `--wsEndpoint` turns isolation off and makes the session use a real profile, so check the configured args; this plugin's `--autoConnect` config connects to the user's logged-in Chrome. Extra tool categories need flags: `--categoryExtensions` for extension tooling; `--memoryDebugging` for heap inspection tools (CLI mode enables it by default, MCP server mode does not).
 
 **Page selection**: tools operate on the currently selected page. Use `list_pages`, then `select_page` to switch context.
 
@@ -84,11 +84,11 @@ A persistent profile (`--userDataDir`) carries logged-in sessions, cookies, and 
 
 ## Gotchas
 
-| What happened                                                                                | Rule                                                                                                                                            |
-| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Element `uid` not found mid-flow                                                             | The page changed under you. Take a fresh snapshot before retrying; never reuse uids across navigations                                          |
-| Only ~9 tools available (navigation, screenshot, little else)                                | The MCP client is enforcing read-only mode or `--slim` is set; the full suite requires write-capable tools. See `references/troubleshooting.md` |
-| `upload_file` or file-saving parameters rejected outside the temp directory                  | The server only has OS temp directory access by default; unrestricted paths need an explicit server flag                                        |
-| Debugging a slow page, memory growth, or a11y failures turned into app-logic root-cause work | Stop at what the browser tools show; do not turn a capture session into a code-reading session                                                  |
+| What happened                                                                                | Rule                                                                                                                                              |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Element `uid` not found mid-flow                                                             | The page changed under you. Take a fresh snapshot before retrying; never reuse uids across navigations                                            |
+| Only ~9 tools available (navigation, screenshot, little else)                                | The MCP client is enforcing read-only mode or `--slim` is set; follow the troubleshooting reference's read-only diagnostic sequence               |
+| `upload_file` or file-saving parameters rejected outside the temp directory                  | In MCP server mode the default is OS temp directory access; unrestricted paths need an explicit server flag (CLI mode is unrestricted by default) |
+| Debugging a slow page, memory growth, or a11y failures turned into app-logic root-cause work | Stop at what the browser tools show; do not turn a capture session into a code-reading session                                                    |
 
 _Tool mechanics adapted from [ChromeDevTools/chrome-devtools-mcp](https://github.com/ChromeDevTools/chrome-devtools-mcp) skills (Apache 2.0)._

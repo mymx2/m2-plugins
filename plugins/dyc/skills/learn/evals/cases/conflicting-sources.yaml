@@ -28,11 +28,6 @@ input:
     CacheBoost 到底能不能改善首屏？不要上网查，也不要补充材料里没有的数据。
     结论直接放在回复里，不用另存文件。
 
-# 零成本预检；不通过则跳过 judge。
-expect:
-  must_contain:
-    - 'CacheBoost'
-
 judge:
   # 评分策略：rule_based | agent_judge | script。
   type: agent_judge
@@ -43,4 +38,4 @@ judge:
     - '结论带有适用条件或置信度标注，没有把 40% 当成普适事实'
     - '点明信息缺口或下一步验证（如更多机型、真实网络、样本量）'
     - '没有引入两份材料之外编造的数据或来源'
-  pass_threshold: 0.75
+  pass_threshold: 0.9

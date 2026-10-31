@@ -15,7 +15,7 @@ Before writing any spec, propose a small **capability map** — a module table (
 Two scoping heuristics when deciding whether and where to carve:
 
 - **Favor recently-changed areas.** Deepening or decomposing a module pays back by easing future change, so weight the parts of the codebase that keep coming up in `git log --oneline`. A capability nobody touches earns little from a cleaner boundary.
-- **Apply the deletion test.** To judge whether a candidate module earns its place, imagine deleting it: if complexity vanishes, it was a pass-through; if it reappears across N callers, it was real. Only the second kind deserves its own boundary in the map.
+- **Apply the deletion test.** Judge a candidate module with the `deep-modules` reference's deletion test: a module earns its own boundary only when deleting it redistributes real complexity across callers instead of making it vanish.
 
 ## Specify
 
@@ -39,7 +39,7 @@ Reframe vague requirements as concrete success criteria ("make the dashboard fas
 ## Plan → Tasks
 
 - The plan identifies components, dependencies, implementation order, risks, what can parallelize, and verification checkpoints.
-- Tasks are discrete, single-session, ordered by dependency (not importance), each with acceptance criteria and a verification step, none touching more than ~5 files.
+- Task sizing, ordering, and acceptance fields are canonical in the task-breakdown reference; this section only names the handoff.
 
 ## Keep the Spec Alive
 

@@ -1,6 +1,6 @@
 # Next-Generation Model Context Rules
 
-Distilled from OpenAI and Anthropic engineering posts (2026): OpenAI removed most scaffolding assumptions for GPT-6 Astra; Anthropic deleted over 80% of Claude Code's system prompt with no measurable coding-eval loss. Both converged on the same conclusion: **next-generation models are overconstrained by instructions written for previous generations.**
+Distilled from OpenAI and Anthropic engineering posts (2026): OpenAI removed most scaffolding assumptions for its next-generation model; Anthropic deleted over 80% of Claude Code's system prompt with no measurable coding-eval loss. Both converged on the same conclusion: **next-generation models are overconstrained by instructions written for previous generations.**
 
 The old model: exhaustive rules, examples, and guardrails to prevent worst-case behavior.
 The new model: minimal, well-scoped guidance; trust the model's judgment.
@@ -58,7 +58,7 @@ The assembled context window, most specific to most general: user prompt → ref
 
 ## Source
 
-Distilled 2026-09-24 from:
+Distilled in 2026 from:
 
-- OpenAI — Eric Provencher, "Rethinking skills and prompts for GPT-6 Astra" (Sep 2026)
-- Anthropic — Thariq Shihipar, "The new rules of context engineering for Claude 5 generation models" (Jul 2026)
+- OpenAI — Eric Provencher, engineering post on skills and prompts for next-generation models
+- Anthropic — Thariq Shihipar, engineering post on context engineering for next-generation models

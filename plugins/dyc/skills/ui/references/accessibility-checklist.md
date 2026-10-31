@@ -67,7 +67,7 @@ Quick reference for WCAG 2.1 AA compliance. Use alongside the `frontend-engineer
 
 ## Testing Tools
 
-Automated: `npx axe-core`, `npx pa11y`. In browser: Chrome DevTools Lighthouse Accessibility, Elements > Accessibility tree. Screen readers: VoiceOver (macOS), NVDA/JAWS (Windows), Orca (Linux).
+Automated: `npx @axe-core/cli <url>` (bin `axe`), `npx pa11y <url>`. In browser: Chrome DevTools Lighthouse Accessibility, Elements > Accessibility tree. Screen readers: VoiceOver (macOS), NVDA/JAWS (Windows), Orca (Linux).
 
 ## Common Anti-Patterns
 

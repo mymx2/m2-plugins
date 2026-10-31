@@ -41,7 +41,7 @@ plugins/dyc/
   - manifest 的 `mcpServers` 指向一个 JSON 文件，文件内容是**直接 server 映射**或 **`mcp_servers` 包裹对象**（注意是蛇形 `mcp_servers`，不是 `mcpServers`）；
   - server 条目**没有 `type` 字段**：stdio 由 `command` 隐含，远程（streamable HTTP）由 `url` 隐含；
   - 远程鉴权用 `bearer_token_env_var`（值是环境变量名），静态头用 `http_headers`，从环境变量取头用 `env_http_headers`；不收 `headers` 写法。
-  - 因此 `init.ts` 把标准源 `mcp.json` 的 `streamable-http + headers: Bearer ${VAR}` 转换为 `url + bearer_token_env_var` 并去掉全部 `type`。
+  - 便携 `mcp.json` 不写凭据 headers，因此 `init.ts` 用本插件的 server→环境变量映射给 `context7` / `github` 补 `bearer_token_env_var`，并去掉全部 `type`；若以后某个 server 仍带 `Bearer ${VAR}` headers，也按旧路径转换。
 - **为什么叫 `mcp.codex.json` 而不是 `.mcp.json`**：仓库根若出现 `.mcp.json` 会被 Claude Code 默认加载，造成跨平台串扰；自定义文件名由 manifest 显式指向，官方允许（本仓库的取舍，官方示例用 `.mcp.json`）。
 
 ## 3. 本地开发 / 安装 / 校验

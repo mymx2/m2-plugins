@@ -230,6 +230,11 @@ function validateApp(pluginRoot: string, output: Record<string, any>): void {
  *  - .mcp.json 内容为「直接 server 映射」或「mcp_servers 包裹对象」，这里用 mcp_servers 包裹
  *  - server 条目没有 type 字段：stdio 由 command 隐含，远程（streamable HTTP）由 url 隐含
  *  - 远程鉴权用 bearer_token_env_var（值为环境变量名），不收 headers 写法 */
+const BEARER_ENV_BY_SERVER: Record<string, string> = {
+  context7: 'CONTEXT7_API_KEY',
+  github: 'GITHUB_PERSONAL_ACCESS_TOKEN',
+}
+
 function writeCodexMcp(pluginRoot: string): void {
   const mcpPath = join(pluginRoot, 'mcp.json')
   if (!existsSync(mcpPath)) return
@@ -241,11 +246,14 @@ function writeCodexMcp(pluginRoot: string): void {
     const { type, headers, ...rest } = { ...cfg }
     const c: Record<string, unknown> = rest
     if (type === 'streamable-http' || type === 'http') {
-      // 远程 server：url 隐含类型；Bearer ${VAR} → bearer_token_env_var
+      // 远程 server：url 隐含类型；便携 mcp.json 不写凭据头，
+      // Codex 侧由本插件的 server→环境变量映射补 bearer_token_env_var。
       const auth = headers?.Authorization
       const m = /^Bearer \$\{(.+)\}$/.exec(typeof auth === 'string' ? auth : '')
       if (m) {
         c.bearer_token_env_var = m[1]
+      } else if (BEARER_ENV_BY_SERVER[name]) {
+        c.bearer_token_env_var = BEARER_ENV_BY_SERVER[name]
       } else if (headers) {
         warn(
           `mcp.json server '${name}': 存在非 Bearer 环境变量的 headers,Codex 需改用 http_headers/env_http_headers`,
