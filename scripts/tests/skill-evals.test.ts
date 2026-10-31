@@ -21,13 +21,38 @@ function skillDirs(): string[] {
     .sort()
 }
 
-function registeredCases(evalYaml: string): string[] {
-  const block = evalYaml.match(/^\s{2}files:\n((?:\s{4}- .*\n)+)/m)?.[1] ?? ''
-  return block
-    .split('\n')
-    .map(line => line.replace(/^\s{4}- /, '').trim())
-    .filter(Boolean)
+export function registeredCases(evalYaml: string): string[] {
+  const lines = evalYaml.split(/\r?\n/)
+  const start = lines.findIndex(line => /^\s*files:\s*$/.test(line))
+  if (start === -1) return []
+  const indent = lines[start].match(/^\s*/)![0].length
+  const files: string[] = []
+  for (const line of lines.slice(start + 1)) {
+    if (!line.trim()) continue
+    const lineIndent = line.match(/^\s*/)![0].length
+    if (lineIndent <= indent) break
+    const item = line.match(/^\s*-\s+(.+?)\s*$/)
+    if (item) files.push(item[1].replace(/^['"]|['"]$/g, ''))
+  }
+  return files
 }
+
+describe('registeredCases parser', () => {
+  it('accepts variable indentation', () => {
+    const yaml =
+      'cases:\n  files:\n    - evals/cases/a.yaml\n    - "evals/cases/b.yaml"\n  defaults:{}\n'
+    expect(registeredCases(yaml)).toEqual(['evals/cases/a.yaml', 'evals/cases/b.yaml'])
+  })
+
+  it('accepts deeper indentation and stops at the next key', () => {
+    const yaml = 'cases:\n    files:\n        - evals/cases/a.yaml\n    defaults: {}\n'
+    expect(registeredCases(yaml)).toEqual(['evals/cases/a.yaml'])
+  })
+
+  it('returns an empty list when files: is absent', () => {
+    expect(registeredCases('cases:\n  defaults: {}\n')).toEqual([])
+  })
+})
 
 describe('skill-up eval registration', () => {
   it('技能目录不低于 12 个（整目录被删会红）', () => {

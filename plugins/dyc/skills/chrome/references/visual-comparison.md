@@ -21,7 +21,7 @@ Two captures are comparable only when everything non-visual is pinned. Before sh
    This also hides the text caret. The SKILL.md script-safety rule applies; prefer a fresh isolated profile when the target page carries authenticated state.
 
 3. Freeze time and randomness: pass a fixed `Date` through `navigate_page --initScript` so it runs before page scripts render timestamps; use deterministic seed data where the app supports it. The same injection safety rule applies.
-4. Wait for stability, not a fixed sleep: poll `take_snapshot` until the expected content appears (this toolset has no `wait_for` command), and let network go idle before capture.
+4. Wait for stability, not a fixed sleep: use `wait_for` in MCP mode; the CLI has no `wait_for` subcommand, so poll `take_snapshot` there. Let network go idle before capture.
 5. Keep browser, OS, and installed fonts constant across the two captures; if a production font is missing locally, document the fallback instead of treating its rendering delta as a regression.
 6. Compare at identical pixel dimensions.
 

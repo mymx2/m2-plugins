@@ -21,7 +21,7 @@ CASES = ROOT / "evals" / "cases"
 OUT = ROOT / "evals" / "results" / "lexical-routing.json"
 SKILLS_DIR = ROOT / "plugins" / "dyc" / "skills"
 
-LATIN_RE = re.compile(r"[a-z0-9](?:[a-z0-9.+_/-]*[a-z0-9])?")
+LATIN_RE = re.compile(r"[a-z0-9](?:[a-z0-9.+_/#-]*[a-z0-9+#])?")
 CJK_RE = re.compile(r"[一-鿿]")
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 DESCRIPTION_RE = re.compile(r"^description:\s*(.*)$", re.MULTILINE)

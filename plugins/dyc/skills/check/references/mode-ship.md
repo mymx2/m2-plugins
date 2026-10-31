@@ -65,15 +65,18 @@ Lead the verdict with an explicit go / no-go (ship, or the named blockers), then
 
 Use below the Release Gate when the change is production-bound; each item is a gate, not advice.
 
-- **Pre-launch:** tests, build, lint/type check pass; security audit clean; input validated; auth checked; rate limiting and CORS set; Core Web Vitals in "Good"; no N+1 in critical paths; bundle and queries within budget; keyboard and screen-reader paths work; focus managed; env vars, migrations, DNS/SSL/CDN, logging, and health checks ready; README, API docs, changelog, and ADRs current.
-- **Staged rollout:** staging full suite and smoke → production behind a flag OFF → team (24h) → canary 5% (24-48h) → 25/50/100 → full rollout. Advance while error rate stays within 10% of baseline, p95 latency within 20%, no new client-error types, and business metrics neutral or positive; hold at 10-100%, 20-50%, new errors below 0.1% of sessions, or a decline under 5%; roll back above 2x errors, above 50% latency, new errors above 0.1%, or a decline over 5%. Clean up the flag within two weeks of full rollout.
+- **Pre-launch:** tests, build, lint/type check pass; security audit clean and no secrets in code or history; input validated; auth checked; security headers, rate limiting, and CORS set; Core Web Vitals in "Good"; no N+1 in critical paths; images optimized, queries indexed, caching configured, and bundle within budget; keyboard and screen-reader paths work; focus managed; env vars, migrations, DNS/SSL/CDN, logging, and health checks ready; README, API docs, changelog, and ADRs current; no debug output in the production build.
+- **Staged rollout:** staging full suite and smoke → production behind a flag OFF → team (24h) → canary 5% (24-48h) → 25/50/100 → full rollout. Advance while error rate stays within 10% of baseline, p95 latency within 20%, no new client-error types, and business metrics neutral or positive; hold at 10-100%, 20-50%, new errors below 0.1% of sessions, or a decline under 5%; roll back above 2x errors, above 50% latency, new errors above 0.1%, or a decline over 5%. Monitor for one week after full rollout, then clean up the flag within two weeks.
+- **Feature flags:** name an owner and expiration, avoid nesting, test both states, and remove the flag on schedule; deployment-strategy mechanics live in the `ci-cd` reference.
 - **Error budget:** above 20% remaining ships normally; 0-20% allows slow rollouts only; exhausted budget freezes feature work for reliability; a high burn rate during canary is a hold.
 - **Rollback:** name trigger conditions (2x error rate, latency threshold, user reports, data-integrity damage, security finding), the steps (disable flag or redeploy previous), database migration and cleanup, and time targets (flag under 1 min, redeploy under 5 min, database under 15 min).
 - **First hour:** health endpoint 200; no new error types; latency normal; critical flow checked manually; logs flowing; rollback mechanism verified.
 
 ## Ship Decision (GO / NO-GO)
 
-For a production-bound release, merge the review findings into one verdict:
+For a production-bound release, run the review dimensions in parallel when the agent facility allows, then merge them in the main session; keep the fan-out flat (personas never invoke other personas). Skip the parallel fan-out only when the change touches 2 files or fewer, is under 50 lines, and does not touch auth, payments, data access, or config/env.
+
+Merge the review findings into one verdict:
 
 ```markdown
 ## Ship Decision: GO | NO-GO
@@ -96,6 +99,13 @@ For a production-bound release, merge the review findings into one verdict:
 ```
 
 No rollback plan, no GO. Any Critical finding defaults to NO-GO unless the user explicitly accepts the risk. The merge happens in the main session, not inside a persona.
+
+## Red Flags
+
+- Deploying without a rollback plan or monitoring/error reporting
+- Big-bang releases with no staging
+- Feature flags with no owner or expiration
+- Shipping a high-risk change late on a Friday without on-call coverage
 
 ## Platform Operations
 

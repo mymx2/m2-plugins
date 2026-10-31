@@ -79,7 +79,7 @@ For a local checkout, install dependencies with `vp install` and run `vp run qod
 
 ### Environment Variables
 
-Codex reads `CONTEXT7_API_KEY` and `GITHUB_PERSONAL_ACCESS_TOKEN` through `bearer_token_env_var` in `mcp.codex.json`. Other clients should authenticate these servers in their own MCP settings; the portable `mcp.json` intentionally carries no credential headers because the Agent Plugins Spec forbids placeholder expansion in headers. Set the variables for Codex before starting it:
+Context7 and GitHub need API keys. The bundled MCP configs send `CONTEXT7_API_KEY` and `GITHUB_PERSONAL_ACCESS_TOKEN` as `Authorization: Bearer ${VAR}` headers, so clients that expand environment variables (Claude Code, CodeBuddy, Qoder) pick them up without extra setup; Codex reads the same variables through `bearer_token_env_var` in `mcp.codex.json`. Keeping these headers in the portable `mcp.json` is a deliberate exception to the Agent Plugins Spec rule against placeholder expansion in headers, chosen for one-step setup; do not remove them without updating the client docs. If your client does not expand variables in headers, set the key in its MCP settings. Set the variables before starting your agent:
 
 ```bash
 # Bash / Zsh (Linux / macOS)

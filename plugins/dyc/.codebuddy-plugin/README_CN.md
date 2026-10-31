@@ -28,7 +28,7 @@ plugins/dyc/
 ## 2. 本插件的适配要点
 
 - **`init.ts` 做了什么**：与 Claude 版同构——合并根 `plugin.json` 与 `extensions['.codebuddy-plugin']`（剔除 `extensions`/`$schema`/构建期字段 `init`）→ 写入本目录 → 跑 commands frontmatter、hooks 事件名、skills 深度 lint、`${CODEBUDDY_PLUGIN_ROOT}` 硬编码路径检查。
-- **MCP 怎么配**：官方 MCP 文档明确 `type` 只支持 **`stdio` / `sse` / `http`**（可省略，按 `command`/`url` 自动推断），**不收 `streamable-http`**。因此 `init.ts` 把标准源 `mcp.json` 的 `streamable-http` 转为 `http` 后**内联**进 manifest（不落盘 `.mcp.json`，避免被 Claude 默认加载造成跨平台串扰——本仓库的取舍）。CodeBuddy 官方支持 `headers: { "Authorization": "Bearer ${VAR}" }`（变量缺失时保留占位符并 WARNING）。本插件的便携 `mcp.json` 有意不写凭据 headers，所以生成清单也不带；Context7/GitHub 请在 CodeBuddy 的 MCP 设置里完成鉴权。
+- **MCP 怎么配**：官方 MCP 文档明确 `type` 只支持 **`stdio` / `sse` / `http`**（可省略，按 `command`/`url` 自动推断），**不收 `streamable-http`**。因此 `init.ts` 把标准源 `mcp.json` 的 `streamable-http` 转为 `http` 后**内联**进 manifest（不落盘 `.mcp.json`，避免被 Claude 默认加载造成跨平台串扰——本仓库的取舍）。密钥写法 `headers: { "Authorization": "Bearer ${VAR}" }` 为官方支持（`${VAR}`、`${VAR:-default}` 均可用，仅全大写变量名会被展开；变量缺失时保留占位符并 WARNING，不报错）。
 - **组件覆盖字段**：本插件不声明 `skills`——默认 `skills/` 目录即被扫描。
 
 ## 3. 本地开发 / 安装 / 校验

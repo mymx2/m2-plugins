@@ -1,6 +1,6 @@
 ---
 name: hunt
-description: 'Finds the actual root cause of a failing test, error, crash, regression, or a page rendered blank or wrong, when a request throws, before applying fixes, proven against a known-good reference (prior version, release artifact, or "good" screenshot). Use when users report errors, crashes, broken behavior, blank rendering, failing tests, or a used-to-work state that now fails. Not for code review (route to check) or a first-impression visual complaint with no working baseline (route to ui).'
+description: 'Finds the actual root cause of a failing test, error, crash, regression, a page rendered blank or wrong, or a request that throws, before applying fixes, proven against a known-good reference (prior version, release artifact, or "good" screenshot). Use when users report errors, crashes, broken behavior, blank rendering, failing tests, or a used-to-work state that now fails. Not for code review (route to check) or a first-impression visual complaint with no working baseline (route to ui).'
 when_to_use: '排查, 报错, 崩溃, 不工作, 跑不通, 以前是好的, 回归, 截图回归, 和之前版本不一样, 判断错误原因, 反复修不好, debug, regression, used to work, broke after update, not working, fix error, stack trace'
 ---
 

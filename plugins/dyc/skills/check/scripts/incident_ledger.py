@@ -44,6 +44,7 @@ REQUIRED_COLUMNS = ("ID", "Fixed", "Layer", "Caught by")
 SHA = re.compile(r"^[0-9a-f]{7,40}$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+CELL_SPLIT = re.compile(r"(?<!\\)\|")
 TEST_DIR_PARTS = {"test", "tests", "spec", "specs", "__tests__", "testing"}
 TEST_NAME = re.compile(r"(^test_.*|.*_test\.[^.]+$|.*\.(test|spec)\.[^.]+$|.*Tests?\.[^.]+$|.*\.bats$)")
 SKIP_PARTS = {".git", "node_modules", "vendor", "dist", "build", "target", ".venv"}
@@ -55,7 +56,12 @@ def git(root: Path, *args: str) -> subprocess.CompletedProcess:
 
 
 def split_row(line: str) -> list[str]:
-    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+    stripped = line.strip()
+    if stripped.startswith("|"):
+        stripped = stripped[1:]
+    if stripped.endswith("|"):
+        stripped = stripped[:-1]
+    return [cell.strip().replace("\\|", "|") for cell in CELL_SPLIT.split(stripped)]
 
 
 def table(text: str):

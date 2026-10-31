@@ -1,6 +1,8 @@
 # 技能行为评测报告 — plugins/dyc/skills(12 个技能)
 
-评测日期:2026-08-26。评测方式:三层独立、数据驱动。**未修改 `plugins/dyc/skills/` 下任何文件**;全部产物在 `evals/` 下。
+评测日期:2026-08-26;Tier 2 复核:2026-11-01。评测方式:三层独立、数据驱动。**原始评测未修改 `plugins/dyc/skills/` 下任何文件**;全部产物在 `evals/` 下。
+
+> **2026-11-01 复核**: Tier 2 语义判定补入 pm 的 8 positive + 6 negative,并复评 think triage 的修复。当前语义判定 **84/84 positive**(74/74 独立;10 条与 check 负例共享 prompt)、**47/47 negative** PASS;词面仍为 37/84(44.0%)与 45/56(80.4%)。下文 2026-08-26 的 BLOCKER 描述保留为历史记录,当前状态以本块为准。
 
 > **修复状态(2026-09-03 核对)**:下文"修复建议"8 项(BLOCKER×1 / STRUCT×5 / INCR×2)已全部在
 > `42c32ff` / `c0040ca` 落地,逐条核对记录见该节开头的状态块。write-baseline 的 2 个 FAIL 属
@@ -17,33 +19,35 @@
 | **Tier 3** 行为抽样       | hunt / check / write | 各 baseline + 压力变体(时间/权威/沉没成本),6 次子代理执行,按 `grader.md` 逐条 PASS/FAIL              | `evals/results/grading-*.json` × 6                       |
 | **Tier 1** 弱模型可读性   | think / check        | 逐句照做的弱模型视角,行号已核对                                                                      | `evals/results/tier1-readability.md`                     |
 
-用例集:`evals/cases/*.json` × 12。pm 的 14 条用例只做触发覆盖,尚未纳入 §A 语义表。fixture:`evals/fixtures/{hunt,check,write}`(check 已 git 化:base commit + dirty 覆盖)。运行现场:`evals/runs/<skill>-<variant>`(含子代理自记 `actions.log`)。
+用例集:`evals/cases/*.json` × 12,pm 的 8 positive + 6 negative 已纳入 §A 语义表。fixture:`evals/fixtures/{hunt,check,write}`(check 已 git 化:base commit + dirty 覆盖)。运行现场:`evals/runs/<skill>-<variant>`(含子代理自记 `actions.log`)。
 
 ---
 
 ## 一句话结论
 
-**有语义 ground truth 的 11 个技能几乎全对(唯一 BLOCKER 是 think 的 triage 盲区),Tier 3 三个技能在压力下守住核心契约;pm 目前只有触发用例、没有语义判定,是明确的覆盖缺口。主要改进面是 description 的中文锚点加固与 think/check 的环境假设清理。**
+**12 个技能全部有语义 ground truth:84/84 positive(74/74 独立)与 47/47 独立 negative 通过;历史上的唯一 BLOCKER(think triage)已通过 description 修复并于 2026-11-01 复核关闭。Tier 3 三个技能在压力下守住核心契约;pm 已补齐语义判定。剩余改进面是词面层的 write 默认汇与 description 中文锚点加固。**
 
 ---
 
 ## Tier 2 — 触发路由
 
-| 判定                      | positive top-1                                                          | negative owner-outranks |
-| ------------------------- | ----------------------------------------------------------------------- | ----------------------- |
-| 语义(读 description 判断) | **65/66 独立 prompt(98.5%)**（08-26 旧口径，新增 8 条 positive 未重评） | 41/41(100%)             |
-| 词面(TF-IDF 纯字面)       | 37/84(44.0%)                                                            | 45/56(80.4%)            |
+| 判定                      | positive top-1                        | negative owner-outranks |
+| ------------------------- | ------------------------------------- | ----------------------- |
+| 语义(读 description 判断) | **84/84(74/74 独立;2026-11-01 复核)** | 47/47(100%)             |
+| 词面(TF-IDF 纯字面)       | 37/84(44.0%)                          | 45/56(80.4%)            |
 
 **语义路由是唯一生产路径,接近满分。** 词面路由命中低是**设计使然**——任务硬约束要求 prompt 不抄 description 用词,所以纯字面匹配自然接不住;词面表的价值是定位"缺关键词锚点"的技能。
 
-### 唯一 BLOCKER:think 的 triage 盲区
+### 已解决的 BLOCKER:think 的 triage 盲区(2026-08-26 记录)
 
 prompt「产品甩过来一堆用户反馈,有报错的、有要功能的、有纯吐槽的,你帮我归归类」语义 rank-1 应是 think(Triage Mode,L104),实际被 **check** 抢走——think description(L3)无 triage/归类/反馈 词汇,check description 含 "issue or PR triage"。**Tier 1(think L104)与 Tier 2 是同一缺陷的两层证据**:正文 Triage Mode 写得再完整,description 缺 cue 就永远路由不到。
+
+**2026-11-01 复核**:think description 已加入 triage/accept-reject cue,该 prompt 的 rank-1 回到 think,BLOCKER 关闭。
 
 ### 词面层的两个结构性观察(非 BLOCKER)
 
 1. **中文 prompt 词面全 0 退化**:10 个纯英文 description 的技能,中文 prompt 与其 CJK bigram 无交集,得分恒 0、排名退化。**forge 是唯一中英双语 description,中文命中最高(4/5)**——双语 cue 是可复制的加固模式。
-2. **write 是词面默认汇**:其 "Use when" 列表(draft/rewrite/proofread/localize/polish...)覆盖面最宽,在词面空间吸走 5 个技能的零分 prompt,在语义空间也制造了 maintainer-reply、proofread 两条薄边。
+2. **write 是词面默认汇**:其 "Use when" 列表(draft/rewrite/proofread/localize/polish...)覆盖面最宽,在词面空间吸走 6/11 条 negative FAIL 的 top-1,在语义空间也制造了 maintainer-reply、proofread 两条薄边。
 
 ---
 
@@ -69,6 +73,10 @@ agent 删掉"总的来说"段(该段"完成了既定目标"与 87% 未达标事�
 
 ---
 
+## 技能内 skill-up 行为评测(2026-11-01)
+
+本次复核实跑了改动涉及的行为用例,覆盖 check、read、write、pm、learn、think、ui;逐例结果与引擎信息见 `results/skill-up-2026-11-01.json`。运行使用 cbc 引擎,judge model 为 `openai/kimi-k3-1`,workspace 不入库。UI 的 `build-landing-page` 在 cbc 下 600s 无输出超时,其阈值改动已回退到 0.75;本次 UI 证据为 `design-md-contract`。read 的 `summarize-url` 在无 shell/抓取工具的 cbc 引擎下仍凭记忆编造,已加 no-fetch 硬规则;该例需在有抓取工具的引擎复跑,本次不宣称通过。
+
 ## Tier 1 — 弱模型可读性(think / check)
 
 | 技能  | BLOCKER                 | STRUCT                                           | INCR                       |
@@ -92,7 +100,8 @@ agent 删掉"总的来说"段(该段"完成了既定目标"与 87% 未达标事�
 > mirrors / hollow green / whole-file reserialization 均已 inline 定义(当前 check SKILL.md
 > L120/L170/L175)。正文行号相对 2026-08-26 版本有漂移(think 现 249 行、check 现 311 行),
 > `results/tier1-readability.md` 的行号引用待重审;BLOCKER #1 修复后的 Tier 2 语义判定
-> (65/66 → 预期 66/66)待重验,词面层与入库基线一致已由 CI 确认。
+> 已于 2026-11-01 复核为 84/84(74/74 独立),BLOCKER 关闭,pm 的 8 positive + 6 negative 已纳入;
+> 词面层与入库基线一致已由 CI 确认。
 
 ### BLOCKER(会导致错误行为)
 

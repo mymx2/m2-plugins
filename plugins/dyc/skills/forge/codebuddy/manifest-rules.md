@@ -37,7 +37,7 @@ CodeBuddy 插件的 manifest 和组件组织速查卡。官方文档：[插件](
 
 ## MCP 约束
 
-`type` 仅支持 **`stdio` / `sse` / `http`**（可省略，按 `command`/`url` 推断），**不接受 `streamable-http`**。init 会把标准源 `mcp.json` 中的 `streamable-http` 转为 `http` 后内联进 manifest。凭据写法 `headers: { "Authorization": "Bearer ${VAR}" }` 为官方支持；本插件便携 `mcp.json` 不写凭据，鉴权在 CodeBuddy 的 MCP 设置里完成。
+`type` 仅支持 **`stdio` / `sse` / `http`**（可省略，按 `command`/`url` 推断），**不接受 `streamable-http`**。init 会把标准源 `mcp.json` 中的 `streamable-http` 转为 `http` 后内联进 manifest。凭据写法 `headers: { "Authorization": "Bearer ${VAR}" }` 为官方支持（`${VAR}`、`${VAR:-default}` 均可用；变量缺失时保留占位符并 WARNING）；标准源 `mcp.json` 保留该写法，init 原样内联，用户设置环境变量即可。
 
 ## 组件目录
 

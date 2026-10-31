@@ -24,6 +24,7 @@ class TestTokenize:
     def test_latin_words_lowercased(self):
         assert tokenize("Hello WORLD Foo") == ["hello", "world", "foo"]
         assert tokenize("wrong. time. 2.1 example.com") == ["wrong", "time", "2.1", "example.com"]
+        assert tokenize("C++ C#") == ["c++", "c#"]
 
     def test_cjk_bigrams(self):
         # 4 个 CJK 字符 -> 3 个 bigram

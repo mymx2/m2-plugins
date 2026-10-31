@@ -24,7 +24,7 @@
 `plugins/dyc/skills/<name>/evals/`(eval.yaml + cases/,默认 cbc 引擎,`skill-up run` 执行,
 `--engine claude_code` / `--engine qodercli` 可覆盖)。两套互补:路由层先保证"选对人",
 技能内 evals 再验证"干对事"。技能内 evals 的案例入库,运行产物(`<skill>-workspace/`)
-不入库(见根 `.gitignore`)。
+不入库(见根 `.gitignore`);变更用例的运行摘要沉淀在 `results/skill-up-<date>.json`。
 
 ## 各层跑法
 

@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-01",
+  "engine": "codebuddy",
+  "judge_model": "openai/kimi-k3-1",
+  "scope": "changed cases across check/read/write/pm/learn/think/ui",
+  "notes": "skill-up run with cbc; workspaces are not committed; result=PASS follows the case pass_threshold.",
+  "cases": [
+    {
+      "skill": "check",
+      "case": "incident-replay",
+      "passed": 4,
+      "total": 5,
+      "pass_rate": 0.8,
+      "result": "PASS"
+    },
+    {
+      "skill": "check",
+      "case": "risk-tier-gate",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "write",
+      "case": "revision-review-copy-cut",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "pm",
+      "case": "metrics-review",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "pm",
+      "case": "prd-quality",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "pm",
+      "case": "prioritization",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "learn",
+      "case": "compile-source-notes",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "learn",
+      "case": "conflicting-sources",
+      "passed": 4,
+      "total": 4,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "think",
+      "case": "triage-user-feedback",
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "think",
+      "case": "unconfirmed-assumptions",
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "read",
+      "case": "deepseek-opt-in",
+      "passed": 3,
+      "total": 3,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "ui",
+      "case": "design-md-contract",
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1,
+      "result": "PASS"
+    },
+    {
+      "skill": "read",
+      "case": "convert-url-to-markdown",
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1,
+      "result": "PASS"
+    }
+  ],
+  "excluded": [
+    {
+      "skill": "ui",
+      "case": "build-landing-page",
+      "reason": "cbc engine produced no output within 600s; threshold change reverted to 0.75, not claimed as covered"
+    },
+    {
+      "skill": "read",
+      "case": "summarize-url",
+      "reason": "cbc engine exposes no shell/fetch tool; the agent still answered from memory. The skill now has a no-fetch hard rule; re-run this case on a fetch-capable engine before claiming coverage."
+    }
+  ]
+}

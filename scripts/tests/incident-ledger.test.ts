@@ -108,6 +108,15 @@ describe('incident_ledger.py', () => {
     expect(result.stderr).toContain('1 rows, 0 problems')
   })
 
+  it('支持单元格内转义的管道符', () => {
+    const { repo, sha } = makeRepo(TEST_FILES)
+    writeLedger(
+      repo,
+      `| I-01 | 2026-01-02 | a \\| b | unknown | ${sha} | unit | \`test_parses_empty_input\` |\n`,
+    )
+    expect(run(repo).code).toBe(0)
+  })
+
   const defects: Array<{ name: string; row: (sha: string) => string; expected: string }> = [
     {
       name: '未定义的 catcher',

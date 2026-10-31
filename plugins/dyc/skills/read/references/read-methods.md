@@ -20,7 +20,7 @@ Do not send authenticated, internal, or otherwise sensitive URLs to third-party 
 
 ## DeepSeek Search and Fetch
 
-Needs `DEEPSEEK_API_KEY` from the DeepSeek platform, exported in the shell profile. Without it the script exits 2 and sends nothing.
+Needs `DEEPSEEK_API_KEY` from the DeepSeek platform, exported in the shell profile. Without it the script exits 2 and sends nothing. When the key is unset, stop and give one concrete non-key next step: propose one or two revised built-in search queries, or ask for a URL or source file. Do not only say the built-in path exists or ask the user to set the key.
 
 ```bash
 python3 "$READ_SCRIPT_DIR/deepseek.py" search "{query}" --count 10

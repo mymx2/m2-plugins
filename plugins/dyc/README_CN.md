@@ -25,12 +25,14 @@ codex plugin marketplace add mymx2/m2-plugins
 codex plugin add dyc@m2-plugins
 
 # Qoder
-vp run qoder:dyc
+qodercli plugins install dyc@m2-plugins
 
 # CodeBuddy
 /plugin marketplace add mymx2/m2-plugins
 /plugin install dyc@m2-plugins
 ```
+
+本地 checkout 场景先执行 `vp install` 安装依赖，再运行 `vp run qoder:dyc`。
 
 ## 前置条件
 
@@ -76,7 +78,7 @@ vp run qoder:dyc
 
 ### 环境变量
 
-Codex 通过 `mcp.codex.json` 的 `bearer_token_env_var` 读取 `CONTEXT7_API_KEY` 和 `GITHUB_PERSONAL_ACCESS_TOKEN`。其他客户端请在各自的 MCP 设置中完成鉴权；便携 `mcp.json` 不携带凭据头，因为 Agent Plugins Spec 禁止在 headers 中展开占位符。使用 Codex 时请在启动前设置：
+Context7 和 GitHub 需要 API key。内置 MCP 配置会把 `CONTEXT7_API_KEY` 和 `GITHUB_PERSONAL_ACCESS_TOKEN` 以 `Authorization: Bearer ${VAR}` 头传给服务端，支持环境变量展开的客户端（Claude Code、CodeBuddy、Qoder）无需额外配置即可使用；Codex 通过 `mcp.codex.json` 的 `bearer_token_env_var` 读取同名变量。便携 `mcp.json` 保留这些 headers 是对 Agent Plugins Spec“headers 禁止占位符展开”的有意偏离，目的是让用户一步完成配置；不要在未同步客户端文档的情况下把它们改回无 headers。若客户端不支持 headers 中的变量展开，请在它的 MCP 设置里配置 key。启动前请设置：
 
 ```bash
 # Bash / Zsh（Linux / macOS）
