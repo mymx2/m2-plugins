@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dyc",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "m2-plugins/plugins/dyc — twelve engineering workflow skills for AI agents: think, check, hunt, ui, read, write, learn, health, forge, chrome, repowiki, and pm.",
   "author": {
     "name": "dyc",
