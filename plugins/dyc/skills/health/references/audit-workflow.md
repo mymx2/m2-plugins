@@ -118,7 +118,7 @@ Agent instructions in the wrong layer, missing hooks, oversized descriptions, ve
 
 Quick check from the project root: invoke the launcher as `agent-context . summary` (Windows: `run-health.ps1`; POSIX: `check-agent-context.sh` under `<skill-base-dir>/scripts/`).
 
-**AI-maintainability findings.** For the maintainability lane (verification surface, conversation-derived guidance, concentrated fix chains, risk-backed hotspot ownership, non-obvious constraint reachability, verifier wrapper, broken doc and Markdown references, stale verifier cache output), load the `maintainability-findings` reference and work its checks with `AI MAINTAINABILITY SUMMARY` / `DETAIL`.
+**AI-maintainability findings.** For the maintainability lane (verification surface, conversation-derived guidance, concentrated fix chains, risk-backed hotspot ownership, non-obvious constraint reachability, verifier wrapper and data-shape blind spots, broken doc and Markdown references, stale verifier cache output), load the `maintainability-findings` reference and work its checks with `AI MAINTAINABILITY SUMMARY` / `DETAIL`.
 
 ### [-] Incremental -- nice to have
 

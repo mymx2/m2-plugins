@@ -16,7 +16,7 @@ Activate when the user sends a screenshot or image alongside a complaint ("è¿™é‡
 8. Verify the matrix in a browser, native app, screenshot tool, or rendered artifact, then re-check every `preserve` boundary:
    - A final-state screenshot does not prove copy feedback, touch behavior, first paint, or transition stability.
    - If rendering is available, finish the loop yourself and report the checked states. If the host cannot render, say that explicitly and hand off the shortest exact view the user should check.
-   - Alignment and spacing complaints close with numbers: measure the two boxes' geometry (`getBoundingClientRect` or a screenshot ruler) before and after, and report both sets plus the viewport width; without numbers the reply does not say "aligned".
+   - Alignment and spacing complaints close with numbers: measure the two boxes' geometry (`getBoundingClientRect` or a screenshot ruler) before and after, and report both sets plus the viewport width; without numbers the reply does not say "aligned". Numbers locate the problem; the capture decides when glyphs may paint outside the measured box. If the capture shows an overhang, report it with the box numbers and do not say "aligned" on numbers alone.
 
    The reply prints `checked N / changed M / left K` over the consumers found in step 7; a reply that changes one view without that line is the failure this step exists to stop.
 

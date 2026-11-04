@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-04",
+  "engine": "codebuddy",
+  "judge_model": "openai/kimi-k3-1",
+  "scope": "health/check/ui feedback review",
+  "notes": "Documentation-only feedback from an external probe. No eval case is claimed as coverage; excluded entries record why each candidate was not retained.",
+  "cases": [],
+  "excluded": [
+    {
+      "skill": "health",
+      "case": "audit-hollow-verifier",
+      "reason": "Baseline on HEAD passed because the existing hollow-verifier definition already led the agent to the coerced-width bug. The case did not distinguish new vs old text, so it was removed; the rule is advisory until a discriminating fixture exists."
+    },
+    {
+      "skill": "check",
+      "case": "gate-red-proof",
+      "reason": "Baseline agent answered correctly but agent_judge exceeded the shared 300s case budget (agent 148.5s + judge 153.3s), producing no verdict. Case removed; re-run with a separate judge budget or a more discriminating fixture before claiming coverage."
+    },
+    {
+      "skill": "ui",
+      "case": "rendered-evidence",
+      "reason": "The cbc engine has no browser/screenshot capability; the rule can only be checked manually. Re-run on a browser-capable engine before claiming coverage."
+    }
+  ]
+}
