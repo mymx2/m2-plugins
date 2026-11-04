@@ -147,6 +147,35 @@ def target_status(target: Path, raw: str, root: Path, home: Path) -> str:
     return "exists" if is_repo_file(target, scope) else "missing"
 
 
+def strip_inline_code(line: str) -> str:
+    """Blank out inline code spans while preserving line length and offsets."""
+    chars = list(line)
+    index = 0
+    while index < len(chars):
+        if chars[index] != "`":
+            index += 1
+            continue
+        tick_start = index
+        while index < len(chars) and chars[index] == "`":
+            index += 1
+        ticks = index - tick_start
+        search = index
+        while search < len(chars):
+            if chars[search] != "`":
+                search += 1
+                continue
+            close_start = search
+            while search < len(chars) and chars[search] == "`":
+                search += 1
+            if search - close_start == ticks:
+                chars[tick_start:search] = " " * (search - tick_start)
+                index = search
+                break
+        else:
+            index = tick_start + ticks
+    return "".join(chars)
+
+
 def collect_scan_files(root: Path) -> list[Path]:
     scan_files: list[Path] = []
     for candidate in (root / "AGENTS.md", root / "CLAUDE.md"):
@@ -179,7 +208,7 @@ def main() -> int:
             if in_fence:
                 continue
 
-            for match in REF_RE.finditer(line):
+            for match in REF_RE.finditer(strip_inline_code(line)):
                 raw = match.group(1)
                 key = (path, lineno, raw)
                 if key in seen:

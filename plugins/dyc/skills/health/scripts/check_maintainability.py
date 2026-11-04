@@ -859,6 +859,11 @@ def main() -> int:
         choices=("summary", "deep"),
         help="Output detail level",
     )
+    parser.add_argument(
+        "--fail-on-fail",
+        action="store_true",
+        help="Exit 1 when maintainability_status is FAIL",
+    )
     args = parser.parse_args()
     root = Path(args.root).resolve()
     mode = args.mode
@@ -1182,6 +1187,8 @@ def main() -> int:
         print_list(markdown_missing, limit=20)
     else:
         print("  (skipped: deep mode only)")
+    if args.fail_on_fail and overall == "FAIL":
+        return 1
     return 0
 
 
